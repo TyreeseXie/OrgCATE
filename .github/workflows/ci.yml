@@ -30,4 +30,18 @@ jobs:
         run: orgcate doctor --json
       - name: Run end-to-end public demo
         run: orgcate demo --scenario sign-reversal --output artifacts/ci_demo
+      - name: Analyze uploaded validation backbone
+        run: >-
+          orgcate acceptance
+          --config configs/data_to_results_acceptance_v1.json
+          --output artifacts/ci_acceptance
+      - name: Verify downloadable analysis results
+        run: python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
+      - name: Upload data-to-results acceptance package
+        uses: actions/upload-artifact@v4
+        with:
+          name: orgcate-data-to-results-${{ github.run_id }}
+          path: artifacts/ci_acceptance/
+          if-no-files-found: error
+          retention-days: 14
 

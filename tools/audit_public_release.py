@@ -27,6 +27,7 @@ IGNORED_PARTS = {
     "local_outputs",
     "results",
     "venv",
+    "AGENTS.md",
 }
 FORBIDDEN_PARTS = {
     "access_notes",

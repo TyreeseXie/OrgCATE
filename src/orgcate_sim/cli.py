@@ -9,6 +9,7 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
+from .acceptance import run_data_to_results_acceptance
 from .public_contract import validate_theory_audit
 from .public_demo import run_public_demo
 from .release import (
@@ -67,6 +68,19 @@ def build_parser() -> argparse.ArgumentParser:
     demo.add_argument("--output", type=Path, default=Path("artifacts/public_demo"))
     demo.add_argument("--seed", type=int, default=20261023)
     demo.add_argument("--backbone-rows", type=int, default=6000)
+
+    acceptance = subparsers.add_parser(
+        "acceptance",
+        help="analyze the bundled real covariate backbone and package aggregate results",
+    )
+    acceptance.add_argument(
+        "--config",
+        type=Path,
+        default=Path("configs/data_to_results_acceptance_v1.json"),
+    )
+    acceptance.add_argument(
+        "--output", type=Path, default=Path("artifacts/data_to_results_acceptance")
+    )
 
     reproduce = subparsers.add_parser(
         "reproduce",
@@ -202,6 +216,17 @@ def main(argv: Sequence[str] | None = None) -> int:
             "Shape interpretation: "
             f"{result['practical']['morphology']['interpretation_en']}"
         )
+        return 0
+    if args.command == "acceptance":
+        result = run_data_to_results_acceptance(
+            config_path=args.config,
+            output=args.output,
+        )
+        statistics = result["statistics"]
+        print(f"Acceptance analysis completed: {args.output.resolve()}")
+        print(f"DML ATE: {statistics['dml_ate']:.4f}")
+        print(f"Morphology: {statistics['estimated_morphology']}")
+        print(f"Practical state: {statistics['practical_state']}")
         return 0
     if args.command == "reproduce":
         return _run_reproduction(args)

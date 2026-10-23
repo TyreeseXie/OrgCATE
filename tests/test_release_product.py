@@ -159,6 +159,7 @@ def test_cli_exposes_current_product_commands_and_nine_names() -> None:
     for command in (
         "doctor",
         "demo",
+        "acceptance",
         "evidence",
         "verify",
         "contract",

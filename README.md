@@ -125,6 +125,26 @@ orgcate reproduce --target kink-resolution --phase report
 The runners preserve completed replications and record failures. `--freeze-only`
 is intended for the documented development-before-confirmation procedure.
 
+## Downloadable data-to-results acceptance
+
+The CI workflow also performs one fresh, fixed-seed analysis using the bundled
+L=3 backbone rather than the synthetic covariate generator:
+
+```powershell
+orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
+python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
+```
+
+The real uploaded data supply 8,648 rows of pre-treatment firm covariates. The
+command samples 3,000 firms, simulates treatment and causal outcomes, refits the
+DML ATE and one joint causal forest, and creates fresh aggregate statistics,
+diagnostics, CATE curves, feature rankings, two SVG figures, an analysis report,
+and a SHA256 manifest. Firm-level rows are excluded from the downloadable
+package.
+
+For every successful GitHub Actions run, open the run summary and download
+`orgcate-data-to-results-<run_id>` from the **Artifacts** section.
+
 ## Documentation
 
 - `docs/METHOD_CONTRACT_AND_STOP_RULES.md`: estimation order and stopping rules.
@@ -146,6 +166,8 @@ simulation outputs are outside the release.
 .venv\Scripts\python.exe -m compileall -q src tests execution tools
 .venv\Scripts\python.exe -m pytest -q -p no:cacheprovider
 python tools/audit_public_release.py --allow-metadata-pending
+orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
+python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
 ```
 
 The metadata exception is removed after `LICENSE` and `CITATION.cff` are added.

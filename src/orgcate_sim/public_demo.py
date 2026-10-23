@@ -311,10 +311,8 @@ def _partition_labels(length: int, train: np.ndarray, test: np.ndarray) -> np.nd
     return labels
 
 
-def _prepare_output(output: Path) -> dict[str, Path]:
+def _prepare_output(output: Path, *, save_row_level: bool = True) -> dict[str, Path]:
     paths = {
-        "analyst": output / "analyst" / "analyst.csv",
-        "oracle": output / "oracle" / "oracle.csv",
         "practical": output / "practical" / "result.json",
         "ranking": output / "practical" / "feature_ranking.csv",
         "curve_practical": output / "practical" / "cate_curve.csv",
@@ -324,6 +322,13 @@ def _prepare_output(output: Path) -> dict[str, Path]:
         "theory_audit": output / "practical" / "researcher_theory_audit.json",
         "manifest": output / "RUN_MANIFEST.json",
     }
+    if save_row_level:
+        paths.update(
+            {
+                "analyst": output / "analyst" / "analyst.csv",
+                "oracle": output / "oracle" / "oracle.csv",
+            }
+        )
     if any(path.exists() for path in paths.values()):
         raise FileExistsError(
             f"demo output already exists under {output}; choose a new --output directory"
@@ -347,15 +352,17 @@ def run_public_demo(
     output: str | Path = "artifacts/public_demo",
     seed: int = 20261023,
     backbone_rows: int = 6000,
+    use_bundled_backbone: bool = False,
+    save_row_level: bool = True,
     root: Path | None = None,
 ) -> dict[str, Any]:
-    """Run one audited public synthetic scenario through the frozen product."""
+    """Run one semi-synthetic scenario through the frozen product."""
 
     if scenario not in NINE_SITUATIONS:
         raise ValueError(f"unknown scenario: {scenario}")
     root = repository_root(root)
     output = Path(output).resolve()
-    paths = _prepare_output(output)
+    paths = _prepare_output(output, save_row_level=save_row_level)
     (
         product,
         kink,
@@ -366,7 +373,24 @@ def run_public_demo(
         base_parameters,
         inputs,
     ) = _contract(root)
-    backbone = make_public_synthetic_backbone(rows=int(backbone_rows), seed=int(seed))
+    if use_bundled_backbone:
+        backbone = product.V2.add_rank_columns(
+            product.V2.v2.load_frozen_backbone(root, source, inputs["source_config"]),
+            source["features"],
+        )
+        backbone_kind = "uploaded-real-covariate-backbone"
+        backbone_input = (
+            root
+            / "execution"
+            / "phase2_real_backbone_v1"
+            / "headline_one_anchor_per_firm_L3.pkl.gz"
+        )
+        inputs = {**inputs, "bundled_backbone": backbone_input}
+    else:
+        backbone = make_public_synthetic_backbone(
+            rows=int(backbone_rows), seed=int(seed)
+        )
+        backbone_kind = "generated-synthetic-covariate-backbone"
     lineage = product.BASE.lineage(int(seed), 0)
     data = product.build_data(
         backbone, source, config, scenario, lineage, base_parameters
@@ -391,8 +415,9 @@ def run_public_demo(
             "true_label": scenario,
         }
     )
-    analyst.to_csv(paths["analyst"], index=False)
-    oracle.to_csv(paths["oracle"], index=False)
+    if save_row_level:
+        analyst.to_csv(paths["analyst"], index=False)
+        oracle.to_csv(paths["oracle"], index=False)
 
     ate_preflight = product.estimate_ate(
         data["X"][train],
@@ -522,7 +547,11 @@ def run_public_demo(
     )
     practical = {
         "schema_version": "orgcate-result-v1",
-        "run_kind": "public-synthetic-demo",
+        "run_kind": (
+            "uploaded-backbone-acceptance"
+            if use_bundled_backbone
+            else "public-synthetic-demo"
+        ),
         "scenario": scenario,
         "practical_state": practical_state,
         "eligibility": eligibility,
@@ -636,8 +665,15 @@ def run_public_demo(
         "schema_version": "orgcate-public-demo-manifest-v1",
         "status": "completed",
         "scenario": scenario,
-        "public_synthetic_data": True,
-        "licensed_data_used": False,
+        "covariate_backbone": backbone_kind,
+        "public_synthetic_data": not use_bundled_backbone,
+        "uploaded_real_covariates_used": use_bundled_backbone,
+        "treatment_outcome_and_cate_simulated": True,
+        "row_level_outputs_written": save_row_level,
+        "backbone_rows_available": len(backbone),
+        "analysis_rows": len(data["T"]),
+        "train_rows": len(train),
+        "test_rows": len(test),
         "analyst_oracle_separated": True,
         "test_used_for_morphology_selection": False,
         "evaluator_truth_used_for_morphology_selection": False,

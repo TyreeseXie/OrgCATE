@@ -7,8 +7,8 @@
     "CITATION.cff"
   ],
   "manifest_excludes_itself": true,
-  "file_count": 97,
-  "total_bytes": 3485231,
+  "file_count": 100,
+  "total_bytes": 3516588,
   "findings": [],
   "files": [
     {
@@ -18,18 +18,13 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 954,
-      "sha256": "0280601a64faad5feaeba20a0d30c072a1fdd87fd63ecc759ec4f6777288a6c3"
+      "bytes": 1564,
+      "sha256": "dfeabc56c9cc55100e8c656e485774ea8369dabc4a848162f0c08099a7e98b3a"
     },
     {
       "path": ".gitignore",
       "bytes": 1029,
       "sha256": "a61d6005d40fa36f9f89dd93e1242965d845e0b1ff710a84806cc48fa6d9b2ea"
-    },
-    {
-      "path": "AGENTS.md",
-      "bytes": 980,
-      "sha256": "6704ff2deae035c51305fe578d1491ec6a2aad53ae0d53d23a4b3bc1264dba42"
     },
     {
       "path": "DATA_NOTICE.md",
@@ -43,13 +38,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 5589,
-      "sha256": "3c8e2ddcfb08f5c17df97bf0800818b2089556f0f4e866b5cf91bb3a432604b0"
+      "bytes": 6681,
+      "sha256": "7c4ce5b0944f3a90a7c00496ce7d9d385fa1641da135b2c65d92289af0e5e2af"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 4955,
-      "sha256": "92fe04d0a5c6bb3506621b387b1793558ae4daeef8d6ef06169e31bd091895cb"
+      "bytes": 5996,
+      "sha256": "ef754816cb74f7e32e1dd5e6ef01ffe422eaad91c41f8d377df9061d32829443"
     },
     {
       "path": "SECURITY.md",
@@ -65,6 +60,11 @@
       "path": "codex_simulation_runner_v2/src/simulation_runner_v2.py",
       "bytes": 42814,
       "sha256": "7a2efc54db13506054a55d10d12f5d1d850bdaa58ced0329df2f01e57f9ddea3"
+    },
+    {
+      "path": "configs/data_to_results_acceptance_v1.json",
+      "bytes": 910,
+      "sha256": "b05bcc5db6a70da2b8a87b86503f1fd151d3b701e0ca9a957c706c7b4c5db307"
     },
     {
       "path": "configs/github_release_method_contract_v1.json",
@@ -347,6 +347,11 @@
       "sha256": "6569380d782f9601e94c363904ef785e10f275b1e415497375eec48c6a16cb54"
     },
     {
+      "path": "src/orgcate_sim/acceptance.py",
+      "bytes": 18228,
+      "sha256": "f5df899a0e229af726b047b547977b4ab2e152d7e0eaae7a01a1a60c0807ab90"
+    },
+    {
       "path": "src/orgcate_sim/ate.py",
       "bytes": 5636,
       "sha256": "beba4f654b572c42e87464e82ea3149a3f06a4c9af97fdd8c9968614d6574da3"
@@ -358,8 +363,8 @@
     },
     {
       "path": "src/orgcate_sim/cli.py",
-      "bytes": 7498,
-      "sha256": "66dee7bdb26e1f3ebf569b5f85f36e04970beb8ad5bc4d66431c0e019f048e33"
+      "bytes": 8459,
+      "sha256": "65de61d3ff95b205d774b52fdb5217cea24cd228f87822025cb3c982ef3f6afb"
     },
     {
       "path": "src/orgcate_sim/config.py",
@@ -418,8 +423,8 @@
     },
     {
       "path": "src/orgcate_sim/public_demo.py",
-      "bytes": 24502,
-      "sha256": "b290d073fe331f9b1af4b200c8976d2e8cdbb39683525144d188532d0472959d"
+      "bytes": 25826,
+      "sha256": "b1fb6624d58578efd76591a8bd29027a4811d6b14aae6f6a9b356dadbddf8bed"
     },
     {
       "path": "src/orgcate_sim/release.py",
@@ -457,6 +462,11 @@
       "sha256": "2e1a8acd1660c21b159af51ba58f78e9fcd59645988b6383901b80907aca6c39"
     },
     {
+      "path": "tests/test_acceptance_workflow.py",
+      "bytes": 1095,
+      "sha256": "0826d09ab4d549611af876f304fa0dc894b491fcf00d41ecf981aff84c0f9dd5"
+    },
+    {
       "path": "tests/test_ate_anchor.py",
       "bytes": 1334,
       "sha256": "831111415bd7f120000acfcdd0e21ae6afa519d9ae36881c370ec956424da3fb"
@@ -488,13 +498,18 @@
     },
     {
       "path": "tests/test_release_product.py",
-      "bytes": 5489,
-      "sha256": "235d13d9ee4708944379d67b0dbc4fe8c0a1396dad0942b1e2ec8c661c450d34"
+      "bytes": 5511,
+      "sha256": "74babd445ddf53796e259d40216a3547f5f3f9308c02aff6236ef62aa21f739b"
     },
     {
       "path": "tools/audit_public_release.py",
-      "bytes": 10123,
-      "sha256": "1a0140b3570f3ae9436a55f8264d9a3738ef214fce60e1e4e8675dbec798d34f"
+      "bytes": 10140,
+      "sha256": "9822b34702aab5a19430ceeec25bf7a2a1ee39a8c7cb865a211dd0eb2c135908"
+    },
+    {
+      "path": "tools/verify_acceptance_artifacts.py",
+      "bytes": 7037,
+      "sha256": "61b6870385008eb9d87ec94db92422943cd280ec9692fd3424aaf9f86efbd250"
     }
   ]
 }

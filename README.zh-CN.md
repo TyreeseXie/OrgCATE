@@ -112,6 +112,24 @@ orgcate reproduce --target kink-resolution --phase report
 程序会保留已经完成的 replication，并记录运行失败。`--freeze-only` 仅用于文档
 规定的“先开发、后确认”流程。
 
+## 可下载的数据到结果验收
+
+CI 还会使用仓库中的 L=3 backbone 做一次固定种子的全新分析，而不是调用合成
+协变量生成器：
+
+```powershell
+orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
+python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
+```
+
+上传的真实数据提供 8,648 行处理前企业协变量。程序从中抽取 3,000 家企业，重新
+模拟处理变量与因果结果，重新拟合 DML ATE 和一棵联合因果森林，并生成新的汇总
+统计、诊断信息、CATE 曲线、变量排名、两张 SVG 图片、分析报告和 SHA256 manifest。
+下载包不包含企业级数据行。
+
+每次 GitHub Actions 成功运行后，打开该次运行的 summary 页面，在 **Artifacts**
+区域下载 `orgcate-data-to-results-<run_id>`。
+
 ## 文档与结果
 
 - `docs/METHOD_CONTRACT_AND_STOP_RULES.md`：估计顺序与停止规则；
@@ -132,6 +150,8 @@ orgcate reproduce --target kink-resolution --phase report
 .venv\Scripts\python.exe -m compileall -q src tests execution tools
 .venv\Scripts\python.exe -m pytest -q -p no:cacheprovider
 python tools/audit_public_release.py --allow-metadata-pending
+orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
+python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
 ```
 
 加入 `LICENSE` 和 `CITATION.cff` 后，最终审计不再使用 metadata 例外。

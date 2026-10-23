@@ -1,0 +1,26 @@
+{
+  "schema_version": "orgcate-data-to-results-acceptance-v1",
+  "input": {
+    "path": "execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz",
+    "classification": "authorized real pre-treatment firm covariate backbone",
+    "sha256": "91c963e02cbdc17a19de85868ba44f5f4fd65791bec83906980f307a6cfd3174",
+    "expected_rows": 8648,
+    "expected_columns": 57
+  },
+  "analysis": {
+    "scenario": "sign-reversal",
+    "master_seed": 20261023,
+    "sample_size": 3000,
+    "external_split": "80% TRAIN / 20% untouched TEST",
+    "treatment_outcome_and_cate": "simulated during this run",
+    "preexisting_results_used_as_analysis_input": false
+  },
+  "output_policy": {
+    "include_aggregate_statistics": true,
+    "include_diagnostics": true,
+    "include_aggregate_curves": true,
+    "include_figures": true,
+    "include_analysis_report": true,
+    "include_firm_level_rows": false
+  }
+}
