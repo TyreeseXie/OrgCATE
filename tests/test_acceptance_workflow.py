@@ -5,7 +5,7 @@ import json
 import pandas as pd
 
 from orgcate_sim.public_demo import _prepare_output
-from orgcate_sim.release import repository_root, sha256_file
+from orgcate_sim.release import NINE_SITUATIONS, repository_root, sha256_file
 
 
 def test_acceptance_config_matches_bundled_backbone() -> None:
@@ -24,6 +24,7 @@ def test_acceptance_config_matches_bundled_backbone() -> None:
         config["input"]["expected_columns"],
     )
     assert config["analysis"]["sample_size"] == 3000
+    assert tuple(config["analysis"]["scenarios"]) == NINE_SITUATIONS
     assert config["output_policy"]["include_firm_level_rows"] is False
 
 

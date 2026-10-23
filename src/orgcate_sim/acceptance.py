@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import subprocess
 import time
@@ -16,7 +17,7 @@ import numpy as np
 import pandas as pd
 
 from .public_demo import run_public_demo
-from .release import repository_root
+from .release import NINE_SITUATIONS, repository_root
 
 
 def _sha256(path: Path) -> str:
@@ -64,7 +65,7 @@ def _scale(values: np.ndarray, lower: float, upper: float) -> np.ndarray:
     return lower + (values - minimum) * (upper - lower) / (maximum - minimum)
 
 
-def _curve_figure(curve: pd.DataFrame, path: Path) -> None:
+def _curve_figure(curve: pd.DataFrame, path: Path, *, title: str) -> None:
     width, height = 920, 560
     left, right, top, bottom = 90, 30, 80, 80
     plot_width = width - left - right
@@ -101,8 +102,8 @@ def _curve_figure(curve: pd.DataFrame, path: Path) -> None:
     ate_y = float(y_pixel(ate))
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">
 <rect width="100%" height="100%" fill="white"/>
-<text x="{left}" y="30" font-family="Arial" font-size="22" font-weight="700" fill="#202124">CATE reconstruction on the uploaded firm backbone</text>
-{''.join(grid)}
+<text x="{left}" y="30" font-family="Arial" font-size="22" font-weight="700" fill="#202124">{escape(title)}</text>
+{"".join(grid)}
 <line x1="{left}" y1="{top}" x2="{left}" y2="{top + plot_height}" stroke="#374151" stroke-width="1.5"/>
 <line x1="{left}" y1="{top + plot_height}" x2="{left + plot_width}" y2="{top + plot_height}" stroke="#374151" stroke-width="1.5"/>
 <line x1="{left}" y1="{ate_y:.2f}" x2="{left + plot_width}" y2="{ate_y:.2f}" stroke="#6b7280" stroke-width="2" stroke-dasharray="8 6"/>
@@ -115,6 +116,82 @@ def _curve_figure(curve: pd.DataFrame, path: Path) -> None:
 <text x="{left + plot_width - 4}" y="{ate_y - 7:.2f}" text-anchor="end" font-family="Arial" font-size="13" fill="#4b5563">DML ATE = {ate:.3f}</text>
 </svg>
 """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(svg, encoding="utf-8")
+
+
+def _overview_figure(curves: dict[str, pd.DataFrame], path: Path) -> None:
+    width, height = 1260, 940
+    panel_width, panel_height = 380, 245
+    origin_x, origin_y = 75, 115
+    gap_x, gap_y = 25, 35
+    elements: list[str] = []
+    for index, scenario in enumerate(NINE_SITUATIONS):
+        curve = curves[scenario]
+        column, row = index % 3, index // 3
+        x0 = origin_x + column * (panel_width + gap_x)
+        y0 = origin_y + row * (panel_height + gap_y)
+        plot_left, plot_top = x0 + 42, y0 + 34
+        plot_width, plot_height = panel_width - 58, panel_height - 62
+        u = curve["u"].to_numpy(float)
+        estimate = curve["estimated_cate"].to_numpy(float)
+        truth = curve["true_cate"].to_numpy(float)
+        ate = float(curve["dml_ate"].iloc[0])
+        y_all = np.concatenate([estimate, truth, np.array([ate])])
+        y_min, y_max = float(np.nanmin(y_all)), float(np.nanmax(y_all))
+        padding = max(0.04, 0.08 * (y_max - y_min))
+        y_min, y_max = y_min - padding, y_max + padding
+        x_px = _scale(u, plot_left, plot_left + plot_width)
+
+        def y_pixel(
+            values: np.ndarray | float,
+            *,
+            current_top: float = plot_top,
+            current_max: float = y_max,
+            current_height: float = plot_height,
+            current_min: float = y_min,
+        ) -> np.ndarray:
+            array = np.asarray(values, dtype=float)
+            return current_top + (current_max - array) * current_height / (
+                current_max - current_min
+            )
+
+        estimated_points = " ".join(
+            f"{px:.2f},{py:.2f}" for px, py in zip(x_px, y_pixel(estimate), strict=True)
+        )
+        truth_points = " ".join(
+            f"{px:.2f},{py:.2f}" for px, py in zip(x_px, y_pixel(truth), strict=True)
+        )
+        ate_y = float(y_pixel(ate))
+        elements.append(
+            f'<text x="{x0}" y="{y0 + 18}" font-family="Arial" font-size="17" '
+            f'font-weight="700" fill="#202124">{escape(scenario)}</text>'
+            f'<line x1="{plot_left}" y1="{plot_top}" x2="{plot_left}" '
+            f'y2="{plot_top + plot_height}" stroke="#9ca3af"/>'
+            f'<line x1="{plot_left}" y1="{plot_top + plot_height}" '
+            f'x2="{plot_left + plot_width}" y2="{plot_top + plot_height}" stroke="#9ca3af"/>'
+            f'<line x1="{plot_left}" y1="{ate_y:.2f}" '
+            f'x2="{plot_left + plot_width}" y2="{ate_y:.2f}" '
+            f'stroke="#6b7280" stroke-width="1.5" stroke-dasharray="6 5"/>'
+            f'<polyline points="{truth_points}" fill="none" stroke="#ca6b3c" '
+            f'stroke-width="2.5"/>'
+            f'<polyline points="{estimated_points}" fill="none" stroke="#1f7a7a" '
+            f'stroke-width="2.5"/>'
+            f'<text x="{plot_left - 4}" y="{plot_top + 3}" text-anchor="end" '
+            f'font-family="Arial" font-size="10" fill="#6b7280">{y_max:.2f}</text>'
+            f'<text x="{plot_left - 4}" y="{plot_top + plot_height}" text-anchor="end" '
+            f'font-family="Arial" font-size="10" fill="#6b7280">{y_min:.2f}</text>'
+        )
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">
+<rect width="100%" height="100%" fill="white"/>
+<text x="75" y="42" font-family="Arial" font-size="26" font-weight="700" fill="#202124">Nine-situation CATE reconstruction</text>
+<text x="75" y="70" font-family="Arial" font-size="14" fill="#4b5563">One fresh run per situation using the same uploaded backbone, seed, and frozen estimator</text>
+<line x1="830" y1="64" x2="865" y2="64" stroke="#1f7a7a" stroke-width="3"/><text x="873" y="69" font-family="Arial" font-size="13">Estimated CATE</text>
+<line x1="1000" y1="64" x2="1035" y2="64" stroke="#ca6b3c" stroke-width="3"/><text x="1043" y="69" font-family="Arial" font-size="13">Simulation truth</text>
+<line x1="830" y1="88" x2="865" y2="88" stroke="#6b7280" stroke-width="2" stroke-dasharray="6 5"/><text x="873" y="93" font-family="Arial" font-size="13">DML ATE</text>
+{"".join(elements)}
+</svg>
+'''
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(svg, encoding="utf-8")
 
@@ -144,12 +221,21 @@ def _importance_figure(ranking: pd.DataFrame, path: Path) -> None:
 <rect width="100%" height="100%" fill="white"/>
 <text x="{left}" y="32" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Causal-forest feature importance</text>
 <line x1="{left}" y1="{top}" x2="{left}" y2="{height - bottom}" stroke="#374151" stroke-width="1.5"/>
-{''.join(rows)}
+{"".join(rows)}
 <text x="{left + plot_width / 2}" y="{height - 17}" text-anchor="middle" font-family="Arial" font-size="14" fill="#374151">Importance (ranking information, not moderator confirmation)</text>
 </svg>
 """
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(svg, encoding="utf-8")
+
+
+def _finite_or_none(value: Any) -> float | None:
+    number = float(value)
+    return number if math.isfinite(number) else None
+
+
+def _format_metric(value: Any) -> str:
+    return "undefined" if value is None else f"{float(value):.4f}"
 
 
 def _report_text(
@@ -158,54 +244,76 @@ def _report_text(
     input_path: str,
     input_rows: int,
     input_columns: int,
-    statistics: dict[str, Any],
+    rows: list[dict[str, Any]],
 ) -> str:
+    table_rows = []
+    detail_sections = []
+    for row in rows:
+        table_rows.append(
+            "| {scenario} | {dml:.4f} | {truth:.4f} | {error:.4f} | "
+            "{label} | {state} | {rank} | {rmse:.4f} | {focal}/12 |".format(
+                scenario=row["scenario"],
+                dml=row["dml_ate"],
+                truth=row["true_ate"],
+                error=row["ate_error"],
+                label=row["estimated_morphology"],
+                state=row["practical_state"],
+                rank=_format_metric(row["cate_rank_correlation"]),
+                rmse=row["cate_rmse"],
+                focal=row["focal_characteristic_rank"],
+            )
+        )
+        detail_sections.append(
+            f"### {row['scenario']}\n\n"
+            f"{row['shape_interpretation']}\n\n"
+            f"Figures: `scenarios/{row['scenario']}/figures/cate_curve.svg` and "
+            f"`scenarios/{row['scenario']}/figures/feature_importance.svg`."
+        )
+    exact_count = sum(bool(row["exact_label_correct"]) for row in rows)
+    table_text = "\n".join(table_rows)
+    detail_text = "\n\n".join(detail_sections)
     return f"""# OrgCATE data-to-results acceptance report
 
 ## What was analyzed
 
 The analysis read `{input_path}`, the uploaded and hash-verified L=3 firm
-covariate backbone ({input_rows:,} rows and {input_columns} columns). A fixed
-sample of {statistics['analysis_sample_n']:,} firms supplied the observed
-pre-treatment covariates. Treatment, potential outcomes, observed outcomes and
-the true CATE were generated during this run with master seed
-`{config['analysis']['master_seed']}`. No pre-existing result table or figure
-was used as an analysis input.
+covariate backbone ({input_rows:,} rows and {input_columns} columns). Each of the
+nine prespecified situations used {rows[0]["analysis_sample_n"]:,} firms and the
+same master seed `{config["analysis"]["master_seed"]}`. Real data supplied only
+pre-treatment firm covariates. Treatment, potential outcomes, observed outcomes,
+and true CATE were generated afresh for every situation. No pre-existing result
+table or figure was used as an analysis input.
 
-The frozen workflow estimated a five-fold cross-fitted DML/AIPW ATE, fitted one
-joint 12-characteristic honest `CausalForestDML`, reconstructed the CATE shape
-on TRAIN, and assessed the selected candidate on untouched TEST.
+For every situation, the frozen workflow estimated a five-fold cross-fitted
+DML/AIPW ATE, fitted one joint 12-characteristic honest `CausalForestDML`,
+reconstructed the CATE shape on TRAIN, and assessed it on untouched TEST.
 
-## Results
+## Nine-situation results
 
-| Quantity | Recomputed value |
-|---|---:|
-| DML ATE | {statistics['dml_ate']:.4f} |
-| DML ATE 95% CI | [{statistics['dml_ate_ci_low']:.4f}, {statistics['dml_ate_ci_high']:.4f}] |
-| Simulated true ATE | {statistics['true_ate']:.4f} |
-| ATE error | {statistics['ate_error']:.4f} |
-| Estimated morphology | `{statistics['estimated_morphology']}` |
-| Practical state | `{statistics['practical_state']}` |
-| TEST CATE rank correlation | {statistics['cate_rank_correlation']:.4f} |
-| TEST CATE RMSE | {statistics['cate_rmse']:.4f} |
-| ATE-CATE standardized gap | {statistics['ate_cate_standardized_gap']:.4f} |
-| Focal-characteristic rank | {statistics['focal_characteristic_rank']} of 12 |
+| Situation | DML ATE | True ATE | ATE error | Estimated form | State | TEST Spearman | CATE RMSE | Focal rank |
+|---|---:|---:|---:|---|---|---:|---:|---:|
+{table_text}
 
-Shape summary: {statistics['shape_interpretation']}
+The exact morphology label matched the simulation label in {exact_count} of
+{len(rows)} fresh runs. This is a fixed-seed executable acceptance result, not a
+Monte Carlo success-rate estimate. Spearman rank correlation is undefined when
+the true CATE is constant.
 
 ## Figures
 
-- `figures/cate_curve.svg` compares the recomputed CATE curve with simulation
-  truth and the DML ATE.
-- `figures/feature_importance.svg` displays the 12-variable forest ranking.
+`figures/nine_scenario_cate_overview.svg` compares estimated CATE, simulation
+truth, and DML ATE for all nine situations. Each situation also has its own CATE
+figure and 12-variable importance figure:
+
+{detail_text}
 
 ## Data boundary
 
 The downloadable artifact contains aggregate statistics, curves, diagnostics,
-figures and reports only. It excludes firm identifiers, firm-level covariates,
-treatment assignments, outcomes, potential outcomes and unit-level oracle
-truth. These results demonstrate executable semi-synthetic reproduction for
-one fixed scenario; they are not empirical causal estimates for real firms.
+figures, and reports only. It excludes firm identifiers, firm-level covariates,
+treatment assignments, outcomes, potential outcomes, and unit-level oracle
+truth. These results demonstrate executable semi-synthetic reproduction; they
+are not empirical causal estimates for real firms.
 """
 
 
@@ -215,7 +323,7 @@ def run_data_to_results_acceptance(
     output: str | Path,
     root: Path | None = None,
 ) -> dict[str, Any]:
-    """Run and package one fresh semi-synthetic acceptance analysis."""
+    """Run and package fresh semi-synthetic analyses for all nine situations."""
 
     started = time.perf_counter()
     root = repository_root(root)
@@ -239,109 +347,155 @@ def run_data_to_results_acceptance(
     if len(input_frame) != int(config["input"]["expected_rows"]):
         raise ValueError("bundled backbone row count does not match acceptance config")
     if len(input_frame.columns) != int(config["input"]["expected_columns"]):
-        raise ValueError("bundled backbone column count does not match acceptance config")
+        raise ValueError(
+            "bundled backbone column count does not match acceptance config"
+        )
 
-    scenario = str(config["analysis"]["scenario"])
+    scenarios = tuple(config["analysis"]["scenarios"])
+    if scenarios != NINE_SITUATIONS:
+        raise ValueError("acceptance config must list the frozen nine situations")
     seed = int(config["analysis"]["master_seed"])
-    result = run_public_demo(
-        scenario=scenario,
-        output=output,
-        seed=seed,
-        use_bundled_backbone=True,
-        save_row_level=False,
-        root=root,
+    rows: list[dict[str, Any]] = []
+    curves: dict[str, pd.DataFrame] = {}
+    seed_lineages: dict[str, dict[str, Any]] = {}
+    first_practical: dict[str, Any] | None = None
+    first_manifest: dict[str, Any] | None = None
+    for scenario in scenarios:
+        scenario_output = output / "scenarios" / scenario
+        result = run_public_demo(
+            scenario=scenario,
+            output=scenario_output,
+            seed=seed,
+            use_bundled_backbone=True,
+            save_row_level=False,
+            root=root,
+        )
+        practical = result["practical"]
+        evaluation = result["evaluation"]
+        run_manifest = result["manifest"]
+        first_practical = first_practical or practical
+        first_manifest = first_manifest or run_manifest
+
+        curve = pd.read_csv(scenario_output / "practical" / "cate_curve.csv")
+        truth = pd.read_csv(scenario_output / "evaluator" / "truth_curve.csv")
+        curve = curve.merge(truth, on="u", how="inner", validate="one_to_one")
+        curve = curve.rename(
+            columns={
+                "estimate_curve": "estimated_cate",
+                "truth_curve": "true_cate",
+            }
+        )
+        curve["dml_ate"] = float(practical["ate"]["estimate"])
+        curves[scenario] = curve
+        curve_path = scenario_output / "tables" / "cate_curve_with_ate.csv"
+        curve_path.parent.mkdir(parents=True, exist_ok=True)
+        curve.to_csv(curve_path, index=False)
+
+        ranking = pd.read_csv(scenario_output / "practical" / "feature_ranking.csv")
+        statistics = {
+            "schema_version": "orgcate-acceptance-statistics-v2",
+            "scenario": scenario,
+            "analysis_sample_n": int(run_manifest["analysis_rows"]),
+            "train_n": int(run_manifest["train_rows"]),
+            "test_n": int(run_manifest["test_rows"]),
+            "dml_ate": float(practical["ate"]["estimate"]),
+            "dml_ate_standard_error": float(practical["ate"]["standard_error"]),
+            "dml_ate_ci_low": float(practical["ate"]["ci_low"]),
+            "dml_ate_ci_high": float(practical["ate"]["ci_high"]),
+            "true_ate": float(evaluation["true_ate"]),
+            "ate_error": float(evaluation["ate_error"]),
+            "estimated_morphology": str(practical["morphology"]["label"]),
+            "exact_label_correct": bool(evaluation["exact_label_correct"]),
+            "practical_state": str(practical["practical_state"]),
+            "cate_rank_correlation": _finite_or_none(
+                evaluation["curve_rank_correlation"]
+            ),
+            "cate_rmse": float(evaluation["curve_rmse"]),
+            "ate_cate_standardized_gap": float(
+                practical["ate_cate_coherence"]["standardized_absolute_gap"]
+            ),
+            "ate_cate_coherence_passed": bool(
+                practical["ate_cate_coherence"]["passed"]
+            ),
+            "test_confirmation_rate": float(
+                practical["confirmation"]["test_confirmation_rate"]
+            ),
+            "focal_characteristic": str(practical["moderator"]["focal_characteristic"]),
+            "focal_characteristic_rank": int(practical["moderator"]["focal_rank"]),
+            "shape_interpretation": str(practical["morphology"]["interpretation_en"]),
+        }
+        if statistics["analysis_sample_n"] != int(config["analysis"]["sample_size"]):
+            raise AssertionError(
+                "actual analysis sample size differs from acceptance config"
+            )
+        rows.append(statistics)
+        _write_json(
+            scenario_output / "statistics" / "summary_statistics.json",
+            statistics,
+        )
+
+        diagnostics = {
+            "schema_version": "orgcate-acceptance-diagnostics-v2",
+            "scenario": scenario,
+            "input_validation": {
+                "path": relative_input.as_posix(),
+                "sha256": observed_input_hash,
+                "bytes": input_path.stat().st_size,
+                "rows_read": len(input_frame),
+                "columns_read": len(input_frame.columns),
+            },
+            "data_roles": {
+                "observed_real_data": "pre-treatment firm covariates and history",
+                "generated_during_run": [
+                    "treatment",
+                    "potential_outcomes",
+                    "observed_outcome",
+                    "true_cate",
+                ],
+                "preexisting_results_used_as_analysis_input": False,
+            },
+            "eligibility": practical["eligibility"],
+            "ate_cate_coherence": practical["ate_cate_coherence"],
+            "forest": practical["forest"],
+            "seed_lineage": practical["audit"]["seed_lineage"],
+            "warnings": {"count": practical["audit"]["warning_count"]},
+            "package_versions": practical["audit"]["package_versions"],
+            "analyst_oracle_separated": run_manifest["analyst_oracle_separated"],
+            "row_level_outputs_written": run_manifest["row_level_outputs_written"],
+        }
+        _write_json(
+            scenario_output / "diagnostics" / "run_diagnostics.json",
+            diagnostics,
+        )
+        seed_lineages[scenario] = practical["audit"]["seed_lineage"]
+        _curve_figure(
+            curve,
+            scenario_output / "figures" / "cate_curve.svg",
+            title=f"{scenario}: CATE reconstruction",
+        )
+        _importance_figure(
+            ranking,
+            scenario_output / "figures" / "feature_importance.svg",
+        )
+
+    if first_practical is None or first_manifest is None:
+        raise AssertionError("acceptance produced no scenario results")
+    summary = pd.DataFrame(rows)
+    summary_dir = output / "statistics"
+    summary_dir.mkdir(parents=True, exist_ok=True)
+    summary.to_csv(summary_dir / "scenario_summary.csv", index=False)
+    _write_json(
+        summary_dir / "scenario_summary.json",
+        {"schema_version": "orgcate-nine-situation-summary-v1", "scenarios": rows},
     )
-    practical = result["practical"]
-    evaluation = result["evaluation"]
-    run_manifest = result["manifest"]
-
-    curve = pd.read_csv(output / "practical" / "cate_curve.csv")
-    truth = pd.read_csv(output / "evaluator" / "truth_curve.csv")
-    curve = curve.merge(truth, on="u", how="inner", validate="one_to_one")
-    curve = curve.rename(
-        columns={"estimate_curve": "estimated_cate", "truth_curve": "true_cate"}
-    )
-    curve["dml_ate"] = float(practical["ate"]["estimate"])
-    curve_path = output / "tables" / "cate_curve_with_ate.csv"
-    curve_path.parent.mkdir(parents=True, exist_ok=True)
-    curve.to_csv(curve_path, index=False)
-
-    ranking = pd.read_csv(output / "practical" / "feature_ranking.csv")
-    statistics = {
-        "schema_version": "orgcate-acceptance-statistics-v1",
-        "analysis_sample_n": int(run_manifest["analysis_rows"]),
-        "train_n": int(run_manifest["train_rows"]),
-        "test_n": int(run_manifest["test_rows"]),
-        "dml_ate": float(practical["ate"]["estimate"]),
-        "dml_ate_standard_error": float(practical["ate"]["standard_error"]),
-        "dml_ate_ci_low": float(practical["ate"]["ci_low"]),
-        "dml_ate_ci_high": float(practical["ate"]["ci_high"]),
-        "true_ate": float(evaluation["true_ate"]),
-        "ate_error": float(evaluation["ate_error"]),
-        "estimated_morphology": str(practical["morphology"]["label"]),
-        "practical_state": str(practical["practical_state"]),
-        "cate_rank_correlation": float(evaluation["curve_rank_correlation"]),
-        "cate_rmse": float(evaluation["curve_rmse"]),
-        "ate_cate_standardized_gap": float(
-            practical["ate_cate_coherence"]["standardized_absolute_gap"]
-        ),
-        "ate_cate_coherence_passed": bool(practical["ate_cate_coherence"]["passed"]),
-        "test_confirmation_rate": float(
-            practical["confirmation"]["test_confirmation_rate"]
-        ),
-        "focal_characteristic": str(
-            practical["moderator"]["focal_characteristic"]
-        ),
-        "focal_characteristic_rank": int(practical["moderator"]["focal_rank"]),
-        "shape_interpretation": str(
-            practical["morphology"]["interpretation_en"]
-        ),
-    }
-    if statistics["analysis_sample_n"] != int(config["analysis"]["sample_size"]):
-        raise AssertionError("actual analysis sample size differs from acceptance config")
-    statistics_path = output / "statistics" / "summary_statistics.json"
-    _write_json(statistics_path, statistics)
-
-    diagnostics = {
-        "schema_version": "orgcate-acceptance-diagnostics-v1",
-        "input_validation": {
-            "path": relative_input.as_posix(),
-            "sha256": observed_input_hash,
-            "bytes": input_path.stat().st_size,
-            "rows_read": len(input_frame),
-            "columns_read": len(input_frame.columns),
-        },
-        "data_roles": {
-            "observed_real_data": "pre-treatment firm covariates and history",
-            "generated_during_run": [
-                "treatment",
-                "potential_outcomes",
-                "observed_outcome",
-                "true_cate",
-            ],
-            "preexisting_results_used_as_analysis_input": False,
-        },
-        "eligibility": practical["eligibility"],
-        "ate_cate_coherence": practical["ate_cate_coherence"],
-        "forest": practical["forest"],
-        "seed_lineage": practical["audit"]["seed_lineage"],
-        "warnings": {"count": practical["audit"]["warning_count"]},
-        "package_versions": practical["audit"]["package_versions"],
-        "analyst_oracle_separated": run_manifest["analyst_oracle_separated"],
-        "row_level_outputs_written": run_manifest["row_level_outputs_written"],
-    }
-    diagnostics_path = output / "diagnostics" / "run_diagnostics.json"
-    _write_json(diagnostics_path, diagnostics)
-
-    _curve_figure(curve, output / "figures" / "cate_curve.svg")
-    _importance_figure(ranking, output / "figures" / "feature_importance.svg")
+    _overview_figure(curves, output / "figures" / "nine_scenario_cate_overview.svg")
 
     report = _report_text(
         config=config,
         input_path=relative_input.as_posix(),
         input_rows=len(input_frame),
         input_columns=len(input_frame.columns),
-        statistics=statistics,
+        rows=rows,
     )
     report_path = output / "ANALYSIS_REPORT.md"
     report_path.write_text(report, encoding="utf-8")
@@ -357,7 +511,7 @@ def run_data_to_results_acceptance(
         )
     git_state = _git_state(root)
     manifest = {
-        "schema_version": "orgcate-data-to-results-acceptance-manifest-v1",
+        "schema_version": "orgcate-data-to-results-acceptance-manifest-v2",
         "status": "completed",
         "created_at_utc": datetime.now(UTC).isoformat(),
         "command": (
@@ -372,7 +526,7 @@ def run_data_to_results_acceptance(
             "bytes": input_path.stat().st_size,
             "rows_read": len(input_frame),
             "columns_read": len(input_frame.columns),
-            "analysis_sample_n": int(run_manifest["analysis_rows"]),
+            "analysis_sample_n_per_scenario": int(first_manifest["analysis_rows"]),
         },
         "generated_data": {
             "treatment": "simulated",
@@ -380,18 +534,19 @@ def run_data_to_results_acceptance(
             "observed_outcome": "simulated",
             "true_cate": "simulated",
             "row_level_generated_data_in_artifact": False,
+            "matched_seed_across_scenarios": True,
         },
         "analysis": {
-            "scenario": scenario,
+            "scenarios": list(scenarios),
             "external_split": "80% TRAIN / 20% untouched TEST",
-            "ate_method": practical["ate"]["method"],
-            "learner": practical["forest"]["learner"],
-            "model_configuration": practical["forest"]["configuration"],
-            "candidate_characteristics": practical["forest"][
+            "ate_method": first_practical["ate"]["method"],
+            "learner": first_practical["forest"]["learner"],
+            "model_configuration": first_practical["forest"]["configuration"],
+            "candidate_characteristics": first_practical["forest"][
                 "candidate_characteristics"
             ],
             "master_seed": seed,
-            "seed_lineage": practical["audit"]["seed_lineage"],
+            "seed_lineage_by_scenario": seed_lineages,
         },
         "config": {
             "path": config_path.relative_to(root).as_posix(),
@@ -410,4 +565,4 @@ def run_data_to_results_acceptance(
     (output / "ACCEPTANCE_MANIFEST.sha256").write_text(
         f"{_sha256(manifest_path)}  ACCEPTANCE_MANIFEST.json\n", encoding="ascii"
     )
-    return {"statistics": statistics, "manifest": manifest}
+    return {"scenario_summary": rows, "manifest": manifest}

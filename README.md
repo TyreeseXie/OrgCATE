@@ -127,7 +127,7 @@ is intended for the documented development-before-confirmation procedure.
 
 ## Downloadable data-to-results acceptance
 
-The CI workflow also performs one fresh, fixed-seed analysis using the bundled
+The CI workflow also performs nine fresh, fixed-seed analyses using the bundled
 L=3 backbone rather than the synthetic covariate generator:
 
 ```powershell
@@ -135,12 +135,13 @@ orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output 
 python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
 ```
 
-The real uploaded data supply 8,648 rows of pre-treatment firm covariates. The
-command samples 3,000 firms, simulates treatment and causal outcomes, refits the
-DML ATE and one joint causal forest, and creates fresh aggregate statistics,
-diagnostics, CATE curves, feature rankings, two SVG figures, an analysis report,
-and a SHA256 manifest. Firm-level rows are excluded from the downloadable
-package.
+The real uploaded data supply 8,648 rows of pre-treatment firm covariates. For
+each of the nine prespecified situations, the command samples 3,000 firms,
+simulates treatment and causal outcomes, refits the DML ATE and one joint causal
+forest, and creates fresh aggregate statistics, diagnostics, CATE curves, and
+feature rankings. The downloadable package contains a nine-situation summary,
+a 3-by-3 overview figure, two SVG figures per situation, an analysis report,
+and a SHA256 manifest. Firm-level rows are excluded.
 
 For every successful GitHub Actions run, open the run summary and download
 `orgcate-data-to-results-<run_id>` from the **Artifacts** section.

@@ -30,7 +30,7 @@ jobs:
         run: orgcate doctor --json
       - name: Run end-to-end public demo
         run: orgcate demo --scenario sign-reversal --output artifacts/ci_demo
-      - name: Analyze uploaded validation backbone
+      - name: Analyze all nine situations on uploaded validation backbone
         run: >-
           orgcate acceptance
           --config configs/data_to_results_acceptance_v1.json

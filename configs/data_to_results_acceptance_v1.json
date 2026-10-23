@@ -8,7 +8,17 @@
     "expected_columns": 57
   },
   "analysis": {
-    "scenario": "sign-reversal",
+    "scenarios": [
+      "homogeneous",
+      "linear-monotone",
+      "nonlinear-monotone",
+      "steep-continuous",
+      "inverted-u",
+      "u-shaped",
+      "kinked",
+      "threshold-step",
+      "sign-reversal"
+    ],
     "master_seed": 20261023,
     "sample_size": 3000,
     "external_split": "80% TRAIN / 20% untouched TEST",

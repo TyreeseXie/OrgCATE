@@ -114,18 +114,18 @@ orgcate reproduce --target kink-resolution --phase report
 
 ## 可下载的数据到结果验收
 
-CI 还会使用仓库中的 L=3 backbone 做一次固定种子的全新分析，而不是调用合成
-协变量生成器：
+CI 还会使用仓库中的 L=3 backbone 对九种预设情境分别做一次固定种子的全新
+分析，而不是调用合成协变量生成器：
 
 ```powershell
 orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
 python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
 ```
 
-上传的真实数据提供 8,648 行处理前企业协变量。程序从中抽取 3,000 家企业，重新
-模拟处理变量与因果结果，重新拟合 DML ATE 和一棵联合因果森林，并生成新的汇总
-统计、诊断信息、CATE 曲线、变量排名、两张 SVG 图片、分析报告和 SHA256 manifest。
-下载包不包含企业级数据行。
+上传的真实数据提供 8,648 行处理前企业协变量。程序针对每种情境从中抽取 3,000
+家企业，重新模拟处理变量与因果结果，重新拟合 DML ATE 和一棵联合因果森林。
+下载包包含九情境汇总表、九宫格总图、每种情境各两张 SVG 图片、诊断信息、分析
+报告和 SHA256 manifest，但不包含企业级数据行。
 
 每次 GitHub Actions 成功运行后，打开该次运行的 summary 页面，在 **Artifacts**
 区域下载 `orgcate-data-to-results-<run_id>`。

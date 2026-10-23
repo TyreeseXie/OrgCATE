@@ -222,11 +222,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             config_path=args.config,
             output=args.output,
         )
-        statistics = result["statistics"]
+        rows = result["scenario_summary"]
         print(f"Acceptance analysis completed: {args.output.resolve()}")
-        print(f"DML ATE: {statistics['dml_ate']:.4f}")
-        print(f"Morphology: {statistics['estimated_morphology']}")
-        print(f"Practical state: {statistics['practical_state']}")
+        print(f"Situations analyzed: {len(rows)}")
+        print(
+            "Exact morphology labels: "
+            f"{sum(bool(row['exact_label_correct']) for row in rows)}/{len(rows)}"
+        )
         return 0
     if args.command == "reproduce":
         return _run_reproduction(args)

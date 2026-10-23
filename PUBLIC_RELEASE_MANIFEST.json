@@ -8,7 +8,7 @@
   ],
   "manifest_excludes_itself": true,
   "file_count": 100,
-  "total_bytes": 3516588,
+  "total_bytes": 3526981,
   "findings": [],
   "files": [
     {
@@ -18,8 +18,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 1564,
-      "sha256": "dfeabc56c9cc55100e8c656e485774ea8369dabc4a848162f0c08099a7e98b3a"
+      "bytes": 1587,
+      "sha256": "21bef4289f915f021ac452c674f66652fc1dd5325cfdc20d7e420ca6689f7024"
     },
     {
       "path": ".gitignore",
@@ -38,13 +38,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 6681,
-      "sha256": "7c4ce5b0944f3a90a7c00496ce7d9d385fa1641da135b2c65d92289af0e5e2af"
+      "bytes": 6802,
+      "sha256": "9b0fb8588dc95d51d6ec9b949d5c844c01ce36b378e4d448be40a1753b40f00d"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 5996,
-      "sha256": "ef754816cb74f7e32e1dd5e6ef01ffe422eaad91c41f8d377df9061d32829443"
+      "bytes": 6044,
+      "sha256": "258b1c235777b3f2d65422c1c3ef7c3ef9480147a60b6fe93820e0d40e365fb8"
     },
     {
       "path": "SECURITY.md",
@@ -63,8 +63,8 @@
     },
     {
       "path": "configs/data_to_results_acceptance_v1.json",
-      "bytes": 910,
-      "sha256": "b05bcc5db6a70da2b8a87b86503f1fd151d3b701e0ca9a957c706c7b4c5db307"
+      "bytes": 1103,
+      "sha256": "498305ac177e9fdedae6a6c9b9b96bd04ebf23f7f25b04c88fae6c13aa183331"
     },
     {
       "path": "configs/github_release_method_contract_v1.json",
@@ -348,8 +348,8 @@
     },
     {
       "path": "src/orgcate_sim/acceptance.py",
-      "bytes": 18228,
-      "sha256": "f5df899a0e229af726b047b547977b4ab2e152d7e0eaae7a01a1a60c0807ab90"
+      "bytes": 25685,
+      "sha256": "3e4b4666f56e135d4878bdc7f254da519f81aafafaa7c8ad51aa4082eaa36387"
     },
     {
       "path": "src/orgcate_sim/ate.py",
@@ -363,8 +363,8 @@
     },
     {
       "path": "src/orgcate_sim/cli.py",
-      "bytes": 8459,
-      "sha256": "65de61d3ff95b205d774b52fdb5217cea24cd228f87822025cb3c982ef3f6afb"
+      "bytes": 8469,
+      "sha256": "44cccaa56f43bbe4ec15a26615f618713a1fbb5a286783d20731a41c3e72a186"
     },
     {
       "path": "src/orgcate_sim/config.py",
@@ -463,8 +463,8 @@
     },
     {
       "path": "tests/test_acceptance_workflow.py",
-      "bytes": 1095,
-      "sha256": "0826d09ab4d549611af876f304fa0dc894b491fcf00d41ecf981aff84c0f9dd5"
+      "bytes": 1181,
+      "sha256": "452bc9ac6271b0b4e0fa9c40cde6619a68809b82d1af3160cd6417b052410ee1"
     },
     {
       "path": "tests/test_ate_anchor.py",
@@ -508,8 +508,8 @@
     },
     {
       "path": "tools/verify_acceptance_artifacts.py",
-      "bytes": 7037,
-      "sha256": "61b6870385008eb9d87ec94db92422943cd280ec9692fd3424aaf9f86efbd250"
+      "bytes": 9492,
+      "sha256": "4e637024c5e72b9ac12f65c2f588f2e0326eabd7ec4487cd9fa1659d34420876"
     }
   ]
 }
