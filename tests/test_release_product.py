@@ -13,6 +13,7 @@ from orgcate_sim.release import (
     audit_method_contract,
     load_integrated_evidence,
     repository_root,
+    sha256_versioned_text_file,
     validate_practical_result,
     verify_release,
 )
@@ -26,6 +27,17 @@ def test_repository_root_does_not_require_private_agent_instructions(
     (tmp_path / "configs").mkdir()
 
     assert repository_root(tmp_path) == tmp_path
+
+
+def test_versioned_text_hash_is_independent_of_checkout_line_endings(
+    tmp_path: Path,
+) -> None:
+    lf_path = tmp_path / "lf.json"
+    crlf_path = tmp_path / "crlf.json"
+    lf_path.write_bytes(b'{\n  "frozen": true\n}\n')
+    crlf_path.write_bytes(b'{\r\n  "frozen": true\r\n}\r\n')
+
+    assert sha256_versioned_text_file(lf_path) == sha256_versioned_text_file(crlf_path)
 
 
 def test_integrated_evidence_uses_focused_kink_version() -> None:

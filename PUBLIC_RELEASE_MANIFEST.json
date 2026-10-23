@@ -8,7 +8,7 @@
   ],
   "manifest_excludes_itself": true,
   "file_count": 97,
-  "total_bytes": 3484572,
+  "total_bytes": 3485231,
   "findings": [],
   "files": [
     {
@@ -308,8 +308,8 @@
     },
     {
       "path": "reports/morphology_product_v1/MORPHOLOGY_PRODUCT_V1_MANIFEST.json",
-      "bytes": 2275,
-      "sha256": "1bc107a647586e1f4d05986498cbd148adcd719ea3e6500fcc94058032a3eb7e"
+      "bytes": 2277,
+      "sha256": "4f3a9222e9d962a971d0fb25f1fc4f4dcbf268797c1e3c5e7168da611b758d7a"
     },
     {
       "path": "reports/morphology_product_v1/MORPHOLOGY_PRODUCT_V1_REPORT_ZH.md",
@@ -423,8 +423,8 @@
     },
     {
       "path": "src/orgcate_sim/release.py",
-      "bytes": 17539,
-      "sha256": "4d091b6fc1be0e5ac7376d8727a0f2ab99e937e63e1af39a8a8d57ea6ff5a9c3"
+      "bytes": 17784,
+      "sha256": "f6952f1218f1700fc6be8a2dcc909473d9d881318faf8e04df88f42facd7157e"
     },
     {
       "path": "src/orgcate_sim/schemas.py",
@@ -488,8 +488,8 @@
     },
     {
       "path": "tests/test_release_product.py",
-      "bytes": 5077,
-      "sha256": "f49d26f178ddda32a796f09056272ec61f467675c8455ba5844cf5975fdf90ad"
+      "bytes": 5489,
+      "sha256": "235d13d9ee4708944379d67b0dbc4fe8c0a1396dad0942b1e2ec8c661c450d34"
     },
     {
       "path": "tools/audit_public_release.py",

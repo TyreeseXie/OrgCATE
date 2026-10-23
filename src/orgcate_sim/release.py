@@ -73,6 +73,13 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def sha256_versioned_text_file(path: Path) -> str:
+    """Hash repository text using Git's LF-normalized representation."""
+
+    content = path.read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(content).hexdigest()
+
+
 def package_versions() -> dict[str, str]:
     result = {"python": platform.python_version()}
     for package in EXPECTED_VERSIONS:
@@ -206,7 +213,7 @@ def load_integrated_evidence(root: Path | None = None) -> pd.DataFrame:
 
 
 def _hash_check(checks: dict[str, bool], name: str, path: Path, expected: str) -> None:
-    checks[name] = path.is_file() and sha256_file(path) == expected
+    checks[name] = path.is_file() and sha256_versioned_text_file(path) == expected
 
 
 def verify_release(root: Path | None = None) -> dict[str, Any]:

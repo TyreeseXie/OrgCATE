@@ -9,7 +9,7 @@
   "oracle_used_for_shape_selection": false,
   "config_sha256": "1d2b6a2a9400bb71cd77035b81211a0f3c9ed5199ff8b4414e722a7c526e6656",
   "runner_sha256": "131e428a9bd4928c13ecc085196226fe5f38e8b385900379fe4e2e79ed2e1e24",
-  "freeze_sha256": "790ccc1e6aa646cc265d3b3d79ab7c1f969537f640222a0ad1ad067aeab6e7ad",
+  "freeze_sha256": "b54185b2d078dada889a0b8a3b8aaa62db2b4c011fcb045d63701e8ed0786ba0",
   "freeze": {
     "status": "METHOD_FROZEN_BEFORE_100_CELL_FRESH_CONFIRMATION",
     "frozen_at": "2026-10-22",
