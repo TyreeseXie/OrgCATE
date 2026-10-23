@@ -1,0 +1,25 @@
+{
+  "status": "METHOD_FROZEN_BEFORE_100_CELL_FRESH_CONFIRMATION",
+  "frozen_at": "2026-10-22",
+  "development_cells": 20,
+  "confirmation_seed_grid": {
+    "0": 3662606528,
+    "1": 1374813382,
+    "2": 2050700487,
+    "3": 3211512206,
+    "4": 152301889,
+    "5": 863109596,
+    "6": 1310112220,
+    "7": 1667746481,
+    "8": 132475672,
+    "9": 114306789
+  },
+  "hashes": {
+    "config_sha256": "1d2b6a2a9400bb71cd77035b81211a0f3c9ed5199ff8b4414e722a7c526e6656",
+    "runner_sha256": "131e428a9bd4928c13ecc085196226fe5f38e8b385900379fe4e2e79ed2e1e24",
+    "source_config_sha256": "3cf08ce84a02f64e0f66d313999ea884f31eeac2b4e0e1807f0dc8068d026d53",
+    "development_results_sha256": "3f8df5857074d48c046137166210e0b5f5d129ce31951b75939d3c39ae5c5f01"
+  },
+  "test_selects_shape": false,
+  "oracle_selects_shape": false
+}

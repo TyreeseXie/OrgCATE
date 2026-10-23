@@ -1,0 +1,49 @@
+feature,family,history_applicability,formula,headline_role
+log_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+at_rank_year_currency,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+asinh_sale,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+sale_rank_year_currency,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+asinh_emp,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+emp_missing,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+cash_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+debt_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+equity_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+roa_ni,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+op_income_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+cashflow_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+capx_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+ppe_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+intangibles_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+goodwill_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+xsga_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+xsga_missing,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+xrd_at,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+xrd_missing,last_pre_year,L1/L3/L5,see build script row-level primitive,candidate
+log_at_mean_L,longitudinal_dynamic,L3/L5,mean_L over L consecutive pre-treatment fiscal years,candidate
+log_at_slope_L,longitudinal_dynamic,L3/L5,slope_L over L consecutive pre-treatment fiscal years,candidate
+log_at_volatility_L,longitudinal_dynamic,L3/L5,volatility_L over L consecutive pre-treatment fiscal years,candidate
+log_at_nobs_L,longitudinal_dynamic,L3/L5,nobs_L over L consecutive pre-treatment fiscal years,candidate
+asinh_sale_mean_L,longitudinal_dynamic,L3/L5,mean_L over L consecutive pre-treatment fiscal years,candidate
+asinh_sale_slope_L,longitudinal_dynamic,L3/L5,slope_L over L consecutive pre-treatment fiscal years,candidate
+asinh_sale_volatility_L,longitudinal_dynamic,L3/L5,volatility_L over L consecutive pre-treatment fiscal years,candidate
+asinh_sale_nobs_L,longitudinal_dynamic,L3/L5,nobs_L over L consecutive pre-treatment fiscal years,candidate
+roa_ni_mean_L,longitudinal_dynamic,L3/L5,mean_L over L consecutive pre-treatment fiscal years,candidate
+roa_ni_slope_L,longitudinal_dynamic,L3/L5,slope_L over L consecutive pre-treatment fiscal years,candidate
+roa_ni_volatility_L,longitudinal_dynamic,L3/L5,volatility_L over L consecutive pre-treatment fiscal years,candidate
+roa_ni_nobs_L,longitudinal_dynamic,L3/L5,nobs_L over L consecutive pre-treatment fiscal years,candidate
+debt_at_mean_L,longitudinal_dynamic,L3/L5,mean_L over L consecutive pre-treatment fiscal years,candidate
+debt_at_slope_L,longitudinal_dynamic,L3/L5,slope_L over L consecutive pre-treatment fiscal years,candidate
+debt_at_volatility_L,longitudinal_dynamic,L3/L5,volatility_L over L consecutive pre-treatment fiscal years,candidate
+debt_at_nobs_L,longitudinal_dynamic,L3/L5,nobs_L over L consecutive pre-treatment fiscal years,candidate
+cash_at_mean_L,longitudinal_dynamic,L3/L5,mean_L over L consecutive pre-treatment fiscal years,candidate
+cash_at_slope_L,longitudinal_dynamic,L3/L5,slope_L over L consecutive pre-treatment fiscal years,candidate
+cash_at_volatility_L,longitudinal_dynamic,L3/L5,volatility_L over L consecutive pre-treatment fiscal years,candidate
+cash_at_nobs_L,longitudinal_dynamic,L3/L5,nobs_L over L consecutive pre-treatment fiscal years,candidate
+capx_at_mean_L,longitudinal_dynamic,L3/L5,mean_L over L consecutive pre-treatment fiscal years,candidate
+capx_at_slope_L,longitudinal_dynamic,L3/L5,slope_L over L consecutive pre-treatment fiscal years,candidate
+capx_at_volatility_L,longitudinal_dynamic,L3/L5,volatility_L over L consecutive pre-treatment fiscal years,candidate
+capx_at_nobs_L,longitudinal_dynamic,L3/L5,nobs_L over L consecutive pre-treatment fiscal years,candidate
+xrd_at_mean_L,longitudinal_dynamic,L3/L5,mean_L over L consecutive pre-treatment fiscal years,candidate
+xrd_at_slope_L,longitudinal_dynamic,L3/L5,slope_L over L consecutive pre-treatment fiscal years,candidate
+xrd_at_volatility_L,longitudinal_dynamic,L3/L5,volatility_L over L consecutive pre-treatment fiscal years,candidate
+xrd_at_nobs_L,longitudinal_dynamic,L3/L5,nobs_L over L consecutive pre-treatment fiscal years,candidate

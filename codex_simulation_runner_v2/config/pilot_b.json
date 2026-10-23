@@ -1,0 +1,50 @@
+{
+  "runner_version": "v2",
+  "pilot": "B_morphology",
+  "backbone_path": "../../execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz",
+  "feature_role_mapping_path": "../../execution/phase3_dgp_smoke_v1/DGP_FEATURE_ROLE_MAPPING_V1.json",
+  "n": 1500,
+  "test_size": 0.20,
+  "worlds": ["W0", "W1_core", "W2", "W3", "W4", "W5"],
+  "primary_model": "M1_CF_DML_HONEST",
+  "replications": 20,
+  "common": {
+    "n_estimators": 1000,
+    "min_samples_leaf": 5,
+    "max_samples": 0.45,
+    "honest": true,
+    "cv": 2,
+    "master_seed": 20260902,
+    "n_jobs": 2
+  },
+  "features": [
+    "at_rank_year_currency", "cash_at", "intangibles_at", "roa_ni",
+    "debt_at", "ppe_at", "log_at_slope_L", "capx_at",
+    "roa_ni_slope_L", "cash_at_slope_L", "debt_at_slope_L",
+    "sale_rank_year_currency"
+  ],
+  "dgp": {
+    "version": "simulation-runner-v2-frozen-before-results-2026-09-01",
+    "history_length": 3,
+    "target_ate": 0.20,
+    "target_treatment_prevalence": 0.30,
+    "overlap_kappa": 1.0,
+    "outcome_r2": 0.50,
+    "effect_sign_delta": 0.02,
+    "W0": {"version": "phase3-v1-unchanged", "morphology": "homogeneous"},
+    "W1_weak_existing": {"version": "phase3-v1-unchanged", "shape": "linear_standardized", "cate_sd": 0.08},
+    "W1_core": {"version": "v2-new-frozen", "shape": "centered_range_normalized_tanh", "center": 0.50, "steepness": 4.0, "half_range": 0.17, "minimum_effect_required": 0.02},
+    "W2": {"version": "phase3-v1-unchanged", "shape": "standardized_tanh", "cate_sd": 0.30, "center": 0.40, "steepness": 6.0},
+    "W3": {"version": "phase4-v1-unchanged", "shape": "inverted_u", "cate_sd": 0.30, "vertex": 0.50},
+    "W4": {"version": "phase4-v1-unchanged", "shape": "steep_continuous_tanh", "cate_sd": 0.30, "center": 0.40, "steepness": 25.0},
+    "W5": {"version": "phase4-v1-unchanged", "shape": "true_discontinuity", "cate_sd": 0.30, "boundary": 0.40}
+  },
+  "diagnostics": {
+    "version": "test-only-binned-morphology-v1",
+    "bins": 20,
+    "piecewise_candidate_min": 0.15,
+    "piecewise_candidate_max": 0.85,
+    "piecewise_candidate_count": 29
+  },
+  "execution": {"dataset_workers": 4, "save_test_predictions": true}
+}

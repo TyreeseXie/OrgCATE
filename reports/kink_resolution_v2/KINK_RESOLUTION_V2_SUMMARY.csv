@@ -1,0 +1,4 @@
+dgp,replications,classification_accuracy,kink_call_rate,median_candidate_center,median_center_abs_error,median_slope_ratio,median_slope_change,median_curve_spearman,focal_top1_rate
+kinked,10,1.0,1.0,0.5,0.0,5.2651293896157,6.888080519174702,1.0,1.0
+nonlinear-monotone,10,1.0,0.0,0.75,,4.484033900898947,-2.4811120583126938,0.9975485967333794,1.0
+steep-continuous,10,1.0,0.0,0.7375,,7.6790578281749085,-4.640926343114702,0.9963523694501957,1.0

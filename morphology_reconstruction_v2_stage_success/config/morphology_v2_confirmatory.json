@@ -1,0 +1,77 @@
+{
+  "version": "morphology_reconstruction_v2",
+  "fresh_confirmatory_master_seed": 2026090401,
+  "worlds": [
+    "W2",
+    "W3",
+    "W4",
+    "W5"
+  ],
+  "sample_sizes": [
+    1500,
+    3000
+  ],
+  "replications_per_cell": 30,
+  "test_size": 0.2,
+  "primary_forest": {
+    "class": "econml.dml.CausalForestDML",
+    "cv": 2,
+    "honest": true,
+    "n_estimators": 1000,
+    "min_samples_leaf": 5,
+    "max_samples": 0.45
+  },
+  "moderator_modes": [
+    "forest_selected",
+    "oracle_relative_firm_size_diagnostic"
+  ],
+  "second_stage": {
+    "nuisance_crossfit_folds": 5,
+    "shape_cv_folds": 5,
+    "one_se_abstention_rule": true,
+    "no_inverse_propensity_pseudooutcome": true
+  },
+  "families": {
+    "linear": {},
+    "single_turn_quadratic": {
+      "c_start": 0.15,
+      "c_end": 0.85,
+      "c_step": 0.025
+    },
+    "smooth_reversal": {
+      "k_grid": [
+        2,
+        4,
+        6,
+        10,
+        15,
+        20,
+        25,
+        35,
+        50,
+        75
+      ],
+      "c_start": 0.2,
+      "c_end": 0.8,
+      "c_step": 0.025
+    },
+    "jump": {
+      "c_start": 0.2,
+      "c_end": 0.8,
+      "c_step": 0.025
+    },
+    "flexible_spline_benchmark": {
+      "interior_knots_grid": [
+        4,
+        6,
+        8
+      ],
+      "ridge_alpha_grid": [
+        0.0001,
+        0.001,
+        0.01,
+        0.1
+      ]
+    }
+  }
+}

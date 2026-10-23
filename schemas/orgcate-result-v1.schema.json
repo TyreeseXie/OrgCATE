@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:orgcate:schema:result:v1",
+  "title": "OrgCATE Practical Result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "run_kind", "scenario", "practical_state",
+    "eligibility", "ate", "ate_cate_coherence", "forest", "moderator",
+    "property_support", "morphology", "confirmation", "theory_audit", "audit"
+  ],
+  "properties": {
+    "schema_version": {"const": "orgcate-result-v1"},
+    "run_kind": {"type": "string"},
+    "scenario": {
+      "enum": [
+        "homogeneous", "linear-monotone", "nonlinear-monotone",
+        "steep-continuous", "inverted-u", "u-shaped", "kinked",
+        "threshold-step", "sign-reversal"
+      ]
+    },
+    "practical_state": {
+      "enum": [
+        "SUPPORTED_CANDIDATE", "INCONCLUSIVE", "NO_THEORY_CLAIM",
+        "DESIGN_NOT_ELIGIBLE"
+      ]
+    },
+    "eligibility": {
+      "type": "object",
+      "required": ["eligible", "treatment_rate", "propensity_q01_oof", "propensity_q99_oof", "propensity_clip_fraction", "thresholds", "reasons"]
+    },
+    "ate": {
+      "type": "object",
+      "required": ["method", "estimate", "standard_error", "ci_low", "ci_high", "conventional_diagnostics"],
+      "additionalProperties": false,
+      "properties": {
+        "method": {"type": "string"},
+        "estimate": {"type": "number"},
+        "standard_error": {"type": "number", "minimum": 0},
+        "ci_low": {"type": "number"},
+        "ci_high": {"type": "number"},
+        "conventional_diagnostics": {
+          "type": "object",
+          "required": ["dml_ate", "naive_difference", "adjusted_ols", "naive_minus_dml", "adjusted_ols_minus_dml", "adjustment_count", "method_note"]
+        }
+      }
+    },
+    "ate_cate_coherence": {
+      "type": "object",
+      "required": ["passed", "dml_ate_train", "final_cate_test_mean", "signed_gap", "outcome_sd_train", "standardized_absolute_gap", "threshold", "sensitivity_thresholds", "rule", "failure_state"]
+    },
+    "forest": {"type": "object"},
+    "moderator": {"type": "object"},
+    "property_support": {
+      "type": "object",
+      "required": ["ordering", "magnitude", "curvature", "boundaries", "shape_requirements", "claim_allowed", "reason"]
+    },
+    "morphology": {
+      "type": "object",
+      "required": ["label", "subtype", "selected_family", "shape_quantities", "key_quantities", "interpretation_en", "continuity", "monotonicity", "sign_relation", "taxonomy_cell", "requires_abduction", "classification_basis"]
+    },
+    "confirmation": {"type": "object"},
+    "theory_audit": {
+      "type": "object",
+      "required": ["status", "artifact", "automated_theory_generation"]
+    },
+    "audit": {"type": "object"}
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "M1": {
+    "feature": "at_rank_year_currency",
+    "meaning": "relative firm size",
+    "why": "0% missing, continuous, strong support, intuitive moderator; sale/employment provide real correlated proxies"
+  },
+  "M2": {
+    "feature": "cash_at",
+    "meaning": "financial slack",
+    "why": "0% missing, broad continuous support, only moderate correlation with size/leverage"
+  },
+  "M3": {
+    "feature": "intangibles_at",
+    "meaning": "intangibility",
+    "why": "<1% missing, distinct organizational resource dimension"
+  },
+  "C1": {
+    "feature": "roa_ni",
+    "meaning": "profitability",
+    "why": "near-complete and economically relevant to treatment selection and outcomes"
+  },
+  "C2": {
+    "feature": "debt_at",
+    "meaning": "leverage",
+    "why": "near-complete, distinct financing condition"
+  },
+  "C3": {
+    "feature": "ppe_at",
+    "meaning": "capital intensity",
+    "why": "near-complete, real operating structure"
+  },
+  "C4": {
+    "feature": "log_at_slope_L",
+    "meaning": "size trajectory",
+    "why": "complete longitudinal state with modest correlations"
+  },
+  "P1": {
+    "feature": "capx_at",
+    "meaning": "investment intensity",
+    "why": "near-complete; prognostic-only in DGP truth"
+  },
+  "P2": {
+    "feature": "roa_ni_slope_L",
+    "meaning": "profitability trend",
+    "why": "near-complete longitudinal predictor"
+  },
+  "P3": {
+    "feature": "cash_at_slope_L",
+    "meaning": "slack trend",
+    "why": "complete and weakly correlated with level factors"
+  },
+  "A1": {
+    "feature": "debt_at_slope_L",
+    "meaning": "leverage trajectory",
+    "why": "near-complete; assignment-only role in primary truth"
+  },
+  "R1": {
+    "feature": "sale_rank_year_currency",
+    "meaning": "size proxy — sales",
+    "why": "highly correlated real proxy for M1"
+  },
+  "R2": {
+    "feature": "asinh_emp",
+    "meaning": "size proxy — employment",
+    "why": "highly correlated real proxy for M1; retained as analyst candidate with missingness"
+  }
+}

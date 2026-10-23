@@ -1,0 +1,37 @@
+name: public-artifact-ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install frozen environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-lock.txt
+          python -m pip install -e . --no-deps
+      - name: Audit public paths and content
+        run: python tools/audit_public_release.py
+      - name: Lint public code
+        run: ruff check src tests execution tools
+      - name: Compile
+        run: python -m compileall -q src tests execution tools
+      - name: Test
+        run: pytest -q -p no:cacheprovider
+      - name: Verify frozen aggregate evidence
+        run: orgcate verify
+      - name: Verify release environment
+        run: orgcate doctor --json
+      - name: Verify proposal and release contract
+        run: orgcate contract --json
+      - name: Run end-to-end public demo
+        run: orgcate demo --scenario sign-reversal --output artifacts/ci_demo
+

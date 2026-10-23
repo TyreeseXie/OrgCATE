@@ -1,0 +1,13 @@
+econml==0.17.0
+joblib==1.5.3
+numpy==2.5.2
+pandas==3.0.5
+pyarrow==25.0.1
+PyYAML==6.0.3
+scikit-learn==1.6.1
+scipy==1.18.1
+threadpoolctl==3.6.0
+
+# Development verification
+pytest==9.1.1
+ruff==0.16.4

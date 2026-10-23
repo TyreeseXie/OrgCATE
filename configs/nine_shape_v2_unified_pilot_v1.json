@@ -1,0 +1,67 @@
+{
+  "schema_version": "nine-shape-v2-unified-pilot-v1",
+  "backbone_path": "../execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz",
+  "source_config": "../codex_simulation_runner_v2/config/pilot_b.json",
+  "output_dir": "../reports/nine_shape_v2_unified_pilot_v1",
+  "n_per_replication": 1500,
+  "replications": 3,
+  "master_seed": 2026101901,
+  "target_ate": 0.20,
+  "external_train_fraction": 0.80,
+  "test_size": 0.20,
+  "key_moderator": "at_rank_year_currency",
+  "candidate_x": [
+    "at_rank_year_currency",
+    "cash_at",
+    "intangibles_at",
+    "roa_ni",
+    "debt_at",
+    "ppe_at",
+    "log_at_slope_L",
+    "capx_at",
+    "roa_ni_slope_L",
+    "cash_at_slope_L",
+    "debt_at_slope_L",
+    "sale_rank_year_currency"
+  ],
+  "primary_forest": {
+    "class": "econml.dml.CausalForestDML",
+    "n_estimators": 1000,
+    "min_samples_leaf": 5,
+    "max_samples": 0.45,
+    "cv": 2,
+    "honest": true,
+    "inference": false,
+    "n_jobs": 1
+  },
+  "nuisance_crossfit_folds": 5,
+  "shape_cv_folds": 5,
+  "one_se_rule": true,
+  "family_grid": {
+    "smooth_k": [2, 4, 6, 10, 15, 20, 25, 35],
+    "location_grid": [0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80],
+    "spline_knots": [4, 6, 8],
+    "spline_alpha": [0.0001, 0.001, 0.01, 0.1]
+  },
+  "shapes": [
+    "homogeneous",
+    "linear-monotone",
+    "nonlinear-monotone",
+    "steep-continuous",
+    "inverted-u",
+    "u-shaped",
+    "kinked",
+    "threshold-step",
+    "sign-reversal"
+  ],
+  "shape_parameters": {
+    "linear-monotone": {"scale": 0.060},
+    "nonlinear-monotone": {"scale": 0.120, "steepness": 1.2},
+    "steep-continuous": {"scale": 0.180, "steepness": 4.0, "center": 0.50},
+    "inverted-u": {"scale": 0.120},
+    "u-shaped": {"scale": 0.120},
+    "kinked": {"scale": 0.100},
+    "threshold-step": {"scale": 0.140, "boundary": 0.50},
+    "sign-reversal": {"scale": 0.300}
+  }
+}

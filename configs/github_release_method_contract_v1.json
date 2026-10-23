@@ -1,0 +1,160 @@
+{
+  "schema_version": "orgcate-github-method-contract-v1",
+  "as_of": "2026-10-22",
+  "scope": "proposal + teacher prototype + current GitHub product",
+  "requirements": [
+    {
+      "id": "dml_ate_crossfit",
+      "stage": "ATE",
+      "requirement": "Cross-fitted orthogonal DML/AIPW ATE with recorded learner and fold structure.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "src/orgcate_sim/ate.py; public practical output",
+      "required_action": "None."
+    },
+    {
+      "id": "ate_interval",
+      "stage": "ATE",
+      "requirement": "Report ATE estimate, standard error, and confidence interval.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "schemas/orgcate-result-v1.schema.json",
+      "required_action": "None."
+    },
+    {
+      "id": "ate_conventional_comparison",
+      "stage": "ATE",
+      "requirement": "Place the DML ATE beside a naive and conventional adjusted estimate as a diagnostic.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "The public workflow and result schema report naive difference-in-means and all-covariate adjusted OLS beside the independent cross-fitted DML/AIPW anchor.",
+      "required_action": "None. Keep the conventional estimates explicitly diagnostic."
+    },
+    {
+      "id": "ate_cate_aggregate_anchor",
+      "stage": "ATE-to-CATE gate",
+      "requirement": "Compare TRAIN cross-fitted DML ATE with the average final orthogonal reconstructed CATE on untouched TEST; interrupt downstream interpretation when the absolute gap exceeds 0.10 SD(Y_train).",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "The hash-frozen v2 rule passed 10/10 fresh cells and is now config-driven in the public schema/runtime; failure overrides downstream support with INCONCLUSIVE.",
+      "required_action": "None. Preserve 0.05 and 0.15 as sensitivity values only."
+    },
+    {
+      "id": "design_overlap_gate",
+      "stage": "Eligibility",
+      "requirement": "Treatment validity, positivity/overlap, and data-contract diagnostics must be executable gates before morphology.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "The public runtime evaluates binary treatment, treatment prevalence, OOF propensity tails, and clipping before invoking the frozen morphology product; failure writes DESIGN_NOT_ELIGIBLE and skips the forest.",
+      "required_action": "None. Thresholds remain explicit in configs/public_workflow_contract_v1.json."
+    },
+    {
+      "id": "one_joint_forest",
+      "stage": "CATE",
+      "requirement": "Fit one honest multivariable CausalForestDML using all 12 candidate characteristics.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "Frozen Product v1 manifest and public demo.",
+      "required_action": "None."
+    },
+    {
+      "id": "untouched_test_and_oracle_separation",
+      "stage": "CATE",
+      "requirement": "Use 80/20 TRAIN/untouched-TEST and prohibit oracle/test information from selection.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "Frozen manifests, result schema, and tests.",
+      "required_action": "None."
+    },
+    {
+      "id": "cate_no_signal_calibration",
+      "stage": "CATE validation",
+      "requirement": "Demonstrate held-out improvement over a constant-effect candidate and calibrate false support in the homogeneous benchmark.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "Product v1 uses untouched-TEST candidate-versus-constant orthogonal-loss confirmation; the homogeneous benchmark produced zero false SUPPORTED_CANDIDATE states in 10/10 fresh cells. The human lead approved this as the formal public equivalent.",
+      "required_action": "None. Prototype permutation remains an optional diagnostic."
+    },
+    {
+      "id": "cate_omnibus_reproducibility",
+      "stage": "CATE validation",
+      "requirement": "Check whether heterogeneity is reproducible across the frozen repeated nuisance/refit estimates and withhold claims when unstable.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "Product v1 has three repeated nuisance refits, TRAIN curve/parameter stability, and untouched-TEST confirmation. The human lead approved this as the formal public equivalent.",
+      "required_action": "None. Prototype split-half surface checks remain optional diagnostics."
+    },
+    {
+      "id": "cate_refit_stability",
+      "stage": "CATE validation",
+      "requirement": "Withhold shape claims when repeated estimates are unstable.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "Product v1 curve and parameter stability rules.",
+      "required_action": "None."
+    },
+    {
+      "id": "property_support_declaration",
+      "stage": "Validation-to-classification gate",
+      "requirement": "Explicitly declare support for ordering, magnitude, curvature, and boundaries; downstream labels may use only supported properties.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "The public result declares ordering, magnitude, curvature, and boundary support, records shape requirements, and suppresses shape quantities when the required support is absent.",
+      "required_action": "None."
+    },
+    {
+      "id": "three_layer_taxonomy_output",
+      "stage": "Morphology",
+      "requirement": "Emit continuity, monotonicity/interior turning, sign relation, taxonomy cell, and requires-abduction status.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "The practical morphology block now emits continuity, linear/nonlinear/non-monotone class, sign relation, 12-cell index, and requires-abduction beside the readable nine-situation label.",
+      "required_action": "None."
+    },
+    {
+      "id": "explicit_abstention",
+      "stage": "Theory output",
+      "requirement": "Support no-claim, inconclusive, and design-ineligible terminal states.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "Current practical-state vocabulary and schema.",
+      "required_action": "None."
+    },
+    {
+      "id": "researcher_reasoning_audit",
+      "stage": "Theory development",
+      "requirement": "Record researcher interpretations, sources, rejected explanations, empirical cues, and unresolved readings separately from model output.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "Every public demo creates a blank interpretation record and orgcate theory-audit validates the completed record.",
+      "required_action": "None."
+    },
+    {
+      "id": "discontinuity_claim_scope",
+      "stage": "Boundary output",
+      "requirement": "Align the proposal's dedicated discontinuity-estimation language with the current operational threshold-step claim.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "Canonical AGENTS.md rule 11 and the human decision on W4/W5 freeze threshold-step as an operational candidate-boundary label; mathematical proof of discontinuity is not claimed.",
+      "required_action": "None. Preserve candidate-boundary wording and do not claim a proven causal discontinuity."
+    },
+    {
+      "id": "authorized_data_distribution",
+      "stage": "Repository",
+      "requirement": "Include only the research-team-authorized frozen L=3 Compustat-derived backbone and exclude all other raw, transformed, credential, and access artifacts.",
+      "status": "PASS",
+      "release_blocking": true,
+      "evidence": "DATA_NOTICE.md; exact-path/hash audit; release checklist.",
+      "required_action": "Repeat the staged-path and hash scan immediately before release."
+    },
+    {
+      "id": "public_license_and_citation",
+      "stage": "Repository",
+      "requirement": "Publish an approved license, authorship, affiliations, and citation instructions.",
+      "status": "HUMAN_DECISION",
+      "release_blocking": true,
+      "evidence": "Not yet approved by the research team.",
+      "required_action": "Human team chooses license and citation/authorship text."
+    }
+  ]
+}

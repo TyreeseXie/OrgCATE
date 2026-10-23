@@ -1,0 +1,497 @@
+{
+  "tests": {
+    "expected_L_counts_match": true,
+    "headline_one_anchor_per_firm": true,
+    "headline_L3_only": true,
+    "headline_USD_only": true,
+    "headline_not_all_latest_anchor": true,
+    "xrd_missing_preserved": true,
+    "no_inf_numeric": true,
+    "current_header_absent": true,
+    "sample_sizes_supported": true
+  },
+  "expected_counts": {
+    "1": {
+      "rows": 87554,
+      "firms": 11611,
+      "usd_rows": 82084,
+      "usd_firms": 10630
+    },
+    "3": {
+      "rows": 64090,
+      "firms": 9385,
+      "usd_rows": 60895,
+      "usd_firms": 8648
+    },
+    "5": {
+      "rows": 45862,
+      "firms": 7238,
+      "usd_rows": 44256,
+      "usd_firms": 6788
+    }
+  },
+  "observed_counts": {
+    "1": {
+      "rows": 87554,
+      "firms": 11611,
+      "usd_rows": 82084,
+      "usd_firms": 10630
+    },
+    "3": {
+      "rows": 64090,
+      "firms": 9385,
+      "usd_rows": 60895,
+      "usd_firms": 8648
+    },
+    "5": {
+      "rows": 45862,
+      "firms": 7238,
+      "usd_rows": 44256,
+      "usd_firms": 6788
+    }
+  },
+  "headline_anchor_distribution": [
+    {
+      "candidate_t0": 2013,
+      "firms": 929
+    },
+    {
+      "candidate_t0": 2014,
+      "firms": 740
+    },
+    {
+      "candidate_t0": 2015,
+      "firms": 647
+    },
+    {
+      "candidate_t0": 2016,
+      "firms": 597
+    },
+    {
+      "candidate_t0": 2017,
+      "firms": 475
+    },
+    {
+      "candidate_t0": 2018,
+      "firms": 493
+    },
+    {
+      "candidate_t0": 2019,
+      "firms": 471
+    },
+    {
+      "candidate_t0": 2020,
+      "firms": 457
+    },
+    {
+      "candidate_t0": 2021,
+      "firms": 428
+    },
+    {
+      "candidate_t0": 2022,
+      "firms": 523
+    },
+    {
+      "candidate_t0": 2023,
+      "firms": 619
+    },
+    {
+      "candidate_t0": 2024,
+      "firms": 659
+    },
+    {
+      "candidate_t0": 2025,
+      "firms": 741
+    },
+    {
+      "candidate_t0": 2026,
+      "firms": 869
+    }
+  ],
+  "feature_support": [
+    {
+      "feature": "asinh_sale_nobs_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 4,
+      "p01": 3.0,
+      "median": 3.0,
+      "p99": 3.0
+    },
+    {
+      "feature": "at_rank_year_currency",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 8610,
+      "p01": 0.008656773978666153,
+      "median": 0.4579462502404033,
+      "p99": 0.984658361550513
+    },
+    {
+      "feature": "capx_at_nobs_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 4,
+      "p01": 2.0,
+      "median": 3.0,
+      "p99": 3.0
+    },
+    {
+      "feature": "cash_at",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 8477,
+      "p01": 0.0,
+      "median": 0.15708793526184214,
+      "p99": 0.9889433456004115
+    },
+    {
+      "feature": "cash_at_mean_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 8602,
+      "p01": 0.0014629426040691645,
+      "median": 0.17843277937758395,
+      "p99": 0.9700989825162305
+    },
+    {
+      "feature": "cash_at_nobs_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 2,
+      "p01": 3.0,
+      "median": 3.0,
+      "p99": 3.0
+    },
+    {
+      "feature": "cash_at_slope_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 8582,
+      "p01": -0.34286844512420234,
+      "median": -0.0009395254286099939,
+      "p99": 0.3353568681638348
+    },
+    {
+      "feature": "cash_at_volatility_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 8598,
+      "p01": 0.0003308750882742519,
+      "median": 0.04559032526775933,
+      "p99": 0.4767101223464664
+    },
+    {
+      "feature": "debt_at_nobs_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 4,
+      "p01": 3.0,
+      "median": 3.0,
+      "p99": 3.0
+    },
+    {
+      "feature": "emp_missing",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 2,
+      "p01": 0.0,
+      "median": 0.0,
+      "p99": 1.0
+    },
+    {
+      "feature": "log_at",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 8405,
+      "p01": 0.017839918128331,
+      "median": 5.584431935756058,
+      "p99": 11.310822735463232
+    },
+    {
+      "feature": "log_at_mean_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 8642,
+      "p01": 0.06214138430479517,
+      "median": 5.411330043529549,
+      "p99": 11.23802045298083
+    },
+    {
+      "feature": "log_at_nobs_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 1,
+      "p01": 3.0,
+      "median": 3.0,
+      "p99": 3.0
+    },
+    {
+      "feature": "log_at_slope_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 8633,
+      "p01": -0.8613807623092684,
+      "median": 0.048414575086737965,
+      "p99": 1.8536307597801578
+    },
+    {
+      "feature": "log_at_volatility_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 8639,
+      "p01": 0.006694566482424504,
+      "median": 0.168833713518958,
+      "p99": 2.0666916368376764
+    },
+    {
+      "feature": "roa_ni_nobs_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 4,
+      "p01": 3.0,
+      "median": 3.0,
+      "p99": 3.0
+    },
+    {
+      "feature": "xrd_at_nobs_L",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 4,
+      "p01": 0.0,
+      "median": 3.0,
+      "p99": 3.0
+    },
+    {
+      "feature": "xrd_missing",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 2,
+      "p01": 0.0,
+      "median": 0.0,
+      "p99": 1.0
+    },
+    {
+      "feature": "xsga_missing",
+      "missing_pct": 0.0,
+      "n_unique_nonmissing": 2,
+      "p01": 0.0,
+      "median": 0.0,
+      "p99": 1.0
+    },
+    {
+      "feature": "asinh_sale_mean_L",
+      "missing_pct": 0.011563367252543942,
+      "n_unique_nonmissing": 7747,
+      "p01": 0.0,
+      "median": 5.423621195230937,
+      "p99": 11.641025980698705
+    },
+    {
+      "feature": "roa_ni_mean_L",
+      "missing_pct": 0.011563367252543942,
+      "n_unique_nonmissing": 8647,
+      "p01": -45.18559895170188,
+      "median": -0.043881018760088035,
+      "p99": 0.28848479228832613
+    },
+    {
+      "feature": "asinh_sale",
+      "missing_pct": 0.023126734505087884,
+      "n_unique_nonmissing": 7314,
+      "p01": 0.0,
+      "median": 5.551833686495774,
+      "p99": 11.658278093355843
+    },
+    {
+      "feature": "roa_ni",
+      "missing_pct": 0.023126734505087884,
+      "n_unique_nonmissing": 8643,
+      "p01": -36.11160714285714,
+      "median": -0.03966741161293579,
+      "p99": 0.4041010053976557
+    },
+    {
+      "feature": "sale_rank_year_currency",
+      "missing_pct": 0.023126734505087884,
+      "n_unique_nonmissing": 7549,
+      "p01": 0.048964968152866245,
+      "median": 0.45079700254506117,
+      "p99": 0.9843426484226588
+    },
+    {
+      "feature": "asinh_sale_slope_L",
+      "missing_pct": 0.03469010175763182,
+      "n_unique_nonmissing": 7705,
+      "p01": -1.356705118321851,
+      "median": 0.03788193441460397,
+      "p99": 1.8956220073471264
+    },
+    {
+      "feature": "asinh_sale_volatility_L",
+      "missing_pct": 0.03469010175763182,
+      "n_unique_nonmissing": 7743,
+      "p01": 0.0,
+      "median": 0.13920502413860159,
+      "p99": 2.5242617586776888
+    },
+    {
+      "feature": "roa_ni_slope_L",
+      "missing_pct": 0.03469010175763182,
+      "n_unique_nonmissing": 8645,
+      "p01": -14.395019229887373,
+      "median": -0.0017941644117036026,
+      "p99": 9.346540834845694
+    },
+    {
+      "feature": "roa_ni_volatility_L",
+      "missing_pct": 0.03469010175763182,
+      "n_unique_nonmissing": 8645,
+      "p01": 0.002379268109528582,
+      "median": 0.0791511736539558,
+      "p99": 53.771699471003245
+    },
+    {
+      "feature": "ppe_at",
+      "missing_pct": 0.06938020351526364,
+      "n_unique_nonmissing": 8135,
+      "p01": 0.0,
+      "median": 0.119138399392786,
+      "p99": 0.9425027263424882
+    },
+    {
+      "feature": "capx_at_mean_L",
+      "missing_pct": 0.10407030527289547,
+      "n_unique_nonmissing": 8125,
+      "p01": 0.0,
+      "median": 0.022372311631558502,
+      "p99": 0.3703979585373451
+    },
+    {
+      "feature": "debt_at_mean_L",
+      "missing_pct": 0.10407030527289547,
+      "n_unique_nonmissing": 7877,
+      "p01": 0.0,
+      "median": 0.2254605280842393,
+      "p99": 19.23106491568759
+    },
+    {
+      "feature": "capx_at_slope_L",
+      "missing_pct": 0.15032377428307123,
+      "n_unique_nonmissing": 8054,
+      "p01": -0.15220235557811962,
+      "median": -1.1043832847622921e-05,
+      "p99": 0.11092482533745383
+    },
+    {
+      "feature": "capx_at_volatility_L",
+      "missing_pct": 0.15032377428307123,
+      "n_unique_nonmissing": 8121,
+      "p01": 0.0,
+      "median": 0.00736486734961283,
+      "p99": 0.28564444492090346
+    },
+    {
+      "feature": "cashflow_at",
+      "missing_pct": 0.16188714153561518,
+      "n_unique_nonmissing": 8623,
+      "p01": -11.0,
+      "median": 0.01764547072724685,
+      "p99": 0.34180360351328437
+    },
+    {
+      "feature": "equity_at",
+      "missing_pct": 0.18501387604070307,
+      "n_unique_nonmissing": 8621,
+      "p01": -71.07750582750583,
+      "median": 0.44482060888753105,
+      "p99": 0.9749647428691031
+    },
+    {
+      "feature": "op_income_at",
+      "missing_pct": 0.21970397779833487,
+      "n_unique_nonmissing": 8619,
+      "p01": -24.834666666666664,
+      "median": 0.0201939564235062,
+      "p99": 0.3846464618598243
+    },
+    {
+      "feature": "debt_at_slope_L",
+      "missing_pct": 0.23126734505087881,
+      "n_unique_nonmissing": 7820,
+      "p01": -3.008443310355479,
+      "median": 0.0,
+      "p99": 5.916360787071744
+    },
+    {
+      "feature": "debt_at_volatility_L",
+      "missing_pct": 0.23126734505087881,
+      "n_unique_nonmissing": 7868,
+      "p01": 0.0,
+      "median": 0.04643300669358193,
+      "p99": 20.772346853455346
+    },
+    {
+      "feature": "capx_at",
+      "missing_pct": 0.24283071230342276,
+      "n_unique_nonmissing": 7679,
+      "p01": 0.0,
+      "median": 0.017846587561309166,
+      "p99": 0.3712250530478253
+    },
+    {
+      "feature": "debt_at",
+      "missing_pct": 0.3353376503237743,
+      "n_unique_nonmissing": 7475,
+      "p01": 0.0,
+      "median": 0.22019974124140393,
+      "p99": 17.206300038124283
+    },
+    {
+      "feature": "goodwill_at",
+      "missing_pct": 0.3353376503237743,
+      "n_unique_nonmissing": 4322,
+      "p01": 0.0,
+      "median": 0.0002038029277945388,
+      "p99": 0.5964984422108409
+    },
+    {
+      "feature": "intangibles_at",
+      "missing_pct": 0.6822386679000925,
+      "n_unique_nonmissing": 5855,
+      "p01": 0.0,
+      "median": 0.04984921057299983,
+      "p99": 0.8492855385034814
+    },
+    {
+      "feature": "asinh_emp",
+      "missing_pct": 5.746993524514338,
+      "n_unique_nonmissing": 2934,
+      "p01": 0.0,
+      "median": 0.4314858034460881,
+      "p99": 5.744281549406468
+    },
+    {
+      "feature": "xsga_at",
+      "missing_pct": 9.123496762257169,
+      "n_unique_nonmissing": 7852,
+      "p01": 0.007786060552902193,
+      "median": 0.26111390444486826,
+      "p99": 23.494250000000033
+    },
+    {
+      "feature": "xrd_at_mean_L",
+      "missing_pct": 36.21646623496762,
+      "n_unique_nonmissing": 4811,
+      "p01": 0.0,
+      "median": 0.07467594906337538,
+      "p99": 3.5679337676293996
+    },
+    {
+      "feature": "xrd_at",
+      "missing_pct": 37.65032377428307,
+      "n_unique_nonmissing": 4659,
+      "p01": 0.0,
+      "median": 0.06873426805777932,
+      "p99": 2.865804728115129
+    },
+    {
+      "feature": "xrd_at_slope_L",
+      "missing_pct": 37.69657724329324,
+      "n_unique_nonmissing": 4727,
+      "p01": -1.6621141351590776,
+      "median": 0.0,
+      "p99": 0.8104650840864261
+    },
+    {
+      "feature": "xrd_at_volatility_L",
+      "missing_pct": 37.69657724329324,
+      "n_unique_nonmissing": 4732,
+      "p01": 0.0,
+      "median": 0.013767126212589229,
+      "p99": 3.756171735776239
+    }
+  ]
+}

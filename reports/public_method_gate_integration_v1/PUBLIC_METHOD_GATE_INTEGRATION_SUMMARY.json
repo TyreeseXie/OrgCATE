@@ -1,0 +1,46 @@
+{
+  "schema_version": "orgcate-public-method-gate-integration-v1",
+  "as_of": "2026-10-22",
+  "status": "MACHINE_GATES_COMPLETE_HUMAN_RELEASE_DECISION_PENDING",
+  "frozen_scientific_contract_changed": false,
+  "nine_situation_benchmark_rerun": false,
+  "method_contract": {
+    "requirements_passed": 16,
+    "requirements_total": 17,
+    "remaining_blockers": ["public_license_and_citation"]
+  },
+  "shape_output": {
+    "all_nine_have_english_key_quantities": true,
+    "raw_refit_parameters_retained": true,
+    "unsupported_quantities_withheld": true,
+    "reference": "docs/SHAPE_OUTPUT_REFERENCE.md"
+  },
+  "public_demo": {
+    "scenario": "sign-reversal",
+    "practical_state": "SUPPORTED_CANDIDATE",
+    "eligible": true,
+    "treatment_rate": 0.304166666666667,
+    "dml_ate": 0.714146037260852,
+    "naive_ate": 0.607932300388011,
+    "adjusted_ols_ate": 0.578638968400518,
+    "final_cate_test_mean": 0.661099304480176,
+    "standardized_ate_cate_gap": 0.0415678960750472,
+    "coherence_threshold": 0.10,
+    "coherence_passed": true,
+    "taxonomy": {
+      "continuity": "continuous",
+      "monotonicity": "linear",
+      "sign_relation": "opposite",
+      "cell": 2,
+      "requires_abduction": true
+    }
+  },
+  "verification": {
+    "targeted_tests_passed": 12,
+    "full_tests_passed": 110,
+    "ruff": "PASS",
+    "compileall": "PASS",
+    "frozen_evidence_checks_passed": 12,
+    "frozen_evidence_checks_total": 12
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "artifact": "Real Covariate Backbone v1",
+  "created_utc": "2026-08-31T09:17:00.386623+00:00",
+  "canonical_source_sha256": "d4dbc22db7ac0bee023a4eb6fc68b184d8d3a7b16e02752737ad66d1cd3ef398",
+  "anchor_source_sha256": "fd649034e1d5b5fe6ed8226b3090ac7ddf3a58622fd0c06172143cf118ec3070",
+  "anchor_seed": 20260831,
+  "primary_L": 3,
+  "serialization": "csv.gz+pkl.gz; parquet engine unavailable",
+  "sample_counts": {
+    "1": {
+      "rows": 87554,
+      "firms": 11611,
+      "usd_rows": 82084,
+      "usd_firms": 10630
+    },
+    "3": {
+      "rows": 64090,
+      "firms": 9385,
+      "usd_rows": 60895,
+      "usd_firms": 8648
+    },
+    "5": {
+      "rows": 45862,
+      "firms": 7238,
+      "usd_rows": 44256,
+      "usd_firms": 6788
+    }
+  },
+  "headline_firms": 8648,
+  "candidate_corr_features": [
+    "at_rank_year_currency",
+    "cash_at",
+    "cash_at_mean_L",
+    "cash_at_slope_L",
+    "cash_at_volatility_L",
+    "log_at",
+    "log_at_mean_L",
+    "log_at_slope_L",
+    "log_at_volatility_L",
+    "asinh_sale_mean_L",
+    "roa_ni_mean_L",
+    "asinh_sale",
+    "roa_ni",
+    "sale_rank_year_currency",
+    "asinh_sale_slope_L",
+    "asinh_sale_volatility_L",
+    "roa_ni_slope_L",
+    "roa_ni_volatility_L",
+    "ppe_at",
+    "capx_at_mean_L",
+    "debt_at_mean_L",
+    "capx_at_slope_L",
+    "capx_at_volatility_L",
+    "cashflow_at",
+    "equity_at",
+    "op_income_at",
+    "debt_at_slope_L",
+    "debt_at_volatility_L",
+    "capx_at",
+    "debt_at",
+    "goodwill_at",
+    "intangibles_at",
+    "asinh_emp",
+    "xsga_at"
+  ],
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "pandas": "2.2.3",
+  "numpy": "2.3.5"
+}

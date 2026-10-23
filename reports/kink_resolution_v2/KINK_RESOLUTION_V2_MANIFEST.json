@@ -1,0 +1,49 @@
+{
+  "status": "completed",
+  "scope": "focused kink resolution only; Product v1 remains immutable",
+  "cells_expected": 30,
+  "cells_completed": 30,
+  "cells_failed": 0,
+  "acceptance": {
+    "kink_at_least_9_of_10": true,
+    "each_smooth_control_false_kink_at_most_1_of_10": true,
+    "kink_median_location_error_at_most_0_05": true,
+    "failures_zero": true,
+    "leakage_flags_zero": true
+  },
+  "freeze": {
+    "status": "KINK_V2_FROZEN_BEFORE_FRESH_CONFIRMATION",
+    "frozen_at": "2026-10-22",
+    "development_cells": 15,
+    "confirmation_seed_grid": {
+      "0": 1890831756,
+      "1": 2923094963,
+      "2": 1173969747,
+      "3": 3138539392,
+      "4": 3231791381,
+      "5": 1107594965,
+      "6": 2626818382,
+      "7": 2928886171,
+      "8": 2695061984,
+      "9": 2689910796
+    },
+    "hashes": {
+      "config_sha256": "c7911578acf83482d89c7aa0cf9300eeb2d2be9eeffe37c142d19ab77a3e9fc4",
+      "runner_sha256": "aae10db2727400e3ce07e5c3d276f9d8ca9c1ff5f9cd26c1a95562d0c70d787b",
+      "product_config_sha256": "1d2b6a2a9400bb71cd77035b81211a0f3c9ed5199ff8b4414e722a7c526e6656",
+      "product_runner_sha256": "131e428a9bd4928c13ecc085196226fe5f38e8b385900379fe4e2e79ed2e1e24",
+      "source_config_sha256": "3cf08ce84a02f64e0f66d313999ea884f31eeac2b4e0e1807f0dc8068d026d53",
+      "development_results_sha256": "bf738349ba78e013b5b88ec8ac7d802d9323b5a161efc3d304ab45137382ae4f"
+    }
+  },
+  "config_sha256": "c7911578acf83482d89c7aa0cf9300eeb2d2be9eeffe37c142d19ab77a3e9fc4",
+  "runner_sha256": "aae10db2727400e3ce07e5c3d276f9d8ca9c1ff5f9cd26c1a95562d0c70d787b",
+  "package_versions": {
+    "econml": "0.17.0",
+    "scikit-learn": "1.6.1",
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "scipy": "1.18.1",
+    "pyarrow": "25.0.1"
+  }
+}

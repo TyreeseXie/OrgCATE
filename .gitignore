@@ -1,0 +1,66 @@
+# OrgCATE: Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.pytest*/
+.ruff_cache/
+.pycache*/
+.ipynb_checkpoints/
+build/
+dist/
+
+# Generated runtime outputs (not versioned)
+artifacts/
+results/
+local_outputs/
+**/local_outputs/
+reports/.pytest*/
+reports/.pycache*/
+
+# Private, licensed, or unapproved datasets
+data/
+**/data/raw/
+**/data/private/
+**/data/processed/
+**/access_notes/
+*.parquet
+*.pkl
+*.pkl.gz
+*.joblib
+*.dta
+*.sas7bdat
+*.sav
+
+# Archives, office files, logs, and credentials
+*.zip
+*.7z
+*.tar
+*.gz
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+*.log
+*.tmp
+*.bak
+.env
+.env.*
+!.env.example
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# PUBLIC VALIDATION DATA EXCEPTIONS
+# Only compressed validation files in the two named directories are allowed.
+# Confirm redistribution permission before publishing the repository.
+# CSV files in those directories are already allowed by default.
+!/execution/phase2_real_backbone_v1/*.pkl.gz
+!/execution/phase3_dgp_smoke_v1/*.pkl.gz
