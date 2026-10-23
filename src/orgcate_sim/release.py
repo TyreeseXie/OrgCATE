@@ -58,8 +58,8 @@ def repository_root(start: Path | None = None) -> Path:
     for candidate in candidates:
         if (
             (candidate / "pyproject.toml").is_file()
-            and (candidate / "AGENTS.md").is_file()
             and (candidate / "execution").is_dir()
+            and (candidate / "configs").is_dir()
         ):
             return candidate
     raise FileNotFoundError("OrgCATE repository root was not found")

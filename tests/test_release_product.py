@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -11,9 +12,20 @@ from orgcate_sim.release import (
     NINE_SITUATIONS,
     audit_method_contract,
     load_integrated_evidence,
+    repository_root,
     validate_practical_result,
     verify_release,
 )
+
+
+def test_repository_root_does_not_require_private_agent_instructions(
+    tmp_path: Path,
+) -> None:
+    (tmp_path / "pyproject.toml").write_text("[project]\nname='test'\n")
+    (tmp_path / "execution").mkdir()
+    (tmp_path / "configs").mkdir()
+
+    assert repository_root(tmp_path) == tmp_path
 
 
 def test_integrated_evidence_uses_focused_kink_version() -> None:

@@ -8,7 +8,7 @@
   ],
   "manifest_excludes_itself": true,
   "file_count": 97,
-  "total_bytes": 3484231,
+  "total_bytes": 3484572,
   "findings": [],
   "files": [
     {
@@ -423,8 +423,8 @@
     },
     {
       "path": "src/orgcate_sim/release.py",
-      "bytes": 17542,
-      "sha256": "f1e56ba416a5aa817b27924ac5891d67edeff2c94a83d31487ca7833d8658035"
+      "bytes": 17539,
+      "sha256": "4d091b6fc1be0e5ac7376d8727a0f2ab99e937e63e1af39a8a8d57ea6ff5a9c3"
     },
     {
       "path": "src/orgcate_sim/schemas.py",
@@ -488,8 +488,8 @@
     },
     {
       "path": "tests/test_release_product.py",
-      "bytes": 4733,
-      "sha256": "69a6d5d0fb9dba2ac74e6a4e1e2bab588ddc69a6e5bc9922437cc59916f34b5d"
+      "bytes": 5077,
+      "sha256": "f49d26f178ddda32a796f09056272ec61f467675c8455ba5844cf5975fdf90ad"
     },
     {
       "path": "tools/audit_public_release.py",
