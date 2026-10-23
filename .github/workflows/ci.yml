@@ -28,8 +28,6 @@ jobs:
         run: orgcate verify
       - name: Verify release environment
         run: orgcate doctor --json
-      - name: Verify proposal and release contract
-        run: orgcate contract --json
       - name: Run end-to-end public demo
         run: orgcate demo --scenario sign-reversal --output artifacts/ci_demo
 

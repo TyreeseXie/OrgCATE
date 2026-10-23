@@ -7,8 +7,8 @@
     "CITATION.cff"
   ],
   "manifest_excludes_itself": true,
-  "file_count": 98,
-  "total_bytes": 3486184,
+  "file_count": 97,
+  "total_bytes": 3484231,
   "findings": [],
   "files": [
     {
@@ -18,13 +18,13 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 1137,
-      "sha256": "807c807e608c333a25a467eba8086e18945fa6ff1c8f0f0b0c30ed5d04677770"
+      "bytes": 954,
+      "sha256": "0280601a64faad5feaeba20a0d30c072a1fdd87fd63ecc759ec4f6777288a6c3"
     },
     {
       "path": ".gitignore",
-      "bytes": 891,
-      "sha256": "dd0752c0283755bc8338c6ee648a60eead41877466899bd22eb75ab75972fd4f"
+      "bytes": 1029,
+      "sha256": "a61d6005d40fa36f9f89dd93e1242965d845e0b1ff710a84806cc48fa6d9b2ea"
     },
     {
       "path": "AGENTS.md",
@@ -35,11 +35,6 @@
       "path": "DATA_NOTICE.md",
       "bytes": 1402,
       "sha256": "e126c618fb246b1485c68028ead4581edd23aab894a47c94e2f3dac27108b380"
-    },
-    {
-      "path": "FILE_STRUCTURE.txt",
-      "bytes": 1908,
-      "sha256": "1ca2d7f9d43419e09e253431f9851828de4ed20809f3c7ec5f6124d49e42dce0"
     },
     {
       "path": "PUBLICATION_METADATA_TEMPLATE.md",
