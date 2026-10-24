@@ -36,7 +36,7 @@ def load_module(path: Path, name: str):
 
 V2 = load_module(V2_PATH, "morphology_v2_for_nine_shapes")
 V2_CONFIG = ROOT / "morphology_reconstruction_v2_stage_success" / "config" / "morphology_v2_confirmatory.json"
-SOURCE_CONFIG = ROOT / "codex_simulation_runner_v2" / "config" / "pilot_b.json"
+SOURCE_CONFIG = ROOT / "simulation_runner_v2" / "config" / "pilot_b.json"
 
 SHAPES = (
     "homogeneous", "linear-monotone", "nonlinear-monotone", "steep-continuous",

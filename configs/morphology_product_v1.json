@@ -1,6 +1,6 @@
 {
   "schema_version": "morphology-product-v1",
-  "source_config": "../codex_simulation_runner_v2/config/pilot_b.json",
+  "source_config": "../simulation_runner_v2/config/pilot_b.json",
   "base_config": "nine_shape_v2_unified_pilot_v1.json",
   "output_dir": "../reports/morphology_product_v1",
   "freeze_path": "../reports/MORPHOLOGY_PRODUCT_V1_METHOD_FREEZE.json",

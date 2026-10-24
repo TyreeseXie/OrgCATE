@@ -37,8 +37,8 @@ from sklearn.preprocessing import SplineTransformer
 
 PILOT_ROOT = Path(__file__).resolve().parents[1]
 PROJECT_ROOT = PILOT_ROOT.parent
-SOURCE_RUNNER = PROJECT_ROOT / "codex_simulation_runner_v2" / "src" / "simulation_runner_v2.py"
-SOURCE_CONFIG = PROJECT_ROOT / "codex_simulation_runner_v2" / "config" / "pilot_b.json"
+SOURCE_RUNNER = PROJECT_ROOT / "simulation_runner_v2" / "src" / "simulation_runner_v2.py"
+SOURCE_CONFIG = PROJECT_ROOT / "simulation_runner_v2" / "config" / "pilot_b.json"
 CONFIG_PATH = PILOT_ROOT / "config" / "morphology_v2_confirmatory.json"
 TRUE_MODERATOR = "at_rank_year_currency"
 WORLDS = {"W2", "W3", "W4", "W5"}

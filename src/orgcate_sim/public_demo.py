@@ -136,7 +136,7 @@ def _contract(root: Path):
     kink_config_path = root / "configs" / "kink_resolution_v2.json"
     kink_config = _read_json(kink_config_path)
     kink.validate_config(kink_config)
-    source_path = root / "codex_simulation_runner_v2" / "config" / "pilot_b.json"
+    source_path = root / "simulation_runner_v2" / "config" / "pilot_b.json"
     source = _read_json(source_path)
     base_path = root / "configs" / "nine_shape_v2_unified_pilot_v1.json"
     base_parameters = _read_json(base_path)["shape_parameters"]

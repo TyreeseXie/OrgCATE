@@ -15,7 +15,7 @@ OrgCATE_GitHub_Upload_v1/
 |-- configs/                         # frozen public method rules
 |-- docs/                            # method, outputs, safety, release guide
 |-- execution/                       # five exact hash-verified frozen runners
-|-- codex_simulation_runner_v2/      # exact low-level dependency, code/config only
+|-- simulation_runner_v2/            # exact low-level dependency, code/config only
 |-- morphology_reconstruction_v2_stage_success/
 |                                      # reconstruction dependency, code/config only
 |-- reports/

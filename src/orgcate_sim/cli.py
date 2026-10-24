@@ -102,26 +102,19 @@ def _print_mapping(value: dict) -> None:
 
 def _run_reproduction(args: argparse.Namespace) -> int:
     root = repository_root()
-    target = {
-        "morphology-product": (
-            root / "execution" / "run_morphology_product_v1.py",
-            root / "configs" / "morphology_product_v1.json",
-        ),
-        "kink-resolution": (
-            root / "execution" / "run_kink_resolution_v2.py",
-            root / "configs" / "kink_resolution_v2.json",
-        ),
-    }[args.target]
     command = [
         sys.executable,
-        str(target[0]),
-        "--config",
-        str(target[1]),
+        str(root / "execution" / "run_frozen_reproduction.py"),
+        "--target",
+        args.target,
         "--phase",
         args.phase,
     ]
     if args.freeze_only:
-        command.append("--freeze-only")
+        raise ValueError(
+            "the public package preserves the existing method freeze; "
+            "creating a replacement freeze is intentionally disabled"
+        )
     completed = subprocess.run(command, cwd=root, check=False)
     return int(completed.returncode)
 

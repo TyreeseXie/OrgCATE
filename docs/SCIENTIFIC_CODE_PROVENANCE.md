@@ -5,7 +5,7 @@ with their source files in the private research repository using SHA256:
 
 - `src/orgcate_sim/`
 - `execution/`
-- `codex_simulation_runner_v2/src/`
+- `simulation_runner_v2/src/`
 - `morphology_reconstruction_v2_stage_success/src/`
 
 All 30 files matched. The assembly step did not change the DGP formulas,
@@ -19,3 +19,9 @@ file except the manifest itself.
 
 The lower-level dependency modules retain their original formatting so their
 hashes remain comparable with the recorded experiments.
+
+The public repository renamed the low-level dependency directory from its
+development name to `simulation_runner_v2`. The runner and source-configuration
+file contents are byte-identical to the frozen versions. Only path references
+were updated; the release verifier reconstructs the legacy path when checking
+the historical product-configuration hash.

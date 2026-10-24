@@ -15,6 +15,7 @@ from orgcate_sim.release import (
     repository_root,
     sha256_versioned_text_file,
     validate_practical_result,
+    validate_simulation_path_migration,
     verify_release,
 )
 
@@ -53,6 +54,12 @@ def test_integrated_evidence_uses_focused_kink_version() -> None:
 
 def test_release_verification_passes_frozen_hashes() -> None:
     result = verify_release()
+    assert result["status"] == "PASS", json.dumps(result["checks"], indent=2)
+    assert all(result["checks"].values())
+
+
+def test_public_runner_name_preserves_historical_freeze() -> None:
+    result = validate_simulation_path_migration()
     assert result["status"] == "PASS", json.dumps(result["checks"], indent=2)
     assert all(result["checks"].values())
 

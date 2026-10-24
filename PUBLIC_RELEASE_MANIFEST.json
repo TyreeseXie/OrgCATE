@@ -7,8 +7,8 @@
     "CITATION.cff"
   ],
   "manifest_excludes_itself": true,
-  "file_count": 99,
-  "total_bytes": 3520328,
+  "file_count": 100,
+  "total_bytes": 3526011,
   "findings": [],
   "files": [
     {
@@ -52,16 +52,6 @@
       "sha256": "10c978f76f20ab73946716a41b28ac93d535fba218e933fe23c85cdb3ee76cd9"
     },
     {
-      "path": "codex_simulation_runner_v2/config/pilot_b.json",
-      "bytes": 2177,
-      "sha256": "3cf08ce84a02f64e0f66d313999ea884f31eeac2b4e0e1807f0dc8068d026d53"
-    },
-    {
-      "path": "codex_simulation_runner_v2/src/simulation_runner_v2.py",
-      "bytes": 42814,
-      "sha256": "7a2efc54db13506054a55d10d12f5d1d850bdaa58ced0329df2f01e57f9ddea3"
-    },
-    {
       "path": "configs/data_to_results_acceptance_v1.json",
       "bytes": 1103,
       "sha256": "498305ac177e9fdedae6a6c9b9b96bd04ebf23f7f25b04c88fae6c13aa183331"
@@ -78,13 +68,13 @@
     },
     {
       "path": "configs/morphology_product_v1.json",
-      "bytes": 3650,
-      "sha256": "1d2b6a2a9400bb71cd77035b81211a0f3c9ed5199ff8b4414e722a7c526e6656"
+      "bytes": 3644,
+      "sha256": "c7a6e188da1cfbcb9014da9be3a6efd58b5c135320cfc3a34baf85c22c365571"
     },
     {
       "path": "configs/nine_shape_v2_unified_pilot_v1.json",
-      "bytes": 1913,
-      "sha256": "14099551749b10fd8f8c74d50119fb60da801db97ac0ffc6aeea39988bacef99"
+      "bytes": 1907,
+      "sha256": "ce4c28729db8c921bcd4b4588955bf6257cccc7e34ca1986b0c4efae5fbbdb60"
     },
     {
       "path": "configs/public_workflow_contract_v1.json",
@@ -94,7 +84,7 @@
     {
       "path": "docs/GITHUB_RELEASE_ASSEMBLY.md",
       "bytes": 4360,
-      "sha256": "b502b4549d5af40f76297c18d241573510b0d7b705ba4288fc290df817d6f509"
+      "sha256": "7a05bf59477968d5fdcea41dd20cd62e0822172e3011c1500bac6328e5f190e8"
     },
     {
       "path": "docs/METHOD_CONTRACT_AND_STOP_RULES.md",
@@ -118,8 +108,8 @@
     },
     {
       "path": "docs/SCIENTIFIC_CODE_PROVENANCE.md",
-      "bytes": 860,
-      "sha256": "ebc49d18c6e44e55711b764a5aff11b3ef22a60f19782913532076ba4e6d2c08"
+      "bytes": 1208,
+      "sha256": "02a5e3a8077f5315861526c2b665079e609790ee408a618e6298c53c48370168"
     },
     {
       "path": "docs/SHAPE_OUTPUT_REFERENCE.md",
@@ -202,6 +192,11 @@
       "sha256": "4978ffb6d5d4b0a1912fa3d9e24396a1fa8143ee51d5443ed6de92e8b8b61252"
     },
     {
+      "path": "execution/run_frozen_reproduction.py",
+      "bytes": 2681,
+      "sha256": "a851104046e1c4822dc07d50cf3b36c5a75f7be39f0c62e6cb7d72d36e5955ac"
+    },
+    {
       "path": "execution/run_kink_resolution_v2.py",
       "bytes": 30368,
       "sha256": "aae10db2727400e3ce07e5c3d276f9d8ca9c1ff5f9cd26c1a95562d0c70d787b"
@@ -223,8 +218,8 @@
     },
     {
       "path": "execution/run_nine_shape_v2_unified_pilot_v1.py",
-      "bytes": 15431,
-      "sha256": "ad9717540e13b395a9257aee783fe774f6ee9e327b368fd57bcf99c49122d339"
+      "bytes": 15425,
+      "sha256": "322a869f5f5c3e30777759d3b36daae12d20b570733e2bc733306ce602cc4c27"
     },
     {
       "path": "morphology_reconstruction_v2_stage_success/config/morphology_v2_confirmatory.json",
@@ -233,8 +228,8 @@
     },
     {
       "path": "morphology_reconstruction_v2_stage_success/src/morphology_v2_runner.py",
-      "bytes": 46725,
-      "sha256": "c2c3ca69d24a40fd00bfdc3d72bcca2e690d57c8cce106320e457fffffc57409"
+      "bytes": 46713,
+      "sha256": "dec0b9aadefb48345eb6b711b580b4b84a26b94306661319dbae57d87b648819"
     },
     {
       "path": "pyproject.toml",
@@ -337,6 +332,16 @@
       "sha256": "f29fb601ea030c38b60bdcfb833bee6196609c13ce23da59f7fe6f462b09b4f9"
     },
     {
+      "path": "simulation_runner_v2/config/pilot_b.json",
+      "bytes": 2177,
+      "sha256": "3cf08ce84a02f64e0f66d313999ea884f31eeac2b4e0e1807f0dc8068d026d53"
+    },
+    {
+      "path": "simulation_runner_v2/src/simulation_runner_v2.py",
+      "bytes": 42814,
+      "sha256": "7a2efc54db13506054a55d10d12f5d1d850bdaa58ced0329df2f01e57f9ddea3"
+    },
+    {
       "path": "src/orgcate_sim/__init__.py",
       "bytes": 769,
       "sha256": "6569380d782f9601e94c363904ef785e10f275b1e415497375eec48c6a16cb54"
@@ -358,8 +363,8 @@
     },
     {
       "path": "src/orgcate_sim/cli.py",
-      "bytes": 8469,
-      "sha256": "44cccaa56f43bbe4ec15a26615f618713a1fbb5a286783d20731a41c3e72a186"
+      "bytes": 8281,
+      "sha256": "d3020ed553cc37ec969bc05c7f0feaf65e9b79a31fef012120442d767b23bada"
     },
     {
       "path": "src/orgcate_sim/config.py",
@@ -418,13 +423,13 @@
     },
     {
       "path": "src/orgcate_sim/public_demo.py",
-      "bytes": 25826,
-      "sha256": "b1fb6624d58578efd76591a8bd29027a4811d6b14aae6f6a9b356dadbddf8bed"
+      "bytes": 25820,
+      "sha256": "2a9fc163a8a87c7f6acdcb9b7ec71508f7a8178bac24fac5e716a42dbe3d1193"
     },
     {
       "path": "src/orgcate_sim/release.py",
-      "bytes": 17784,
-      "sha256": "f6952f1218f1700fc6be8a2dcc909473d9d881318faf8e04df88f42facd7157e"
+      "bytes": 20383,
+      "sha256": "386867dab6a4252ad44540802fd431c9f3c954f00641acd1310020f809205cd7"
     },
     {
       "path": "src/orgcate_sim/schemas.py",
@@ -493,8 +498,8 @@
     },
     {
       "path": "tests/test_release_product.py",
-      "bytes": 5515,
-      "sha256": "d636ad829cb746bf47876b387e62453dc72392e1fc3e7c30b6d95cb7ecdabd20"
+      "bytes": 5794,
+      "sha256": "bbe3e54aa5acf8eb8f3e0e3e92e49f3018656b2dfe14de5e7f4e8ccce0632433"
     },
     {
       "path": "tools/audit_public_release.py",

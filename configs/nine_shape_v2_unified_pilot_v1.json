@@ -1,7 +1,7 @@
 {
   "schema_version": "nine-shape-v2-unified-pilot-v1",
   "backbone_path": "../execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz",
-  "source_config": "../codex_simulation_runner_v2/config/pilot_b.json",
+  "source_config": "../simulation_runner_v2/config/pilot_b.json",
   "output_dir": "../reports/nine_shape_v2_unified_pilot_v1",
   "n_per_replication": 1500,
   "replications": 3,

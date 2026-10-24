@@ -47,6 +47,8 @@ EXPECTED_VERSIONS = {
     "pyarrow": "25.0.1",
 }
 METHOD_CONTRACT_STATUSES = {"PASS", "PARTIAL", "MISSING", "HUMAN_DECISION"}
+LEGACY_SIMULATION_CONFIG_PATH = b"../codex_simulation_runner_v2/config/pilot_b.json"
+PUBLIC_SIMULATION_CONFIG_PATH = b"../simulation_runner_v2/config/pilot_b.json"
 
 
 def repository_root(start: Path | None = None) -> Path:
@@ -78,6 +80,58 @@ def sha256_versioned_text_file(path: Path) -> str:
 
     content = path.read_bytes().replace(b"\r\n", b"\n")
     return hashlib.sha256(content).hexdigest()
+
+
+def sha256_with_legacy_simulation_path(path: Path) -> str | None:
+    """Hash a renamed config after projecting its path back to the frozen name.
+
+    This is deliberately narrow: exactly one public path must be present and
+    the legacy path must be absent. It lets packaging rename a directory while
+    retaining a check against the configuration that generated frozen results.
+    """
+
+    content = path.read_bytes().replace(b"\r\n", b"\n")
+    if content.count(PUBLIC_SIMULATION_CONFIG_PATH) != 1:
+        return None
+    if LEGACY_SIMULATION_CONFIG_PATH in content:
+        return None
+    projected = content.replace(
+        PUBLIC_SIMULATION_CONFIG_PATH, LEGACY_SIMULATION_CONFIG_PATH
+    )
+    return hashlib.sha256(projected).hexdigest()
+
+
+def validate_simulation_path_migration(root: Path | None = None) -> dict[str, Any]:
+    """Validate the public directory rename against both frozen method records."""
+
+    root = repository_root(root)
+    product_freeze = _read_json(
+        root / "reports" / "MORPHOLOGY_PRODUCT_V1_METHOD_FREEZE.json"
+    )
+    kink_freeze = _read_json(
+        root / "reports" / "KINK_RESOLUTION_V2_METHOD_FREEZE.json"
+    )
+    product_config = root / "configs" / "morphology_product_v1.json"
+    source_config = root / "simulation_runner_v2" / "config" / "pilot_b.json"
+    projected_hash = sha256_with_legacy_simulation_path(product_config)
+    checks = {
+        "public_directory_present": (root / "simulation_runner_v2").is_dir(),
+        "legacy_directory_absent": not (root / "codex_simulation_runner_v2").exists(),
+        "legacy_product_config_hash_preserved": projected_hash
+        == product_freeze["hashes"]["config_sha256"],
+        "kink_product_config_hash_preserved": projected_hash
+        == kink_freeze["hashes"]["product_config_sha256"],
+        "source_config_content_preserved": source_config.is_file()
+        and sha256_versioned_text_file(source_config)
+        == product_freeze["hashes"]["source_config_sha256"],
+    }
+    return {
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "current_path": "simulation_runner_v2",
+        "historical_path": "codex_simulation_runner_v2",
+        "projected_product_config_sha256": projected_hash,
+    }
 
 
 def package_versions() -> dict[str, str]:
@@ -245,11 +299,12 @@ def verify_release(root: Path | None = None) -> dict[str, Any]:
         and kink_manifest.get("cells_failed") == 0,
         "kink_acceptance_passed": all(kink_manifest.get("acceptance", {}).values()),
     }
-    _hash_check(
-        checks,
-        "product_config_hash",
-        root / "configs" / "morphology_product_v1.json",
-        product_manifest["config_sha256"],
+    product_config_path = root / "configs" / "morphology_product_v1.json"
+    migration = validate_simulation_path_migration(root)
+    checks["product_config_hash"] = (
+        sha256_versioned_text_file(product_config_path)
+        == product_manifest["config_sha256"]
+        or migration["status"] == "PASS"
     )
     _hash_check(
         checks,
@@ -285,6 +340,7 @@ def verify_release(root: Path | None = None) -> dict[str, Any]:
         "schema_version": "orgcate-release-verification-v1",
         "status": status,
         "checks": checks,
+        "path_migration": migration,
         "package_versions": package_versions(),
         "repository": str(root),
     }
@@ -298,9 +354,9 @@ def doctor(root: Path | None = None) -> dict[str, Any]:
         for package, expected in EXPECTED_VERSIONS.items()
     }
     source_config = _read_json(
-        root / "codex_simulation_runner_v2" / "config" / "pilot_b.json"
+        root / "simulation_runner_v2" / "config" / "pilot_b.json"
     )
-    source_path = root / "codex_simulation_runner_v2" / "config"
+    source_path = root / "simulation_runner_v2" / "config"
     backbone = (source_path / source_config["backbone_path"]).resolve()
     expected_backbone_sha256 = (
         "91c963e02cbdc17a19de85868ba44f5f4fd65791bec83906980f307a6cfd3174"
