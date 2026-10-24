@@ -272,7 +272,7 @@ def audit(*, allow_metadata_pending: bool) -> dict[str, Any]:
             {
                 "severity": "BLOCKER",
                 "path": ".",
-                "issue": "missing human-approved metadata: "
+                "issue": "missing required publication metadata: "
                 + ", ".join(metadata_missing),
             }
         )

@@ -37,12 +37,12 @@ The authoritative status of these items is machine readable in
 `configs/github_release_method_contract_v1.json` and checked by
 `orgcate contract`.
 
-## Human approval required before public release
+## Publication metadata still to be supplied
 
 - [ ] Choose and add a software license.
 - [ ] Confirm author order, affiliations, contact details, and citation text.
 - [ ] Decide which non-disclosive aggregate reports and figures will be tracked.
-- [x] Record the human research lead's authorization for the single frozen
+- [x] Record the research team's authorization for the single frozen
   processed Compustat-derived backbone in `DATA_NOTICE.md`.
 - [ ] Confirm that the staged tree contains only that hash-pinned backbone and
   no raw extract, access note, credential, or additional firm-level dataset.
@@ -56,6 +56,6 @@ even when the code and tests run successfully.
 The private research worktree must not be uploaded wholesale. This candidate
 preserves only the exact hash-verified frozen runtime dependencies and aggregate
 evidence selected in `docs/GITHUB_RELEASE_ASSEMBLY.md`. Run the automated
-allowlist/content audit, test from a clean installation, add human-approved
+allowlist/content audit, test from a clean installation, add team-approved
 release metadata, and inspect the final staged paths before creating the public
 repository.

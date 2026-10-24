@@ -18,8 +18,8 @@ def build_tau(
 ) -> tuple[np.ndarray, dict]:
     """Construct oracle treatment effects from the full multivariable X matrix.
 
-    This starter implements the first-stage worlds plus simple extensions. More
-    sophisticated moment calibration belongs in a later Codex task.
+    This utility implements the first-stage worlds plus simple extensions.
+    More elaborate moment calibration is outside its current scope.
     """
     X = np.asarray(X, dtype=float)
     n = X.shape[0]

@@ -1,7 +1,7 @@
 {
   "schema_version": "orgcate-github-method-contract-v1",
   "as_of": "2026-10-22",
-  "scope": "proposal + teacher prototype + current GitHub product",
+  "scope": "research design + reference prototype + current GitHub implementation",
   "requirements": [
     {
       "id": "dml_ate_crossfit",
@@ -72,7 +72,7 @@
       "requirement": "Demonstrate held-out improvement over a constant-effect candidate and calibrate false support in the homogeneous benchmark.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "Product v1 uses untouched-TEST candidate-versus-constant orthogonal-loss confirmation; the homogeneous benchmark produced zero false SUPPORTED_CANDIDATE states in 10/10 fresh cells. The human lead approved this as the formal public equivalent.",
+      "evidence": "Product v1 uses untouched-TEST candidate-versus-constant orthogonal-loss confirmation; the homogeneous benchmark produced zero false SUPPORTED_CANDIDATE states in 10/10 fresh cells. This is the documented public implementation.",
       "required_action": "None. Prototype permutation remains an optional diagnostic."
     },
     {
@@ -81,7 +81,7 @@
       "requirement": "Check whether heterogeneity is reproducible across the frozen repeated nuisance/refit estimates and withhold claims when unstable.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "Product v1 has three repeated nuisance refits, TRAIN curve/parameter stability, and untouched-TEST confirmation. The human lead approved this as the formal public equivalent.",
+      "evidence": "Product v1 has three repeated nuisance refits, TRAIN curve/parameter stability, and untouched-TEST confirmation. This is the documented public implementation.",
       "required_action": "None. Prototype split-half surface checks remain optional diagnostics."
     },
     {
@@ -135,7 +135,7 @@
       "requirement": "Align the proposal's dedicated discontinuity-estimation language with the current operational threshold-step claim.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "Canonical AGENTS.md rule 11 and the human decision on W4/W5 freeze threshold-step as an operational candidate-boundary label; mathematical proof of discontinuity is not claimed.",
+      "evidence": "The documented research design treats threshold-step as an operational candidate-boundary label; mathematical proof of discontinuity is not claimed.",
       "required_action": "None. Preserve candidate-boundary wording and do not claim a proven causal discontinuity."
     },
     {

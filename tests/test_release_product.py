@@ -19,7 +19,7 @@ from orgcate_sim.release import (
 )
 
 
-def test_repository_root_does_not_require_private_agent_instructions(
+def test_repository_root_does_not_require_private_workspace_instructions(
     tmp_path: Path,
 ) -> None:
     (tmp_path / "pyproject.toml").write_text("[project]\nname='test'\n")

@@ -1,7 +1,7 @@
-# Publication metadata pending human approval
+# Publication metadata to be completed
 
-The repository is technically assembled but is not ready for public reuse
-until the research team supplies and approves the following information.
+The research team should complete the following information before assigning a
+versioned public release:
 
 - Software license: `[choose and approve]`
 - Project title: `OrgCATE: [confirm final title]`

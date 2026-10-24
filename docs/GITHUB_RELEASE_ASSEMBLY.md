@@ -64,7 +64,7 @@ the v1 release.
   frozen L=3 real-covariate backbone.
 - Exclude every other row-level dataset, including generated treatment,
   analyst, oracle, and evaluator tables.
-- Exclude private Git history, handoffs, teacher documents, access notes,
+- Exclude private Git history, handoffs, unpublished source documents, access notes,
   credentials, archives, caches, local outputs, and machine-specific paths.
 - Retain evaluator/oracle *code* because simulation truth evaluation is part of
   the scientific method; never retain saved evaluator/oracle *row data*.
@@ -95,6 +95,6 @@ candidate assembly. After adding approved metadata, run:
 python tools/audit_public_release.py
 ```
 
-Only a clean audit, clean tests, verified hashes, and human review of the final
+Only a clean audit, clean tests, verified hashes, and research-team review of the final
 staged paths authorize upload.
 
