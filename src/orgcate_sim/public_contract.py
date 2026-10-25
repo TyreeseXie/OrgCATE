@@ -339,6 +339,16 @@ def summarize_shape_quantities_en(
         center = _median_scalar(records, "center")
         steepness = _median_scalar(records, "k")
         amplitude = _median_scalar(records, "amplitude")
+        transition_width = (
+            float(2.0 * np.arctanh(0.5) / steepness)
+            if steepness is not None and steepness > 0
+            else None
+        )
+        effective_gradient = (
+            float(abs(amplitude) * steepness)
+            if amplitude is not None and steepness is not None
+            else None
+        )
         center_slope = _slope_at(u, curve, center)
         lower_slope = _slope_at(u, curve, float(u[0]))
         upper_slope = _slope_at(u, curve, float(u[-1]))
@@ -346,6 +356,8 @@ def summarize_shape_quantities_en(
             transition_center_median_across_refits=center,
             steepness_k_median_across_refits=steepness,
             amplitude_median_across_refits=amplitude,
+            central_transition_width_25_75=transition_width,
+            effective_center_gradient=effective_gradient,
             effect_direction=_direction(amplitude),
             slope_at_lower_support=lower_slope,
             slope_at_transition_center=center_slope,
@@ -358,11 +370,13 @@ def summarize_shape_quantities_en(
         )
         interpretation = (
             f"CATE follows a {kind} {_direction(amplitude)} pattern: transition "
-            f"center={_format_number(center)}, steepness k={_format_number(steepness)}, "
-            f"amplitude={_format_number(amplitude)}, and slopes at the lower support, "
+            f"center={_format_number(center)}, amplitude={_format_number(amplitude)}, "
+            f"25%-75% transition width={_format_number(transition_width)}, effective "
+            f"center gradient={_format_number(effective_gradient)}, and slopes at the lower support, "
             f"center, and upper support are {_format_number(lower_slope)}, "
             f"{_format_number(center_slope)}, and {_format_number(upper_slope)}. "
-            f"Endpoint effects are {curve[0]:.3f} and {curve[-1]:.3f}."
+            f"Raw k={_format_number(steepness)} is retained as a diagnostic; endpoint "
+            f"effects are {curve[0]:.3f} and {curve[-1]:.3f}."
         )
     elif label in {"inverted-u", "u-shaped"}:
         turning = _median_scalar(records, "turning_point")

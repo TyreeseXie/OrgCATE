@@ -67,6 +67,11 @@ ALLOWED_TABULAR = {
     "reports/kink_resolution_v2/KINK_RESOLUTION_V2_SUMMARY.csv",
     "reports/morphology_product_v1/MORPHOLOGY_PRODUCT_V1_DEVELOPMENT_LONG.csv",
     "reports/morphology_product_v1/MORPHOLOGY_PRODUCT_V1_SUMMARY.csv",
+    "reports/nonlinear_monotone_resolution_v1/confirmation/NONLINEAR_CONFIRMATION_EVALUATOR_LONG.csv",
+    "reports/nonlinear_monotone_resolution_v1/confirmation/NONLINEAR_CONFIRMATION_PRACTICAL_LONG.csv",
+    "reports/nonlinear_monotone_resolution_v1/confirmation/NONLINEAR_CONFIRMATION_SUMMARY.csv",
+    "reports/single_scenario_release_candidate_v1/SINGLE_SCENARIO_UNIFIED_SUMMARY.csv",
+    "reports/unified_recovery_acceptance_v1/UNIFIED_SINGLE_SUMMARY.csv",
 }
 ALLOWED_BINARY_DATA = {
     "execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz": {
@@ -111,6 +116,15 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def manifest_bytes(path: Path) -> bytes:
+    """Return the bytes Git records for cross-platform manifest hashes."""
+
+    content = path.read_bytes()
+    if path.suffix.lower() in TEXT_SUFFIXES:
+        return content.replace(b"\r\n", b"\n")
+    return content
 
 
 def relative(path: Path) -> str:
@@ -260,8 +274,13 @@ def audit(*, allow_metadata_pending: bool) -> dict[str, Any]:
                 )
         if suffix in TEXT_SUFFIXES:
             findings.extend(inspect_text(path))
+        content = manifest_bytes(path)
         records.append(
-            {"path": rel, "bytes": path.stat().st_size, "sha256": sha256(path)}
+            {
+                "path": rel,
+                "bytes": len(content),
+                "sha256": hashlib.sha256(content).hexdigest(),
+            }
         )
 
     metadata_missing = [

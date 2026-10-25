@@ -346,6 +346,31 @@ def _ranking(importance: dict[str, float]) -> list[dict[str, Any]]:
     ]
 
 
+def _apply_tanh_transition_rule(result: dict[str, Any]) -> dict[str, Any]:
+    """Use the fitted curve's effective gradient, not raw k alone."""
+
+    if result.get("selected_family") != "tanh" or result.get(
+        "predicted_label"
+    ) not in {"nonlinear-monotone", "steep-continuous"}:
+        return result
+    details = json.loads(result.get("parameter_details_json", "[]"))
+    if not details:
+        return result
+    amplitudes = np.asarray(
+        [abs(float(item["amplitude"])) for item in details], dtype=float
+    )
+    steepness = np.asarray([float(item["k"]) for item in details], dtype=float)
+    effective_gradient = float(np.median(amplitudes * steepness))
+    result["predicted_label"] = (
+        "steep-continuous"
+        if effective_gradient >= 10.0
+        else "nonlinear-monotone"
+    )
+    result["effective_center_gradient"] = effective_gradient
+    result["transition_rule"] = "median absolute amplitude-times-k; cutpoint=10"
+    return result
+
+
 def run_public_demo(
     *,
     scenario: str = "sign-reversal",
@@ -505,6 +530,7 @@ def run_public_demo(
         )
         result.update(update)
         confirmation_rows = []
+    result = _apply_tanh_transition_rule(result)
     predicted_label = str(result["predicted_label"])
     selected_family = str(result["selected_family"])
     curve_practical = pd.DataFrame(curve_rows)
@@ -640,11 +666,7 @@ def run_public_demo(
         "scenario": scenario,
         "true_label": scenario,
         "predicted_label": predicted_label,
-        "exact_label_correct": bool(
-            result.get(
-                "exact_label_correct", result.get("classification_correct_evaluator")
-            )
-        ),
+        "exact_label_correct": bool(predicted_label == scenario),
         "true_ate": float(np.mean(data["tau_true"])),
         "ate_error": float(result["train_ate_dml"] - np.mean(data["tau_true"])),
         "curve_rank_correlation": float(

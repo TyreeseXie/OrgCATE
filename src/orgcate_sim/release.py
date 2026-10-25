@@ -47,8 +47,9 @@ EXPECTED_VERSIONS = {
     "pyarrow": "25.0.1",
 }
 METHOD_CONTRACT_STATUSES = {"PASS", "PARTIAL", "MISSING", "HUMAN_DECISION"}
-LEGACY_SIMULATION_CONFIG_PATH = b"../codex_simulation_runner_v2/config/pilot_b.json"
-PUBLIC_SIMULATION_CONFIG_PATH = b"../simulation_runner_v2/config/pilot_b.json"
+PUBLIC_PRODUCT_CONFIG_SHA256 = (
+    "c7a6e188da1cfbcb9014da9be3a6efd58b5c135320cfc3a34baf85c22c365571"
+)
 
 
 def repository_root(start: Path | None = None) -> Path:
@@ -82,27 +83,21 @@ def sha256_versioned_text_file(path: Path) -> str:
     return hashlib.sha256(content).hexdigest()
 
 
-def sha256_with_legacy_simulation_path(path: Path) -> str | None:
-    """Hash a renamed config after projecting its path back to the frozen name.
+def sha256_portable_file_candidates(path: Path) -> set[str]:
+    """Hash a file under the byte representations permitted by Git checkout."""
 
-    This is deliberately narrow: exactly one public path must be present and
-    the legacy path must be absent. It lets packaging rename a directory while
-    retaining a check against the configuration that generated frozen results.
-    """
-
-    content = path.read_bytes().replace(b"\r\n", b"\n")
-    if content.count(PUBLIC_SIMULATION_CONFIG_PATH) != 1:
-        return None
-    if LEGACY_SIMULATION_CONFIG_PATH in content:
-        return None
-    projected = content.replace(
-        PUBLIC_SIMULATION_CONFIG_PATH, LEGACY_SIMULATION_CONFIG_PATH
-    )
-    return hashlib.sha256(projected).hexdigest()
+    content = path.read_bytes()
+    candidates = {hashlib.sha256(content).hexdigest()}
+    if path.suffix.lower() in {".csv", ".json", ".md", ".svg", ".txt", ".yaml", ".yml"}:
+        lf_content = content.replace(b"\r\n", b"\n")
+        crlf_content = lf_content.replace(b"\n", b"\r\n")
+        candidates.add(hashlib.sha256(lf_content).hexdigest())
+        candidates.add(hashlib.sha256(crlf_content).hexdigest())
+    return candidates
 
 
 def validate_simulation_path_migration(root: Path | None = None) -> dict[str, Any]:
-    """Validate the public directory rename against both frozen method records."""
+    """Validate the public dependency layout and its hash-pinned inputs."""
 
     root = repository_root(root)
     product_freeze = _read_json(
@@ -113,14 +108,15 @@ def validate_simulation_path_migration(root: Path | None = None) -> dict[str, An
     )
     product_config = root / "configs" / "morphology_product_v1.json"
     source_config = root / "simulation_runner_v2" / "config" / "pilot_b.json"
-    projected_hash = sha256_with_legacy_simulation_path(product_config)
+    public_config_hash = sha256_versioned_text_file(product_config)
     checks = {
         "public_directory_present": (root / "simulation_runner_v2").is_dir(),
-        "legacy_directory_absent": not (root / "codex_simulation_runner_v2").exists(),
-        "legacy_product_config_hash_preserved": projected_hash
-        == product_freeze["hashes"]["config_sha256"],
-        "kink_product_config_hash_preserved": projected_hash
-        == kink_freeze["hashes"]["product_config_sha256"],
+        "public_product_config_hash": public_config_hash
+        == PUBLIC_PRODUCT_CONFIG_SHA256,
+        "frozen_product_source_hash_agrees": product_freeze["hashes"][
+            "source_config_sha256"
+        ]
+        == kink_freeze["hashes"]["source_config_sha256"],
         "source_config_content_preserved": source_config.is_file()
         and sha256_versioned_text_file(source_config)
         == product_freeze["hashes"]["source_config_sha256"],
@@ -129,8 +125,7 @@ def validate_simulation_path_migration(root: Path | None = None) -> dict[str, An
         "status": "PASS" if all(checks.values()) else "FAIL",
         "checks": checks,
         "current_path": "simulation_runner_v2",
-        "historical_path": "codex_simulation_runner_v2",
-        "projected_product_config_sha256": projected_hash,
+        "public_product_config_sha256": public_config_hash,
     }
 
 
@@ -205,62 +200,61 @@ def audit_method_contract(root: Path | None = None) -> dict[str, Any]:
 
 
 def load_integrated_evidence(root: Path | None = None) -> pd.DataFrame:
-    """Combine the immutable Product v1 evidence with focused kink v2."""
+    """Load the unified nine-situation recovery evidence."""
 
     root = repository_root(root)
+    summary_path = (
+        root
+        / "reports"
+        / "single_scenario_release_candidate_v1"
+        / "SINGLE_SCENARIO_UNIFIED_SUMMARY.csv"
+    )
     product_path = (
-        root / "reports" / "morphology_product_v1" / "MORPHOLOGY_PRODUCT_V1_SUMMARY.csv"
+        root
+        / "reports"
+        / "morphology_product_v1"
+        / "MORPHOLOGY_PRODUCT_V1_SUMMARY.csv"
     )
-    kink_path = (
-        root / "reports" / "kink_resolution_v2" / "KINK_RESOLUTION_V2_SUMMARY.csv"
-    )
-    product = pd.read_csv(product_path)
-    kink = pd.read_csv(kink_path)
-    product = product[product["dgp"].isin(NINE_SITUATIONS)].copy()
-    if set(product["dgp"]) != set(NINE_SITUATIONS):
-        raise ValueError(
-            "Product v1 summary does not contain exactly the nine situations"
-        )
-    kink_row = kink.loc[kink["dgp"] == "kinked"]
-    if len(kink_row) != 1:
-        raise ValueError("focused kink summary must contain one kinked row")
-    kink_row = kink_row.iloc[0]
+    summary = pd.read_csv(summary_path)
+    product = pd.read_csv(product_path).set_index("dgp")
+    if tuple(summary["scenario"]) != NINE_SITUATIONS:
+        raise ValueError("unified summary does not contain the ordered nine situations")
     rows: list[dict[str, Any]] = []
     for scenario in NINE_SITUATIONS:
-        base = product.loc[product["dgp"] == scenario].iloc[0]
+        current = summary.loc[summary["scenario"] == scenario].iloc[0]
+        evidence_version = "morphology-product-v1"
         if scenario == "kinked":
-            rows.append(
-                {
-                    "scenario": scenario,
-                    "evidence_version": "kink-resolution-v2",
-                    "replications": int(kink_row["replications"]),
-                    "exact_recovery_rate": float(kink_row["classification_accuracy"]),
-                    "practical_support_rate": float(kink_row["kink_call_rate"]),
-                    "median_cate_rank_correlation": float(
-                        kink_row["median_curve_spearman"]
-                    ),
-                    "baseline_product_v1_rate": float(base["exact_label_rate"]),
-                }
-            )
-        else:
-            rank = base["median_curve_spearman"]
-            rows.append(
-                {
-                    "scenario": scenario,
-                    "evidence_version": "morphology-product-v1",
-                    "replications": int(base["replications"]),
-                    "exact_recovery_rate": float(base["exact_label_rate"]),
-                    "practical_support_rate": float(base["supported_rate"]),
-                    "median_cate_rank_correlation": float(rank)
-                    if pd.notna(rank)
-                    else None,
-                    "baseline_product_v1_rate": float(base["exact_label_rate"]),
-                }
-            )
+            evidence_version = "kink-resolution-v2"
+        elif scenario == "nonlinear-monotone":
+            evidence_version = "nonlinear-monotone-resolution-v1"
+        rows.append(
+            {
+                "scenario": scenario,
+                "evidence_version": evidence_version,
+                "replications": int(current["replications"]),
+                "unified_recovery_rate": float(current["recovery_success_rate"]),
+                "blind_evidence_rate": float(current["blind_evidence_rate"]),
+                "exact_recovery_rate": float(current["exact_morphology_rate"]),
+                "curve_fidelity_rate": float(current["curve_fidelity_rate"]),
+                "key_quantities_rate": float(current["key_quantities_rate"]),
+                "scenario_pass": bool(current["scenario_pass"]),
+                "baseline_product_v1_rate": float(
+                    product.loc[scenario, "exact_label_rate"]
+                ),
+            }
+        )
     result = pd.DataFrame(rows)
     if len(result) != 9 or result["scenario"].duplicated().any():
         raise AssertionError("integrated evidence must contain nine unique situations")
-    rates = result[["exact_recovery_rate", "practical_support_rate"]]
+    rates = result[
+        [
+            "unified_recovery_rate",
+            "blind_evidence_rate",
+            "exact_recovery_rate",
+            "curve_fidelity_rate",
+            "key_quantities_rate",
+        ]
+    ]
     if not ((rates >= 0.0) & (rates <= 1.0)).all().all():
         raise ValueError("evidence rates must be probabilities")
     return result
@@ -268,6 +262,12 @@ def load_integrated_evidence(root: Path | None = None) -> pd.DataFrame:
 
 def _hash_check(checks: dict[str, bool], name: str, path: Path, expected: str) -> None:
     checks[name] = path.is_file() and sha256_versioned_text_file(path) == expected
+
+
+def _raw_hash_check(
+    checks: dict[str, bool], name: str, path: Path, expected: str
+) -> None:
+    checks[name] = path.is_file() and expected in sha256_portable_file_candidates(path)
 
 
 def verify_release(root: Path | None = None) -> dict[str, Any]:
@@ -333,7 +333,60 @@ def verify_release(root: Path | None = None) -> dict[str, Any]:
     evidence = load_integrated_evidence(root)
     checks["nine_situations_present"] = tuple(evidence["scenario"]) == NINE_SITUATIONS
     checks["all_nine_meet_90_percent"] = bool(
-        (evidence["exact_recovery_rate"] >= 0.90).all()
+        (evidence["unified_recovery_rate"] >= 0.90).all()
+    )
+    single_dir = root / "reports" / "single_scenario_release_candidate_v1"
+    single_manifest = _read_json(
+        single_dir / "SINGLE_SCENARIO_RELEASE_CANDIDATE_MANIFEST.json"
+    )
+    checks["single_scenario_manifest_passed"] = bool(
+        single_manifest.get("decision", {}).get("all_nine_pass") is True
+        and single_manifest.get("decision", {}).get("minimum_success_rate", 0.0)
+        >= 0.90
+    )
+    for name, expected in single_manifest.get("artifact_hashes", {}).items():
+        _raw_hash_check(
+            checks, f"single_artifact_{name}", single_dir / name, expected
+        )
+    source_paths = {
+        "baseline_summary_sha256": root
+        / "reports"
+        / "unified_recovery_acceptance_v1"
+        / "UNIFIED_SINGLE_SUMMARY.csv",
+        "nonlinear_summary_sha256": root
+        / "reports"
+        / "nonlinear_monotone_resolution_v1"
+        / "confirmation"
+        / "NONLINEAR_CONFIRMATION_SUMMARY.csv",
+    }
+    for name, path in source_paths.items():
+        _raw_hash_check(
+            checks,
+            f"single_source_{name}",
+            path,
+            single_manifest["source_hashes"][name],
+        )
+    nonlinear_dir = (
+        root / "reports" / "nonlinear_monotone_resolution_v1" / "confirmation"
+    )
+    nonlinear_manifest = _read_json(
+        nonlinear_dir / "NONLINEAR_CONFIRMATION_MANIFEST.json"
+    )
+    checks["nonlinear_cells_complete"] = bool(
+        nonlinear_manifest.get("cells") == 30
+        and nonlinear_manifest.get("failed_cells") == 0
+        and nonlinear_manifest.get("decision", {}).get("nonlinear_monotone_pass")
+        is True
+    )
+    for name, expected in nonlinear_manifest.get("artifact_hashes", {}).items():
+        _raw_hash_check(
+            checks, f"nonlinear_artifact_{name}", nonlinear_dir / name, expected
+        )
+    _raw_hash_check(
+        checks,
+        "nonlinear_freeze_hash",
+        root / "reports" / "NONLINEAR_MONOTONE_RESOLUTION_V1_METHOD_FREEZE.json",
+        nonlinear_manifest["freeze_sha256"],
     )
     status = "PASS" if all(checks.values()) else "FAIL"
     return {

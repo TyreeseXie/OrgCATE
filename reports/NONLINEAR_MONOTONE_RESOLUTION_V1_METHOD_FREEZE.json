@@ -1,0 +1,27 @@
+{
+  "status": "FROZEN_BEFORE_FRESH_CONFIRMATION",
+  "frozen_at": "2026-10-25",
+  "selected_route": "pooled_cv",
+  "seed_grid": {
+    "0": 788580957,
+    "1": 3284130091,
+    "2": 516877928,
+    "3": 982903875,
+    "4": 2207957410,
+    "5": 655756549,
+    "6": 2890887654,
+    "7": 3930680341,
+    "8": 2441676872,
+    "9": 3430086610
+  },
+  "hashes": {
+    "confirmation_config_sha256": "47ab8611f41a289c2dc6309779bffc40b980f8b3706edbe0624bbf888e090ceb",
+    "confirmation_runner_sha256": "5bbbae8ed0966c42cd5ea2337ab10c410653159172a82823fa968c7dd639971d",
+    "development_config_sha256": "cbef4881bc2da6fd05e3c62ab79dec6857fc347e9592b75fa3a57e02b732133c",
+    "development_runner_sha256": "40602cf7dddfa182ae34fcbbf17e5715af3bf43bd6f35a95c24556a0dd48c1b8",
+    "development_long_sha256": "bbe12d3cd8ca70be3d4cde07fdc6cae0d56d5f0c6d78b0a9672d703038701681",
+    "development_manifest_sha256": "cb3cc084967a6141866a510bdc2d738779eb8e0977db11eac04825437dc28476"
+  },
+  "test_selects_shape_or_parameters": false,
+  "oracle_selects_shape_or_parameters": false
+}

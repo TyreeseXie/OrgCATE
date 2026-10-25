@@ -76,6 +76,23 @@ nine separate datasets. Multi-threshold-step is a subtype of threshold-step.
 
 Simulation truth is stored separately and is used only to calculate accuracy.
 
+## Single-scenario simulation acceptance
+
+The nine single-scenario simulations use one success definition. A supported
+heterogeneous result must pass blind TEST confirmation in at least two of three
+fixed nuisance refits; the three fitted curves must have pairwise Spearman at
+least `.80`; and the range of the primary location estimate may not exceed
+`.20` on the frozen ECDF scale. The evaluator then requires the correct
+operational morphology, curve Spearman at least `.95`, normalized curve RMSE at
+most `.20`, and all required key quantities within tolerance.
+
+Location and width error tolerance is `.10 ECDF`. Effect levels, slopes,
+curvature, contrasts, and amplitudes are compared through their implied effect
+over observed support and may differ by at most 20% of the true CATE range. A
+scenario passes when at least 9 of 10 frozen replications satisfy every
+condition. Full details are in
+`docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`.
+
 ## Machine-readable status
 
 `configs/github_release_method_contract_v1.json` lists each requirement, its

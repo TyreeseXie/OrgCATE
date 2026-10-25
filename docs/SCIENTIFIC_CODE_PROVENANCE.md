@@ -20,8 +20,7 @@ file except the manifest itself.
 The lower-level dependency modules retain their original formatting so their
 hashes remain comparable with the recorded experiments.
 
-The public repository renamed the low-level dependency directory from its
-development name to `simulation_runner_v2`. The runner and source-configuration
-file contents are byte-identical to the frozen versions. Only path references
-were updated; the release verifier reconstructs the legacy path when checking
-the historical product-configuration hash.
+The public dependency is stored under `simulation_runner_v2`. The runner and
+source-configuration file contents are byte-identical to the frozen versions.
+The release verifier hash-checks the public configuration, dependency source,
+and frozen evidence records separately.

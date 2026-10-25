@@ -72,8 +72,8 @@ orgcate theory-audit --input artifacts/public_demo/practical/researcher_theory_a
 |---|---|
 | homogeneous | constant effect estimate |
 | linear-monotone | direction and slope |
-| nonlinear-monotone | effect ordering and nonlinear intensity |
-| steep-continuous | ordering and location of a sharp continuous transition |
+| nonlinear-monotone | direction, center, amplitude, transition width, effective gradient, and local slopes |
+| steep-continuous | direction, center, amplitude, narrow transition width, effective gradient, and local slopes |
 | inverted-u | turning point, peak, and tail contrasts |
 | u-shaped | turning point, trough, and tail contrasts |
 | kinked | kink location and left/right slopes |
@@ -83,13 +83,22 @@ orgcate theory-audit --input artifacts/public_demo/practical/researcher_theory_a
 Multiple ordered thresholds are reported as a subtype of `threshold-step`.
 They are not treated as a separate high-level class.
 
-## Validation results
+## Validation standard and results
 
-The table combines Morphology Product v1 with the separately developed
-kink-resolution v2 experiment. Each proportion is based on ten confirmation
-replications at `n=3000`.
+The simulation evaluator applies one conjunctive standard to all nine
+single-scenario forms. A heterogeneous replication succeeds only when blind
+TRAIN/TEST evidence supports the fitted candidate, the operational morphology
+is correct, curve Spearman correlation is at least `.95`, normalized curve
+RMSE is at most `.20`, and every required shape quantity is accurate. Location
+and width errors may not exceed `.10` on the frozen 0--1 ECDF scale.
+Effect-level, slope, curvature, contrast, and amplitude errors, expressed over
+the observed support, may not exceed 20% of the true CATE range. A scenario
+passes when at least 9 of 10 frozen replications succeed. Simulation truth is
+opened only after the practical output is fixed.
 
-| Functional form | Exact recovery |
+The table reports this unified recovery measure at `n=3000`.
+
+| Functional form | Unified recovery |
 |---|---:|
 | homogeneous | 10/10 |
 | linear-monotone | 10/10 |
@@ -101,8 +110,12 @@ replications at `n=3000`.
 | threshold-step | 10/10 |
 | sign-reversal | 10/10 |
 
-The kinked row reports the final independently confirmed kink-resolution v2
-result.
+The nonlinear-monotone row uses a focused independent confirmation after the
+operational transition rule was frozen. The kinked row uses the independently
+confirmed kink-resolution v2 result. The complete definition and required
+quantity map are in `docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`.
+
+![Unified single-scenario recovery](reports/single_scenario_release_candidate_v1/FIGURE_SINGLE_SCENARIO_UNIFIED_RECOVERY.svg)
 
 ## Semi-synthetic reproduction
 
@@ -149,6 +162,12 @@ For every successful GitHub Actions run, open the run summary and download
 ## Documentation
 
 - `docs/METHOD_CONTRACT_AND_STOP_RULES.md`: estimation order and stopping rules.
+- `docs/TECHNICAL_APPENDIX.md`: estimators, data splits, morphology reconstruction,
+  validation criteria, and reproducibility details.
+- `docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`: the frozen single-scenario
+  success definition.
+- `docs/REPOSITORY_VERIFICATION_RECORD.md`: final code, evidence, data, and
+  data-to-results verification record.
 - `docs/OUTPUT_SCHEMA.md`: result fields and state definitions.
 - `docs/SHAPE_OUTPUT_REFERENCE.md`: quantities reported for each functional form.
 - `reports/morphology_product_v1/`: main experiment results and figures.
@@ -166,6 +185,7 @@ simulation outputs are outside the release.
 .venv\Scripts\ruff.exe check src tests execution tools
 .venv\Scripts\python.exe -m compileall -q src tests execution tools
 .venv\Scripts\python.exe -m pytest -q -p no:cacheprovider
+python tools/verify_single_scenario_evidence.py
 python tools/audit_public_release.py --allow-metadata-pending
 orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
 python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance

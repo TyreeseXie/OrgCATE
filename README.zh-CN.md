@@ -64,8 +64,8 @@ orgcate theory-audit --input artifacts/public_demo/practical/researcher_theory_a
 |---|---|
 | homogeneous | 恒定效应估计 |
 | linear-monotone | 方向与斜率 |
-| nonlinear-monotone | 效应排序与非线性强度 |
-| steep-continuous | 排序与剧烈连续转变的位置 |
+| nonlinear-monotone | 方向、中心、幅度、转变宽度、有效梯度和局部斜率 |
+| steep-continuous | 方向、中心、较窄的转变宽度、有效梯度和局部斜率 |
 | inverted-u | 转折点、峰值和两侧差异 |
 | u-shaped | 转折点、谷值和两侧差异 |
 | kinked | 折点位置及左右斜率 |
@@ -74,12 +74,19 @@ orgcate theory-audit --input artifacts/public_demo/practical/researcher_theory_a
 
 多个有序阈值作为 `threshold-step` 的子型报告，不另设一个高层类别。
 
-## 验证结果
+## 验证标准与结果
 
-下表合并 Morphology Product v1 与单独开展的 kink-resolution v2。每个比例基于
-`n=3000` 下的 10 次确认实验。
+九种单情境使用同一套联合标准。一个异质性 replication 只有同时满足以下条件才算
+成功：盲态 TRAIN/TEST 证据支持固定候选形态、操作性形态名称正确、曲线 Spearman
+相关不低于 `.95`、标准化曲线 RMSE 不高于 `.20`，并且该形态要求的所有关键量均
+准确。位置和宽度在冻结的 0--1 ECDF（经验分位秩）尺度上的误差不得超过 `.10`；
+效应水平、斜率、曲率、对比度和幅度在观测支持区间内换算后的误差，不得超过真实
+CATE 极差的 20%。10 次冻结重复中至少 9 次整体成功，该情境才通过。实践程序固定
+输出后，评价器才读取模拟真值。
 
-| 函数形态 | 精确恢复 |
+下表报告 `n=3000` 下的统一恢复率。
+
+| 函数形态 | 统一恢复率 |
 |---|---:|
 | homogeneous | 10/10 |
 | linear-monotone | 10/10 |
@@ -91,7 +98,11 @@ orgcate theory-audit --input artifacts/public_demo/practical/researcher_theory_a
 | threshold-step | 10/10 |
 | sign-reversal | 10/10 |
 
-`kinked` 一行报告的是折点专项 v2 独立确认后的最终结果。
+`nonlinear-monotone` 一行来自操作性转变规则冻结后的独立专项确认；`kinked` 一行
+来自折点专项 v2 的独立确认。完整定义及各形态的必需关键量见
+`docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`。
+
+![九种单情境统一恢复结果](reports/single_scenario_release_candidate_v1/FIGURE_SINGLE_SCENARIO_UNIFIED_RECOVERY.svg)
 
 ## 半合成复现
 
@@ -133,6 +144,10 @@ python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
 ## 文档与结果
 
 - `docs/METHOD_CONTRACT_AND_STOP_RULES.md`：估计顺序与停止规则；
+- `docs/TECHNICAL_APPENDIX.md`：估计量、样本划分、形态重构、验证标准和复现细节；
+- `docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`：冻结的单情境成功标准；
+- `docs/REPOSITORY_VERIFICATION_RECORD.md`：代码、证据、数据和端到端分析的最终
+  验证记录；
 - `docs/OUTPUT_SCHEMA.md`：结果字段与状态定义；
 - `docs/SHAPE_OUTPUT_REFERENCE.md`：各形态报告的参数；
 - `reports/morphology_product_v1/`：主实验结果与图；
@@ -149,6 +164,7 @@ python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
 .venv\Scripts\ruff.exe check src tests execution tools
 .venv\Scripts\python.exe -m compileall -q src tests execution tools
 .venv\Scripts\python.exe -m pytest -q -p no:cacheprovider
+python tools/verify_single_scenario_evidence.py
 python tools/audit_public_release.py --allow-metadata-pending
 orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
 python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance

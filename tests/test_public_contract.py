@@ -186,6 +186,8 @@ def test_researcher_audit_is_created_blank_and_validated() -> None:
             {
                 "transition_center_median_across_refits",
                 "steepness_k_median_across_refits",
+                "central_transition_width_25_75",
+                "effective_center_gradient",
                 "amplitude_median_across_refits",
                 "slope_at_lower_support",
                 "slope_at_transition_center",
@@ -199,6 +201,8 @@ def test_researcher_audit_is_created_blank_and_validated() -> None:
             {
                 "transition_center_median_across_refits",
                 "steepness_k_median_across_refits",
+                "central_transition_width_25_75",
+                "effective_center_gradient",
                 "amplitude_median_across_refits",
                 "slope_at_lower_support",
                 "slope_at_transition_center",

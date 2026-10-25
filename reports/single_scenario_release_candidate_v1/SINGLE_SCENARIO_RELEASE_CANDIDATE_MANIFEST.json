@@ -1,0 +1,17 @@
+{
+  "schema_version": "orgcate-single-scenario-release-candidate-result-v1",
+  "decision": {
+    "all_nine_pass": true,
+    "minimum_success_rate": 0.9,
+    "public_repository_mutated": false
+  },
+  "source_hashes": {
+    "baseline_summary_sha256": "d8ab8fc6ec1fc52a605420a119eb71dee5160a5ef2fd4d2786016a9a20ccb2f4",
+    "nonlinear_summary_sha256": "05914107df6320993942a09671fe0b2852161f4ef7e8a1aed5d4d3e84053f21c"
+  },
+  "artifact_hashes": {
+    "SINGLE_SCENARIO_UNIFIED_SUMMARY.csv": "518bab446d26523e23b5a39406ce7b25ad9bb85cfa2f9edc20f94775202091dc",
+    "FIGURE_SINGLE_SCENARIO_UNIFIED_RECOVERY.svg": "5853ee69ab97b99fe1febd9e8a4e8e2f0b1da57f198b1a83a39bbc5ae8cec81c",
+    "SINGLE_SCENARIO_UNIFIED_REPORT_ZH.md": "6194ccccc4f1317ad19722f33433665f1e0a7fd09fe16261bfc25a8214d5c802"
+  }
+}
