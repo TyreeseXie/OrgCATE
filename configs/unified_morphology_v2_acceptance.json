@@ -1,0 +1,34 @@
+{
+  "schema_version": "unified-morphology-v2-acceptance",
+  "results": "../reports/unified_morphology_v2/UNIFIED_MORPHOLOGY_V2_CONFIRMATION_LONG.csv",
+  "curves": "../reports/unified_morphology_v2/UNIFIED_MORPHOLOGY_V2_CONFIRMATION_CURVES_LONG.csv",
+  "output_dir": "../reports/unified_morphology_v2",
+  "required_replications_per_scenario": 10,
+  "thresholds": {
+    "scenario_success_rate": 0.90,
+    "curve_spearman": 0.95,
+    "normalized_curve_rmse": 0.20,
+    "location_abs_error_ecdf": 0.10,
+    "effect_quantity_error_fraction_truth_cate_range": 0.20,
+    "dimensionless_parameter_relative_error": 0.20,
+    "blind_curve_stability_spearman": 0.80
+  },
+  "truth": {
+    "homogeneous": {"level": 1.0},
+    "linear-monotone": {"slope": 3.0},
+    "nonlinear-monotone": {"center": 0.5, "amplitude": 1.0, "transition_width_25_75": 0.18310204811135164},
+    "steep-continuous": {"center": 0.5, "amplitude": 1.4, "transition_width_25_75": 0.10986122886681098},
+    "inverted-u": {"turning_point": 0.5, "curvature": -27.5},
+    "u-shaped": {"turning_point": 0.5, "curvature": 27.5},
+    "kinked": {"kink": 0.5, "left_slope": 2.0, "right_slope": 9.0},
+    "threshold-step": {"boundaries": [0.5], "levels": [0.3, 2.3], "jumps": [2.0]},
+    "sign-reversal": {"crossing": 0.65, "global_slope": -5.0, "lower_effect": 2.75, "upper_effect": -1.25}
+  },
+  "contract": {
+    "blind_evidence_required": true,
+    "exact_label_required": true,
+    "curve_fidelity_required": true,
+    "all_shape_specific_quantities_required": true,
+    "oracle_used_after_practical_output_only": true
+  }
+}

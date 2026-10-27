@@ -26,8 +26,8 @@ jobs:
         run: pytest -q -p no:cacheprovider
       - name: Verify frozen aggregate evidence
         run: orgcate verify
-      - name: Verify unified single-scenario evidence
-        run: python tools/verify_single_scenario_evidence.py
+      - name: Verify unified morphology evidence
+        run: python tools/verify_unified_morphology_evidence.py
       - name: Verify separate additive coexistence evidence
         run: python additive_coexistence/verify.py
       - name: Assemble additive coexistence artifact

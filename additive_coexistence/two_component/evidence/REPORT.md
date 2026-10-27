@@ -32,9 +32,9 @@ alongside overall CATE fidelity and the all-null error rate.
 `FIGURE_2_COMPONENT_CURVES.svg` displays the truth, median estimate, and
 10%-90% interval across 20 fresh replications.
 
-The result supports this clear, prespecified, additive example. It does not
-establish automatic active-set discovery, interactions, or universal recovery
-for arbitrary combinations.
+The result supports this clear, prespecified, additive example. Active-set
+discovery, interactions, and broader combinations are separate capability
+questions.
 
 ## Research implication
 

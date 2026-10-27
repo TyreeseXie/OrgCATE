@@ -1,26 +1,21 @@
-# Code provenance
+# Scientific code provenance
 
-At assembly, the selected Python files in the following paths were compared
-with their source files in the private research repository using SHA256:
+The public repository was assembled from the private research repository after
+the single-morphology method was consolidated into one common classifier.
 
-- `src/orgcate_sim/`
-- `execution/`
-- `simulation_runner_v2/src/`
-- `morphology_reconstruction_v2_stage_success/src/`
+The public-path changes are limited to:
 
-All 30 files matched. The assembly step did not change the DGP formulas,
-estimator settings, sample split, classification rules, thresholds, or
-experiment runners.
+- replacing private directory names with repository-relative paths;
+- moving common acceptance calculations into the installable package;
+- excluding private packs, row-level generated outputs, and local logs;
+- retaining only aggregate evidence and the authorized firm-covariate backbone;
+- adding public verification, artifact packaging, and CI checks.
 
-Changes made for publication are limited to documentation, ignore rules, CI,
-the repository scan, publication-metadata placeholders, and copies of aggregate
-figures. `PUBLIC_RELEASE_MANIFEST.json` records the SHA256 of every included
-file except the manifest itself.
+The public consolidation does not change the DGP formulas, primary
+`CausalForestDML` settings, 80/20 split, DML ATE estimator, candidate variables,
+classification thresholds, or acceptance tolerances. Configuration, runner,
+acceptance helper, and method-freeze hashes are checked by `orgcate verify`.
 
-The lower-level dependency modules retain their original formatting so their
-hashes remain comparable with the recorded experiments.
-
-The public dependency is stored under `simulation_runner_v2`. The runner and
-source-configuration file contents are byte-identical to the frozen versions.
-The release verifier hash-checks the public configuration, dependency source,
-and frozen evidence records separately.
+The internal `run_nine_shape_*` modules are shared numerical dependencies of
+the unified runner. They do not route observations by a known simulation label.
+The public entry point is `execution/run_unified_morphology_v2.py`.

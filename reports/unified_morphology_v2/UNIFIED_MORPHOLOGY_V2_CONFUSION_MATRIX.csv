@@ -1,0 +1,10 @@
+scenario,homogeneous,inverted-u,kinked,linear-monotone,nonlinear-monotone,sign-reversal,steep-continuous,threshold-step,u-shaped
+homogeneous,9,0,0,0,0,0,0,1,0
+inverted-u,0,9,0,0,0,0,1,0,0
+kinked,0,0,9,0,1,0,0,0,0
+linear-monotone,0,0,0,10,0,0,0,0,0
+nonlinear-monotone,0,0,0,0,10,0,0,0,0
+sign-reversal,0,0,0,0,0,10,0,0,0
+steep-continuous,0,0,0,0,0,0,10,0,0
+threshold-step,0,0,0,0,0,0,0,10,0
+u-shaped,0,0,0,0,0,0,0,0,10

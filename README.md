@@ -2,48 +2,71 @@
 
 [简体中文](README.zh-CN.md)
 
-OrgCATE is a Python package for studying treatment-effect heterogeneity in
-organizational data. The package estimates an average treatment effect with
-cross-fitted DML/AIPW, fits one multivariable `CausalForestDML`, and reconstructs
-the CATE function along a focal firm characteristic. The final output reports
-the functional form and its main quantities, such as slopes, turning points,
-zero crossings, and threshold locations.
-
-The empirical sequence is:
+OrgCATE is a researcher-directed workflow for developing organizational theory
+from treatment-effect heterogeneity. Starting from a credible causal design,
+it combines a cross-fitted ATE estimate, multivariable causal forests,
+held-out confirmation, and interpretable CATE morphology reconstruction.
 
 ```text
-design and overlap checks
-  -> cross-fitted DML/AIPW ATE
-  -> ATE-CATE coherence check
-  -> one multivariable CausalForestDML
-  -> held-out assessment of CATE properties
-  -> functional-form classification and parameter estimates
-  -> interpretation record completed by the researcher
+credible causal design
+  -> treatment and overlap eligibility
+  -> cross-fitted DML/AIPW ATE anchor
+  -> naive/adjusted ATE diagnostics
+  -> DML-ATE/final-CATE 10% coherence stop rule
+  -> one joint multivariable CausalForestDML
+  -> held-out validation and supportable CATE properties
+  -> prespecified focal characteristic + all-variable rank information
+  -> three-layer classification + readable functional morphology
+  -> supported candidate / inconclusive / no claim / design ineligible
+  -> researcher-owned theory audit or abstention
 ```
 
-Estimation, held-out confirmation, and simulation evaluation use separate data
-objects. Simulation truth is used to evaluate the method and is not available
-to the estimation or classification routines.
+The causal design identifies the effect, the forest estimates heterogeneity,
+held-out data assess the candidate pattern, and the researcher develops and
+evaluates the theoretical explanation.
 
-## What the repository establishes
+## Method in one page
 
-The repository contains two related methodological results. First, it shows
-how one focal firm characteristic can be assigned to a functional morphology
-and evaluated against its shape-defining quantities. Second, it extends the
-same audited standard to a limited additive-coexistence setting, where two or
-three prespecified firm characteristics contribute to the same CATE surface
-and must be separated without relaxing the single-component criterion.
+The estimand is the conditional average treatment effect
+`tau(x) = E[Y(1) - Y(0) | X=x]`. The benchmark is semi-synthetic: real
+pre-treatment Compustat-derived firm histories supply the joint covariate
+distribution, while treatment, potential outcomes, observed outcomes, and
+oracle CATE are simulated. Oracle fields are never available to the practical
+workflow.
 
-The coexistence extension is deliberately stricter than showing that the total
-CATE is predicted well. Every active component must independently recover its
-morphology, curve, and key quantities; the reconstructed total CATE must also
-pass; and a matched all-null design controls the probability of falsely
-confirming any component.
+| Stage | What is estimated or checked | Role in the workflow |
+|---|---|---|
+| Design eligibility | binary treatment, overlap, support, and required variables | stops analysis when the causal design is not usable |
+| ATE anchor | five-fold cross-fitted DML/AIPW estimate | provides an independently estimated population-effect reference |
+| HTE estimation | one joint 12-characteristic `CausalForestDML` | estimates multivariable CATE without fitting one forest per characteristic |
+| Coherence check | `abs(mean(CATE_test) - ATE_train) / SD(Y_train) <= 0.10` | stops interpretation when the final CATE surface is inconsistent with the ATE anchor |
+| Morphology reconstruction | TRAIN-only orthogonal shape fitting | converts a noisy forest surface into explicit slopes, turning points, crossings, kinks, or thresholds |
+| Confirmation | untouched TEST orthogonal-loss and component-ablation checks | separates construction from evidential confirmation |
+| Theory audit | researcher records mechanisms, literature, exclusions, and decision | keeps theory development human-owned and permits abstention |
 
-## Installation and basic checks
+For observation `i`, the AIPW score is
 
-The reference environment uses Python 3.13 and EconML 0.17.0. Package versions
-are recorded in `requirements-lock.txt`.
+```text
+psi_i = m1(X_i) - m0(X_i)
+        + T_i * (Y_i - m1(X_i)) / e(X_i)
+        - (1 - T_i) * (Y_i - m0(X_i)) / (1 - e(X_i)).
+```
+
+The nuisance functions are fitted out of fold; the score clips estimated
+propensities to `[0.05, 0.95]`. The primary forest uses an external 80/20
+TRAIN/TEST split, `cv=2`, `honest=True`, 1,000 trees,
+`min_samples_leaf=5`, and `max_samples=0.45`. Every eligible curve enters the
+same constant, linear, quadratic, tanh, hinge, and piecewise candidate library.
+Shape families and parameters are selected on TRAIN only; there is no
+scenario-name dispatch. TEST is reserved for confirmation and oracle truth is
+reserved for simulation evaluation. The full implementation
+contract, formulas, output fields, and evidence-to-claim map are repeated in
+[`docs/TECHNICAL_APPENDIX.md`](docs/TECHNICAL_APPENDIX.md).
+
+## Quick start
+
+The verified release environment is Python 3.10+ with EconML 0.17.0. Exact
+versions are listed in `requirements-lock.txt`.
 
 ```powershell
 python -m venv .venv
@@ -56,193 +79,138 @@ orgcate contract
 orgcate evidence
 ```
 
-`doctor` checks the environment and bundled backbone. `verify` checks the
-recorded code, configuration, and result hashes. `contract` checks whether the
-method and release requirements are complete. `evidence` prints the integrated
-nine-situation results.
-
-## Synthetic example
-
-The example below runs the full procedure with simulated covariates, treatment,
-and outcomes. It uses `n=3000` and the same 1,000-tree forest specification as
-the reported experiments.
+Run one fully public synthetic demonstration. It uses the frozen `n=3000`,
+1,000-tree product contract, so it is a real workflow smoke rather than a toy
+ten-row example.
 
 ```powershell
 orgcate demo --scenario sign-reversal --output artifacts/public_demo
 ```
 
-The output is divided into `analyst/`, `practical/`, `oracle/`, and
-`evaluator/`. The first two contain the estimation inputs and reported result;
-the latter two contain simulation truth and accuracy statistics. The example
-also creates a blank interpretation record. After completing that record, its
-schema can be checked with:
+The demo writes separate `analyst/`, `oracle/`, `practical/`, and `evaluator/`
+directories plus a hash manifest. Any of the nine named situations may be used
+with `--scenario`.
+
+The practical directory also contains a blank researcher-owned Step 4 record.
+After completing it, validate its structure without asking the software to
+invent a mechanism:
 
 ```powershell
 orgcate theory-audit --input artifacts/public_demo/practical/researcher_theory_audit.json
 ```
 
-## Functional forms
+## Nine-situation morphology layer
 
-| Label | Reported information |
+| Situation | Substantive output |
 |---|---|
-| homogeneous | constant effect estimate |
+| homogeneous | no supported heterogeneity claim |
 | linear-monotone | direction and slope |
-| nonlinear-monotone | direction, center, amplitude, transition width, effective gradient, and local slopes |
-| steep-continuous | direction, center, amplitude, narrow transition width, effective gradient, and local slopes |
+| nonlinear-monotone | effect ordering and nonlinear intensity |
+| steep-continuous | ordering and sharp continuous-transition location |
 | inverted-u | turning point, peak, and tail contrasts |
 | u-shaped | turning point, trough, and tail contrasts |
 | kinked | kink location and left/right slopes |
-| threshold-step | boundary location and effects on each side |
-| sign-reversal | zero crossing, endpoint effects, and slopes |
+| threshold-step | boundary location and two-side effect contrast |
+| sign-reversal | zero crossing, endpoint effects/signs, and global/two-side slopes |
 
-Multiple ordered thresholds are reported as a subtype of `threshold-step`.
-They are not treated as a separate high-level class.
+Multiple ordered thresholds are reported as a subtype of `threshold-step`, not
+as a tenth high-level situation.
 
-## Validation standard and results
+## Frozen evidence
 
-The simulation evaluator applies one conjunctive standard to all nine
-single-scenario forms. A heterogeneous replication succeeds only when blind
-TRAIN/TEST evidence supports the fitted candidate, the operational morphology
-is correct, curve Spearman correlation is at least `.95`, normalized curve
-RMSE is at most `.20`, and every required shape quantity is accurate. Location
-and width errors may not exceed `.10` on the frozen 0--1 ECDF scale.
-Effect-level, slope, curvature, contrast, and amplitude errors, expressed over
-the observed support, may not exceed 20% of the true CATE range. A scenario
-passes when at least 9 of 10 frozen replications succeed. Simulation truth is
-opened only after the practical output is fixed.
+The active result view is produced by one unified blind classifier. Every
+situation follows the same runtime path and the same acceptance standard.
 
-The table reports this unified recovery measure at `n=3000`.
-
-| Functional form | Unified recovery |
+| Situation | Fresh unified recovery |
 |---|---:|
-| homogeneous | 10/10 |
+| homogeneous | 9/10 |
 | linear-monotone | 10/10 |
-| nonlinear-monotone | 9/10 |
+| nonlinear-monotone | 10/10 |
 | steep-continuous | 10/10 |
-| inverted-u | 10/10 |
+| inverted-u | 9/10 |
 | u-shaped | 10/10 |
-| kinked | 10/10 |
+| kinked | 9/10 |
 | threshold-step | 10/10 |
 | sign-reversal | 10/10 |
 
-The nonlinear-monotone row uses a focused independent confirmation after the
-operational transition rule was frozen. The kinked row uses the independently
-confirmed kink-resolution v2 result. The complete definition and required
-quantity map are in `docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`.
+Use `orgcate evidence --format json` for the machine-readable table,
+`orgcate verify` to verify frozen code/config/result hashes, and
+`orgcate contract` to audit the proposal-level stop rules. Every row is
+produced by the same classifier and differs only in the shape-specific
+quantities read after classification.
 
-![Unified single-scenario recovery](reports/single_scenario_release_candidate_v1/FIGURE_SINGLE_SCENARIO_UNIFIED_RECOVERY.svg)
+## Multiple coexisting HTE components
 
-## Additive heterogeneity coexistence
+The single-morphology benchmark asks whether one focal characteristic's shape
+can be recovered. Separate capability pilots ask the harder question: when
+several prespecified characteristics contribute additively to CATE, can the
+same joint forest and orthogonal reconstruction separate their contributions?
+These experiments map the workflow's initial capability under additive
+coexistence.
 
-The second research module asks whether several prespecified firm
-characteristics can be separated after one joint causal forest estimates their
-combined CATE. It advances the analysis from one functional form at a time to
-limited coexistence while retaining the same component-level recovery
-requirements. One shared method is used, but the two-component and
-three-component confirmations remain separate experiments and separate
-reports.
+Two repository examples pass the same component-level standard used for a
+single morphology. At `n=3000` and `R=20`, the two-component example recovers
+fixed-asset intensity's inverted U in 90% of replications and
+intangible-asset intensity's U shape in 100%. The three-component example
+recovers change in cash holdings' sign reversal in 95%, intangible-asset
+intensity's inverted U in 90%, and change in leverage's U shape in 100%.
+Total-CATE fidelity is 100% in both examples; matched all-null family-wise
+false confirmation is 0% and 5%. Reproduction instructions, figures, reports,
+and hashes are in [`additive_coexistence/`](additive_coexistence/). The current
+evidence covers these prespecified two- and three-component additive designs;
+active-set discovery, interactions, and higher component counts define the
+next capability studies.
 
-| Example | Complete component recovery | Total-CATE fidelity | All-null family-wise false confirmation |
-|---|---:|---:|---:|
-| Two components | 90%, 100% | 100% | 0% |
-| Three components | 95%, 90%, 100% | 100% | 5% |
+## Full semi-synthetic reproduction
 
-These `n=3000` results establish an auditable capability frontier: under clear,
-prespecified, additive signals, the procedure can separate two and three
-coexisting components while maintaining total-CATE fidelity and all-null error
-control. They do not claim automatic active-set discovery, interactions, or
-universal recovery across arbitrary combinations. Each experiment has its own
-config, report, aggregate tables, figures, and evidence manifest under
-[`additive_coexistence/`](additive_coexistence/); the joint interpretation is
-in the [module report](additive_coexistence/ADDITIVE_COEXISTENCE_REPORT.md).
-
-![Two-component recovery and null control](additive_coexistence/two_component/evidence/FIGURE_1_RECOVERY_AND_NULL_CONTROL.svg)
-
-![Three-component recovery and null control](additive_coexistence/three_component/evidence/FIGURE_1_RECOVERY_AND_NULL_CONTROL.svg)
-
-## Semi-synthetic reproduction
-
-The repository includes the authorized Compustat-derived L=3 pre-treatment
-firm-panel backbone used in the experiments:
-
-`execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz`
-
-The backbone supplies firm covariates only. Treatment, potential outcomes,
-observed outcomes, true CATE, and morphology labels are simulated by the
-versioned code. Full runs use the following commands:
+The GitHub upload candidate includes the research-team-authorized frozen
+Compustat-derived L=3 pre-treatment firm-panel backbone used by the final
+benchmark: `execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz`.
+It contains real covariates only; treatment, potential outcomes, observed
+outcomes, true CATE, and all oracle labels are freshly simulated. Verify the
+bundled data and environment with `orgcate doctor`, then use the unified router:
 
 ```powershell
-orgcate reproduce --target morphology-product --phase confirmation
-orgcate reproduce --target morphology-product --phase report
-orgcate reproduce --target kink-resolution --phase confirmation
-orgcate reproduce --target kink-resolution --phase report
-python additive_coexistence/src/run.py --config additive_coexistence/two_component/config.json
-python additive_coexistence/src/run.py --config additive_coexistence/three_component/config.json
-python additive_coexistence/verify.py
+orgcate reproduce --target unified-morphology --phase confirmation
+orgcate reproduce --target unified-morphology --phase report
+orgcate reproduce --target unified-morphology --phase acceptance
 ```
 
-The runners preserve completed replications and record failures. `--freeze-only`
-is intended for the documented development-before-confirmation procedure.
+Existing completed rows are checkpointed, so the runners do not silently drop
+failures or refit completed cells. Do not use `--freeze-only` unless following
+the documented development-before-confirmation protocol.
 
-## Downloadable data-to-results acceptance
+## Output and audit contracts
 
-The CI workflow also performs nine fresh, fixed-seed analyses using the bundled
-L=3 backbone rather than the synthetic covariate generator:
+- `schemas/orgcate-result-v1.schema.json`: practical output schema.
+- `docs/OUTPUT_SCHEMA.md`: field semantics and practical states.
+- `docs/SHAPE_OUTPUT_REFERENCE.md`: English key quantities reported for every
+  morphology, including turning points, curvature, kinks, boundaries, slopes,
+  band effects, jumps, and zero crossings.
+- `docs/UNIFIED_MORPHOLOGY_V2_METHOD.md`: common candidate library, decision order, and readouts.
+- `reports/unified_morphology_v2/`: unified fresh evidence, confusion matrix, and figures.
+- `docs/REPOSITORY_VERIFICATION_RECORD.md`: public verification record.
+
+Oracle truth never enters practical feature ranking, model tuning, morphology
+selection, boundary selection, or practical theory states.
+
+## Data and release safety
+
+The research team has explicitly authorized only the hash-pinned processed L=3
+backbone documented in the public candidate's `DATA_NOTICE.md`. Do not add any
+other raw download, transformed firm panel, access note, credential,
+machine-specific provenance, or generated analyst/oracle row-level output.
+
+Before the first public release, the research team must approve a software
+license, citation metadata, authorship, and the exact aggregate artifacts to be
+tracked. All machine-resolvable proposal-level method gates are integrated;
+their authoritative status is in `docs/METHOD_CONTRACT_AND_STOP_RULES.md` and
+`configs/github_release_method_contract_v1.json`. See `docs/RELEASE_CHECKLIST.md`.
+
+## Verification
 
 ```powershell
-orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
-python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
+.venv\Scripts\ruff.exe check src tests
+.venv\Scripts\python.exe -m compileall -q src tests
+.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider --basetemp reports/.pytest_release
 ```
-
-The real uploaded data supply 8,648 rows of pre-treatment firm covariates. For
-each of the nine prespecified situations, the command samples 3,000 firms,
-simulates treatment and causal outcomes, refits the DML ATE and one joint causal
-forest, and creates fresh aggregate statistics, diagnostics, CATE curves, and
-feature rankings. The downloadable package contains a nine-situation summary,
-a 3-by-3 overview figure, two SVG figures per situation, an analysis report,
-and a SHA256 manifest. Firm-level rows are excluded.
-
-For every successful GitHub Actions run, open the run summary and download
-`orgcate-data-to-results-<run_id>` from the **Artifacts** section.
-
-The same run also provides
-`orgcate-additive-coexistence-<run_id>`, containing the two separate
-confirmation reports, figures, aggregate tables, configurations, and evidence
-manifests. It contains no firm-level rows.
-
-## Documentation
-
-- `docs/METHOD_CONTRACT_AND_STOP_RULES.md`: estimation order and stopping rules.
-- `docs/TECHNICAL_APPENDIX.md`: estimators, data splits, morphology reconstruction,
-  validation criteria, and reproducibility details.
-- `docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`: the frozen single-scenario
-  success definition.
-- `additive_coexistence/`: shared coexistence method, separate two- and
-  three-component confirmations, and the integrated module report.
-- `docs/REPOSITORY_VERIFICATION_RECORD.md`: final code, evidence, data, and
-  data-to-results verification record.
-- `docs/OUTPUT_SCHEMA.md`: result fields and state definitions.
-- `docs/SHAPE_OUTPUT_REFERENCE.md`: quantities reported for each functional form.
-- `reports/morphology_product_v1/`: main experiment results and figures.
-- `reports/kink_resolution_v2/`: focused kink experiment.
-- `DATA_NOTICE.md`: contents and authorization scope of the L=3 backbone.
-- `PUBLIC_RELEASE_MANIFEST.json`: file inventory and SHA256 hashes.
-
-Only the backbone identified in `DATA_NOTICE.md` is included. Raw downloads,
-other processed panels, access records, credentials, and generated firm-level
-simulation outputs are outside the release.
-
-## Development checks
-
-```powershell
-.venv\Scripts\ruff.exe check src tests execution tools additive_coexistence
-.venv\Scripts\python.exe -m compileall -q src tests execution tools additive_coexistence
-.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider
-python tools/verify_single_scenario_evidence.py
-python additive_coexistence/verify.py
-python tools/audit_public_release.py --allow-metadata-pending
-orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
-python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
-```
-
-The metadata exception is removed after `LICENSE` and `CITATION.cff` are added.

@@ -24,7 +24,7 @@ DEFAULT_CONFIG = ROOT / "multi_morphology_pilot_v1" / "config" / "pilot.json"
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "src"))
 
-import execution.run_morphology_product_v1 as PRODUCT  # noqa: I001
+import execution.run_unified_morphology_v2 as PRODUCT  # noqa: I001
 
 
 HELPER = PRODUCT.HELPER

@@ -1,7 +1,7 @@
 {
   "schema_version": "orgcate-github-method-contract-v1",
   "as_of": "2026-10-22",
-  "scope": "research design + reference prototype + current GitHub implementation",
+  "scope": "proposal + teacher prototype + current GitHub product",
   "requirements": [
     {
       "id": "dml_ate_crossfit",
@@ -45,7 +45,7 @@
       "requirement": "Treatment validity, positivity/overlap, and data-contract diagnostics must be executable gates before morphology.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "The public runtime evaluates binary treatment, treatment prevalence, OOF propensity tails, and clipping before invoking the frozen morphology product; failure writes DESIGN_NOT_ELIGIBLE and skips the forest.",
+      "evidence": "The public runtime evaluates binary treatment, treatment prevalence, OOF propensity tails, and clipping before invoking the unified morphology workflow; failure writes DESIGN_NOT_ELIGIBLE and skips the forest.",
       "required_action": "None. Thresholds remain explicit in configs/public_workflow_contract_v1.json."
     },
     {
@@ -54,7 +54,7 @@
       "requirement": "Fit one honest multivariable CausalForestDML using all 12 candidate characteristics.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "Frozen Product v1 manifest and public demo.",
+      "evidence": "Unified Morphology v2 manifest and public demo.",
       "required_action": "None."
     },
     {
@@ -72,7 +72,7 @@
       "requirement": "Demonstrate held-out improvement over a constant-effect candidate and calibrate false support in the homogeneous benchmark.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "Product v1 uses untouched-TEST candidate-versus-constant orthogonal-loss confirmation; the homogeneous benchmark produced zero false SUPPORTED_CANDIDATE states in 10/10 fresh cells. This is the documented public implementation.",
+      "evidence": "Unified Morphology v2 uses untouched-TEST candidate-versus-constant orthogonal-loss confirmation; the homogeneous benchmark is included in the same fresh blind run.",
       "required_action": "None. Prototype permutation remains an optional diagnostic."
     },
     {
@@ -81,7 +81,7 @@
       "requirement": "Check whether heterogeneity is reproducible across the frozen repeated nuisance/refit estimates and withhold claims when unstable.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "Product v1 has three repeated nuisance refits, TRAIN curve/parameter stability, and untouched-TEST confirmation. This is the documented public implementation.",
+      "evidence": "Unified Morphology v2 has three repeated nuisance refits, TRAIN curve/parameter stability, and untouched-TEST confirmation for every input.",
       "required_action": "None. Prototype split-half surface checks remain optional diagnostics."
     },
     {
@@ -90,7 +90,7 @@
       "requirement": "Withhold shape claims when repeated estimates are unstable.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "Product v1 curve and parameter stability rules.",
+      "evidence": "Unified Morphology v2 common curve and parameter stability rules.",
       "required_action": "None."
     },
     {
@@ -123,10 +123,10 @@
     {
       "id": "researcher_reasoning_audit",
       "stage": "Theory development",
-      "requirement": "Record researcher interpretations, sources, rejected explanations, empirical cues, and unresolved readings separately from model output.",
+      "requirement": "Keep theory/mechanism determination researcher-owned and log candidates, sources, rejections, cues, and unresolved readings.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "Every public demo creates a blank interpretation record and orgcate theory-audit validates the completed record.",
+      "evidence": "Every public demo creates a blank researcher-owned Step 4 audit artifact and orgcate theory-audit validates the completed record without generating mechanisms.",
       "required_action": "None."
     },
     {
@@ -135,7 +135,7 @@
       "requirement": "Align the proposal's dedicated discontinuity-estimation language with the current operational threshold-step claim.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "The documented research design treats threshold-step as an operational candidate-boundary label; mathematical proof of discontinuity is not claimed.",
+      "evidence": "Canonical AGENTS.md rule 11 and the human decision on W4/W5 freeze threshold-step as an operational candidate-boundary label; mathematical proof of discontinuity is not claimed.",
       "required_action": "None. Preserve candidate-boundary wording and do not claim a proven causal discontinuity."
     },
     {
@@ -144,7 +144,7 @@
       "requirement": "Include only the research-team-authorized frozen L=3 Compustat-derived backbone and exclude all other raw, transformed, credential, and access artifacts.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "DATA_NOTICE.md; exact-path/hash audit; release checklist.",
+      "evidence": "Public upload candidate DATA_NOTICE.md; exact-path/hash audit; release checklist.",
       "required_action": "Repeat the staged-path and hash scan immediately before release."
     },
     {

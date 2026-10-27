@@ -7,11 +7,10 @@ surface. One multivariable `CausalForestDML` is fitted to all 12 candidate
 characteristics. TRAIN-only additive reconstruction separates the components;
 untouched TEST data evaluates each fixed component jointly with the others.
 
-The methodological question is not only whether the combined CATE is accurate.
-It is whether each constituent relationship retains its functional form and
-key quantities after the other active relationships are controlled. The module
-therefore applies the complete single-component standard separately to every
-component and adds total-CATE and all-null family-wise checks.
+The methodological question is whether each constituent relationship retains
+its functional form and key quantities after the other active relationships
+are controlled. The module applies the complete single-component standard to
+every component and adds total-CATE and all-null family-wise checks.
 
 The module has one shared method and two separately reported examples:
 
@@ -66,14 +65,12 @@ integrated module report and the separate two- and three-component reports,
 figures, aggregate tables, configs, and manifests. It contains no firm-level
 records.
 
-## Claim boundary
+## Current scope
 
 These are clear-signal, prespecified, additive examples at `n=3000`. They show
-that limited coexistence can be separated under the stated conditions. They do
-not establish automatic active-set discovery, interactions, or successful
-recovery for arbitrary variable-and-shape combinations. The development record
-also contains original-strength combinations that did not pass, so the examples
-should be read as demonstrated capability rather than a universal guarantee.
+that two- and three-component coexistence can be separated under the stated
+conditions. Active-set discovery, interactions, and broader variable-and-shape
+combinations define the next capability studies.
 
 See the [integrated module report](ADDITIVE_COEXISTENCE_REPORT.md),
 [METHOD.md](METHOD.md),

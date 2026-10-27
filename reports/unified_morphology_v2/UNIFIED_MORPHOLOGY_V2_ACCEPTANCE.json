@@ -1,0 +1,37 @@
+{
+  "all_nine_pass": true,
+  "all_scenarios_complete": true,
+  "required_replications_per_scenario": 10,
+  "scenario_replications": {
+    "homogeneous": 10,
+    "linear-monotone": 10,
+    "nonlinear-monotone": 10,
+    "steep-continuous": 10,
+    "inverted-u": 10,
+    "u-shaped": 10,
+    "kinked": 10,
+    "threshold-step": 10,
+    "sign-reversal": 10
+  },
+  "scenario_rates": {
+    "homogeneous": 0.9,
+    "linear-monotone": 1.0,
+    "nonlinear-monotone": 1.0,
+    "steep-continuous": 1.0,
+    "inverted-u": 0.9,
+    "u-shaped": 1.0,
+    "kinked": 0.9,
+    "threshold-step": 1.0,
+    "sign-reversal": 1.0
+  },
+  "thresholds": {
+    "scenario_success_rate": 0.9,
+    "curve_spearman": 0.95,
+    "normalized_curve_rmse": 0.2,
+    "location_abs_error_ecdf": 0.1,
+    "effect_quantity_error_fraction_truth_cate_range": 0.2,
+    "dimensionless_parameter_relative_error": 0.2,
+    "blind_curve_stability_spearman": 0.8
+  },
+  "scenario_specific_dispatch": false
+}

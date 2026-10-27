@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import inspect
 import json
 
 import pandas as pd
 
+from orgcate_sim import public_demo
 from orgcate_sim.public_demo import _prepare_output
 from orgcate_sim.release import NINE_SITUATIONS, repository_root, sha256_file
 
@@ -35,3 +37,12 @@ def test_acceptance_output_plan_excludes_row_level_tables(tmp_path) -> None:
     assert "oracle" not in paths
     assert "practical" in paths
     assert "evaluation" in paths
+
+
+def test_public_demo_has_one_unified_morphology_path() -> None:
+    source = inspect.getsource(public_demo)
+
+    assert "run_unified_morphology_v2.py" in source
+    assert "run_kink_resolution_v2.py" not in source
+    assert "_focused_kink_readout" not in source
+    assert 'scenario == "kinked"' not in source

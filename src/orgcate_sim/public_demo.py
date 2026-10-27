@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import copy
 import hashlib
 import importlib.util
 import json
@@ -126,16 +125,11 @@ def _write_json(path: Path, value: dict[str, Any]) -> None:
 
 
 def _contract(root: Path):
-    product_path = root / "execution" / "run_morphology_product_v1.py"
-    kink_path = root / "execution" / "run_kink_resolution_v2.py"
-    product = _load_module(product_path, "orgcate_public_demo_product")
-    kink = _load_module(kink_path, "orgcate_public_demo_kink")
-    product_config_path = root / "configs" / "morphology_product_v1.json"
+    product_path = root / "execution" / "run_unified_morphology_v2.py"
+    product = _load_module(product_path, "orgcate_public_demo_unified_morphology")
+    product_config_path = root / "configs" / "unified_morphology_v2.json"
     product_config = _read_json(product_config_path)
     product.validate_config(product_config)
-    kink_config_path = root / "configs" / "kink_resolution_v2.json"
-    kink_config = _read_json(kink_config_path)
-    kink.validate_config(kink_config)
     source_path = root / "simulation_runner_v2" / "config" / "pilot_b.json"
     source = _read_json(source_path)
     base_path = root / "configs" / "nine_shape_v2_unified_pilot_v1.json"
@@ -144,162 +138,18 @@ def _contract(root: Path):
     public_contract = _read_json(public_contract_path)
     return (
         product,
-        kink,
         product_config,
-        kink_config,
         public_contract,
         source,
         base_parameters,
         {
             "product_runner": product_path,
-            "kink_runner": kink_path,
             "product_config": product_config_path,
-            "kink_config": kink_config_path,
             "source_config": source_path,
             "base_config": base_path,
             "public_contract": public_contract_path,
         },
     )
-
-
-def _focused_kink_readout(
-    *,
-    product: Any,
-    kink: Any,
-    data: dict[str, Any],
-    train: np.ndarray,
-    test: np.ndarray,
-    backbone: pd.DataFrame,
-    source: dict[str, Any],
-    product_config: dict[str, Any],
-    kink_config: dict[str, Any],
-    seed: int,
-    lineage: dict[str, int],
-    ate: dict[str, Any],
-) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    """Apply the frozen kink v2 readout without fitting a second forest."""
-
-    u = product.BASE.reference_u(
-        backbone, data["unit_id"], product_config["focal_characteristic"]
-    )
-    libraries = []
-    nuisances = []
-    evidence = []
-    for refit in range(int(kink_config["same_data_nuisance_refits"])):
-        refit_seeds = product.HELPER.refit_seeds(int(seed), refit)
-        nuisance = product.V2.crossfit_nuisance(
-            data["X"][train],
-            data["Y"][train],
-            data["T"][train],
-            data["X"][test],
-            refit_seeds["nuisance_refit_seed"],
-            int(kink_config["nuisance_crossfit_folds"]),
-        )
-        library_config = copy.deepcopy(product_config)
-        library_config["selection"] = {
-            "structured_families": [
-                "constant",
-                "linear",
-                "quadratic",
-                "tanh",
-                "kink",
-                "step",
-            ],
-            "flexible_family": "spline",
-        }
-        library = product.HELPER.fit_library(
-            u[train],
-            nuisance["y_residual_train"],
-            nuisance["t_residual_train"],
-            library_config,
-            refit_seeds["shape_cv_refit_seed"],
-        )
-        evidence.append(
-            kink.nested_kink_evidence(
-                u[train],
-                nuisance["y_residual_train"],
-                nuisance["t_residual_train"],
-                kink_config,
-                refit_seeds["shape_cv_refit_seed"] + 7001,
-            )
-        )
-        libraries.append(library)
-        nuisances.append(nuisance)
-    combined = kink.combine_evidence(evidence, kink_config)
-    confirmations = []
-    for library, nuisance in zip(libraries, nuisances, strict=True):
-        y_test = data["Y"][test] - nuisance["m_test"]
-        t_test = data["T"][test] - nuisance["e_test"]
-        confirmation = product.confirm_candidate(
-            library["models"]["kink"],
-            library["models"]["constant"],
-            u[test],
-            y_test,
-            t_test,
-            float(kink_config["test_confirmation"]["one_sided_alpha"]),
-        )
-        confirmations.append(bool(confirmation["test_confirmed_vs_constant"]))
-    confirmation_rate = float(np.mean(confirmations))
-    supported = bool(
-        combined["kink_supported_train"]
-        and confirmation_rate
-        >= float(kink_config["test_confirmation"]["minimum_confirmation_rate"])
-    )
-    models = [library["models"]["kink"] for library in libraries]
-    grid_spec = product_config["grid"]
-    grid = np.linspace(
-        float(grid_spec["minimum"]),
-        float(grid_spec["maximum"]),
-        int(grid_spec["points"]),
-    )
-    estimate = np.median(
-        [product.HELPER.predict_model(model, grid) for model in models], axis=0
-    )
-    consensus_test = np.median(
-        [product.HELPER.predict_model(model, u[test]) for model in models], axis=0
-    )
-    truth = product.truth_curve("kinked", grid, product_config)
-    details = []
-    for model in models:
-        coefficient = np.asarray(model["coefficient"], dtype=float)
-        details.append(
-            {
-                "center": float(model["params"]["c"]),
-                "left_slope": float(coefficient[1]),
-                "right_slope": float(coefficient[1] + coefficient[2]),
-                "slope_change": float(coefficient[2]),
-            }
-        )
-    update = {
-        "predicted_label": "kinked" if supported else "undetermined",
-        "predicted_subtype": "",
-        "practical_state": "SUPPORTED_CANDIDATE" if supported else "INCONCLUSIVE",
-        "selected_family": "kink",
-        "test_confirmation_rate": confirmation_rate,
-        "exact_label_correct": supported,
-        "oracle_curve_spearman": float(
-            pd.Series(truth).corr(pd.Series(estimate), method="spearman")
-        ),
-        "curve_rmse": float(np.sqrt(np.mean((truth - estimate) ** 2))),
-        "parameter_details_json": json.dumps(details, sort_keys=True),
-        "parameter_median": float(combined["center_median"]),
-        "parameter_range": float(combined["center_range"]),
-        "cate_test_mean": float(np.mean(consensus_test)),
-        "cate_test_sd": float(np.std(consensus_test)),
-        **{f"train_{key}": value for key, value in ate.items()},
-    }
-    curve_rows = [
-        {
-            "u": float(value),
-            "estimate_curve": float(fitted),
-            "truth_curve": float(actual),
-            "ate_dml_train": float(ate["ate_dml"]),
-            "ate_ci_low_train": float(ate["ate_ci_low"]),
-            "ate_ci_high_train": float(ate["ate_ci_high"]),
-        }
-        for value, fitted, actual in zip(grid, estimate, truth, strict=True)
-    ]
-    return update, curve_rows
 
 
 def _partition_labels(length: int, train: np.ndarray, test: np.ndarray) -> np.ndarray:
@@ -346,31 +196,6 @@ def _ranking(importance: dict[str, float]) -> list[dict[str, Any]]:
     ]
 
 
-def _apply_tanh_transition_rule(result: dict[str, Any]) -> dict[str, Any]:
-    """Use the fitted curve's effective gradient, not raw k alone."""
-
-    if result.get("selected_family") != "tanh" or result.get(
-        "predicted_label"
-    ) not in {"nonlinear-monotone", "steep-continuous"}:
-        return result
-    details = json.loads(result.get("parameter_details_json", "[]"))
-    if not details:
-        return result
-    amplitudes = np.asarray(
-        [abs(float(item["amplitude"])) for item in details], dtype=float
-    )
-    steepness = np.asarray([float(item["k"]) for item in details], dtype=float)
-    effective_gradient = float(np.median(amplitudes * steepness))
-    result["predicted_label"] = (
-        "steep-continuous"
-        if effective_gradient >= 10.0
-        else "nonlinear-monotone"
-    )
-    result["effective_center_gradient"] = effective_gradient
-    result["transition_rule"] = "median absolute amplitude-times-k; cutpoint=10"
-    return result
-
-
 def run_public_demo(
     *,
     scenario: str = "sign-reversal",
@@ -390,9 +215,7 @@ def run_public_demo(
     paths = _prepare_output(output, save_row_level=save_row_level)
     (
         product,
-        kink,
         config,
-        kink_config,
         public_contract,
         source,
         base_parameters,
@@ -513,24 +336,6 @@ def run_public_demo(
             0,
             int(seed),
         )
-    if scenario == "kinked" and eligibility["eligible"]:
-        update, curve_rows = _focused_kink_readout(
-            product=product,
-            kink=kink,
-            data=data,
-            train=train,
-            test=test,
-            backbone=backbone,
-            source=source,
-            product_config=config,
-            kink_config=kink_config,
-            seed=int(seed),
-            lineage=lineage,
-            ate=ate_preflight,
-        )
-        result.update(update)
-        confirmation_rows = []
-    result = _apply_tanh_transition_rule(result)
     predicted_label = str(result["predicted_label"])
     selected_family = str(result["selected_family"])
     curve_practical = pd.DataFrame(curve_rows)
@@ -666,7 +471,11 @@ def run_public_demo(
         "scenario": scenario,
         "true_label": scenario,
         "predicted_label": predicted_label,
-        "exact_label_correct": bool(predicted_label == scenario),
+        "exact_label_correct": bool(
+            result.get(
+                "exact_label_correct", result.get("classification_correct_evaluator")
+            )
+        ),
         "true_ate": float(np.mean(data["tau_true"])),
         "ate_error": float(result["train_ate_dml"] - np.mean(data["tau_true"])),
         "curve_rank_correlation": float(
@@ -699,17 +508,14 @@ def run_public_demo(
         "analyst_oracle_separated": True,
         "test_used_for_morphology_selection": False,
         "evaluator_truth_used_for_morphology_selection": False,
+        "dgp_label_used_for_morphology_selection": False,
+        "scenario_specific_dispatch": False,
         "one_joint_multivariable_forest": True,
         "master_seed": int(seed),
         "seed_lineage": lineage,
         "input_hashes": {name: _sha256(path) for name, path in inputs.items()},
         "active_runner_hashes": {
-            "product": _sha256(inputs["product_runner"]),
-            **(
-                {"focused_kink": _sha256(inputs["kink_runner"])}
-                if scenario == "kinked"
-                else {}
-            ),
+            "unified_morphology": _sha256(inputs["product_runner"]),
         },
         "output_hashes": {name: _sha256(path) for name, path in tracked.items()},
         "package_versions": package_versions(),

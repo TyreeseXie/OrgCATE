@@ -1,0 +1,122 @@
+{
+  "schema_version": "unified-morphology-v2",
+  "source_config": "../simulation_runner_v2/config/pilot_b.json",
+  "base_config": "nine_shape_v2_unified_pilot_v1.json",
+  "output_dir": "../reports/unified_morphology_v2",
+  "freeze_path": "../reports/UNIFIED_MORPHOLOGY_V2_METHOD_FREEZE.json",
+  "n": 3000,
+  "test_size": 0.20,
+  "focal_characteristic": "at_rank_year_currency",
+  "primary_forest": {
+    "class": "econml.dml.CausalForestDML",
+    "n_estimators": 1000,
+    "min_samples_leaf": 5,
+    "max_samples": 0.45,
+    "cv": 2,
+    "honest": true,
+    "inference": false,
+    "n_jobs": 2
+  },
+  "same_data_nuisance_refits": 3,
+  "nuisance_crossfit_folds": 5,
+  "shape_cv_folds": 5,
+  "dml_ate": {
+    "n_splits": 5,
+    "propensity_clip_low": 0.05,
+    "propensity_clip_high": 0.95,
+    "confidence_level": 0.95
+  },
+  "grid": {"minimum": 0.10, "maximum": 0.90, "points": 161},
+  "family_grid": {
+    "quadratic_center": {"minimum": 0.20, "maximum": 0.80, "step": 0.025},
+    "tanh_center": {"minimum": 0.20, "maximum": 0.80, "step": 0.025},
+    "tanh_k": [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 35, 50, 75],
+    "kink_location": {"minimum": 0.20, "maximum": 0.80, "step": 0.025},
+    "step_boundary": {"minimum": 0.20, "maximum": 0.80, "step": 0.025},
+    "spline_knots": [4, 6, 8],
+    "spline_alpha": [0.0001, 0.001, 0.01, 0.1]
+  },
+  "multi_step_search": {
+    "boundary_grid": {"minimum": 0.20, "maximum": 0.80, "step": 0.05},
+    "minimum_separation": 0.15,
+    "maximum_boundaries": 3,
+    "selection_rule": "smallest boundary count within one SE of minimum TRAIN CV R-loss"
+  },
+  "multi_step_truth": {
+    "boundaries": [0.30, 0.70],
+    "levels": [0.20, 1.20, 2.20],
+    "high_level_label": "threshold-step",
+    "subtype": "multi-threshold-step"
+  },
+  "hierarchy": {
+    "train_paired_loss_z": 1.645,
+    "maximum_normalized_deviation_from_linear": 0.05,
+    "step_saturation_k": 75.0,
+    "step_near_tie_z": 1.645,
+    "turning_point_support": [0.25, 0.75],
+    "minimum_two_sided_tail_contrast_share": 0.15,
+    "steep_tanh_k_cutpoint": 8.0,
+    "steep_effective_gradient_cutpoint": 10.0,
+    "minimum_monotone_derivative_share": 0.90
+  },
+  "nested_kink_evidence": {
+    "outer_folds": 5,
+    "inner_folds": 3,
+    "candidate_center_grid": {"minimum": 0.20, "maximum": 0.80, "step": 0.025},
+    "interior_support": [0.30, 0.70],
+    "one_sided_z": 1.645
+  },
+  "kink_rule": {
+    "minimum_refit_loss_pass_rate": 0.6666666666666666,
+    "interior_support": [0.30, 0.70],
+    "minimum_interior_center_share": 0.80,
+    "maximum_center_iqr": 0.10,
+    "minimum_same_sign_rate": 0.80,
+    "minimum_slope_ratio": 2.0,
+    "minimum_absolute_slope_change": 2.0
+  },
+  "kink_diagnostic": {
+    "windows": [0.05, 0.10, 0.15],
+    "minimum_same_sign_rate": 0.6666666666666666,
+    "minimum_slope_ratio": 2.0,
+    "maximum_center_range": 0.20,
+    "paired_loss_one_sided_z": 1.645,
+    "decision_rule": "stable same-sign hinge geometry and upper one-sided paired TRAIN CV R-loss difference versus tanh below zero",
+    "multiscale_role": "secondary diagnostic retained after development showed local-window slope estimates were too noisy for a hard gate",
+    "minimum_abs_delta_small": 1.0,
+    "minimum_persistence": 0.50
+  },
+  "test_confirmation": {
+    "one_sided_alpha": 0.05,
+    "minimum_confirmation_rate": 0.6666666666666666
+  },
+  "supportability": {
+    "minimum_pairwise_curve_spearman": 0.80,
+    "maximum_parameter_range": 0.20
+  },
+  "development": {
+    "master_seed": 2026102701,
+    "replications": 5,
+    "dgps": ["kinked", "linear-monotone", "nonlinear-monotone", "steep-continuous"]
+  },
+  "confirmation": {
+    "master_seed": 2026102702,
+    "replications": 10,
+    "dgps": [
+      "homogeneous", "linear-monotone", "nonlinear-monotone", "steep-continuous",
+      "inverted-u", "u-shaped", "kinked", "threshold-step", "sign-reversal",
+      "multi-threshold-step"
+    ]
+  },
+  "selection_policy": {
+    "test_used_for_shape_selection": false,
+    "oracle_used_for_shape_selection": false,
+    "dgp_label_used_for_shape_selection": false,
+    "scenario_specific_dispatch": false,
+    "focal_characteristic_prespecified": true,
+    "rank_is_information_only": true
+  },
+  "practical_states": [
+    "SUPPORTED_CANDIDATE", "INCONCLUSIVE", "NO_THEORY_CLAIM", "DESIGN_NOT_ELIGIBLE"
+  ]
+}

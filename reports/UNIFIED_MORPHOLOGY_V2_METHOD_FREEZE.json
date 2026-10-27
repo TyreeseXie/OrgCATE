@@ -1,0 +1,43 @@
+{
+  "status": "UNIFIED_METHOD_FROZEN_WITH_NONSCIENTIFIC_INTERFACE_CORRECTION",
+  "frozen_at": "2026-10-27",
+  "development_cells": 20,
+  "confirmation_seed_grid": {
+    "0": 1639142227,
+    "1": 440819849,
+    "2": 2533102321,
+    "3": 801092850,
+    "4": 1658962941,
+    "5": 3644614984,
+    "6": 63833274,
+    "7": 707200512,
+    "8": 3503368052,
+    "9": 1044348322
+  },
+  "hashes": {
+    "config_sha256": "6a4d8d3a49ff620961f17c59fdbe3d2ddc737f4bf526e5c5ff9101aad3294e04",
+    "runner_sha256": "ebfa5514982dd1e959f131e4fef52365b4a3d4dbadb8bf28a5f9069c5b5f5a08",
+    "source_config_sha256": "3cf08ce84a02f64e0f66d313999ea884f31eeac2b4e0e1807f0dc8068d026d53",
+    "development_results_sha256": "d74e1447a40d7c4a219e48903491aed875827c641e8ab92b7f96c11f42423a40"
+  },
+  "test_selects_shape": false,
+  "oracle_selects_shape": false,
+  "dgp_label_selects_shape": false,
+  "scenario_specific_dispatch": false,
+  "public_path_adaptation": {
+    "private_config_sha256": "1369241f0b9a06ad5567934ddd01b3d5ceae3619104fba5390449d0ab8b40857",
+    "change": "source_config directory name only",
+    "source_config_content_changed": false
+  },
+  "engineering_correction": {
+    "observed_during_confirmation": true,
+    "original_runner_sha256": "6ddd05fff221ed4b68747fef1bde3b5b64d6a9376b6a16720dde39d8efa2a9b5",
+    "affected_cells": "sign-reversal replications 0, 1, 2, 3, 7, 8, 9",
+    "exception": "KeyError: selected_center",
+    "correction": "Require a consensus center only when the TRAIN nested-kink rule confirms a kink; a hinge basis used for another morphology retains its TRAIN-CV fitted centers.",
+    "scientific_elements_changed": [],
+    "thresholds_changed": false,
+    "dgp_changed": false,
+    "seed_changed": false
+  }
+}

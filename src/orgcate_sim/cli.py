@@ -87,10 +87,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="route to a frozen full runner; licensed backbone may be required",
     )
     reproduce.add_argument(
-        "--target", choices=("morphology-product", "kink-resolution"), required=True
+        "--target", choices=("unified-morphology",), required=True
     )
     reproduce.add_argument(
-        "--phase", choices=("development", "confirmation", "report"), required=True
+        "--phase",
+        choices=("development", "confirmation", "report", "acceptance"),
+        required=True,
     )
     reproduce.add_argument("--freeze-only", action="store_true")
     return parser
@@ -102,19 +104,27 @@ def _print_mapping(value: dict) -> None:
 
 def _run_reproduction(args: argparse.Namespace) -> int:
     root = repository_root()
+    runner, config = {
+        "unified-morphology": (
+            root / "execution" / "run_unified_morphology_v2.py",
+            root / "configs" / "unified_morphology_v2.json",
+        ),
+    }[args.target]
+    if args.phase == "acceptance":
+        runner = root / "execution" / "evaluate_unified_morphology_v2.py"
+        config = root / "configs" / "unified_morphology_v2_acceptance.json"
     command = [
         sys.executable,
-        str(root / "execution" / "run_frozen_reproduction.py"),
-        "--target",
-        args.target,
-        "--phase",
-        args.phase,
+        str(runner),
+        "--config",
+        str(config),
     ]
+    if args.phase != "acceptance":
+        command.extend(["--phase", args.phase])
     if args.freeze_only:
-        raise ValueError(
-            "the public package preserves the existing method freeze; "
-            "creating a replacement freeze is intentionally disabled"
-        )
+        if args.phase == "acceptance":
+            raise ValueError("acceptance does not create or modify a method freeze")
+        command.append("--freeze-only")
     completed = subprocess.run(command, cwd=root, check=False)
     return int(completed.returncode)
 

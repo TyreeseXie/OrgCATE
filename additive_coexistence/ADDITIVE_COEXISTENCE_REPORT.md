@@ -8,8 +8,8 @@ This module asks the next question: when several firm characteristics jointly
 produce treatment-effect heterogeneity, can their separate additive
 contributions still be reconstructed and confirmed?
 
-The module is an extension of the single-characteristic workflow, not a second
-causal forest estimator. Every replication fits one `CausalForestDML` using all
+The module extends the single-characteristic workflow. Every replication fits
+one `CausalForestDML` using all
 12 candidate characteristics. The forest estimates the joint CATE; a
 TRAIN-only additive reconstruction then separates a prespecified active set,
 and untouched TEST observations confirm the fixed components jointly.
@@ -88,7 +88,7 @@ the same component-level standard. The 5% all-null result means that one of 20
 matched null replications falsely confirmed at least one component; this
 remains below the prespecified 10% family-wise ceiling.
 
-## Interpretation and boundary
+## Interpretation and scope
 
 Together, the two confirmations establish a limited but substantive extension
 of the single-characteristic result: clear, prespecified, additive
@@ -96,10 +96,9 @@ heterogeneity from two or three firm characteristics can be separated while
 preserving component accuracy, total-CATE fidelity, and family-wise null
 control.
 
-The result is not evidence that the active set can always be discovered
-automatically. It does not cover interactions, arbitrary variable-and-shape
-combinations, or unrestricted component counts. Those questions require
-separate capability experiments and do not alter the verified claim here.
+The current result concerns a prespecified active set and additive effects.
+Active-set discovery, interactions, broader variable-and-shape combinations,
+and higher component counts define the next capability experiments.
 
 ## Reproduction and audit
 

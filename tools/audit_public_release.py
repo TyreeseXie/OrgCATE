@@ -69,15 +69,9 @@ ALLOWED_TABULAR = {
     "execution/phase2_real_backbone_v1/candidate_feature_spearman_correlation_L3.csv",
     "execution/phase2_real_backbone_v1/feature_support_qc_v1.csv",
     "execution/phase2_real_backbone_v1/history_length_sample_composition.csv",
-    "reports/kink_resolution_v2/KINK_RESOLUTION_V2_DEVELOPMENT_LONG.csv",
-    "reports/kink_resolution_v2/KINK_RESOLUTION_V2_SUMMARY.csv",
-    "reports/morphology_product_v1/MORPHOLOGY_PRODUCT_V1_DEVELOPMENT_LONG.csv",
-    "reports/morphology_product_v1/MORPHOLOGY_PRODUCT_V1_SUMMARY.csv",
-    "reports/nonlinear_monotone_resolution_v1/confirmation/NONLINEAR_CONFIRMATION_EVALUATOR_LONG.csv",
-    "reports/nonlinear_monotone_resolution_v1/confirmation/NONLINEAR_CONFIRMATION_PRACTICAL_LONG.csv",
-    "reports/nonlinear_monotone_resolution_v1/confirmation/NONLINEAR_CONFIRMATION_SUMMARY.csv",
-    "reports/single_scenario_release_candidate_v1/SINGLE_SCENARIO_UNIFIED_SUMMARY.csv",
-    "reports/unified_recovery_acceptance_v1/UNIFIED_SINGLE_SUMMARY.csv",
+    "reports/unified_morphology_v2/UNIFIED_MORPHOLOGY_V2_ACCEPTANCE_SUMMARY.csv",
+    "reports/unified_morphology_v2/UNIFIED_MORPHOLOGY_V2_CONFUSION_MATRIX.csv",
+    "reports/unified_morphology_v2/UNIFIED_MORPHOLOGY_V2_SUMMARY.csv",
 }
 ALLOWED_BINARY_DATA = {
     "execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz": {

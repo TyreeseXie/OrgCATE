@@ -1,10 +1,10 @@
 {
   "schema_version": "multi-hte-property-first-coexistence-v2",
   "source_config": "../../simulation_runner_v2/config/pilot_b.json",
-  "method_config": "../../configs/morphology_product_v1.json",
+  "method_config": "../../configs/unified_morphology_v2.json",
   "base_runner": "../src/additive_base.py",
-  "output_dir": "../../reports/multi_morphology_coexistence_theory_v2",
-  "freeze_path": "../../reports/MULTI_HTE_COEXISTENCE_THEORY_V2_METHOD_FREEZE.json",
+  "output_dir": "../../artifacts/additive_coexistence/property_work",
+  "freeze_path": "../../artifacts/additive_coexistence/property_method_freeze.json",
   "n": 3000,
   "test_size": 0.2,
   "target_ate": 0.2,

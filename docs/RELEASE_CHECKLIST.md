@@ -6,8 +6,10 @@
   evidence, frozen-result verification, and full-run routing.
 - [x] Public synthetic demo requires no licensed data.
 - [x] Practical and evaluator outputs use separate files and directories.
-- [x] Product v1 and focused kink v2 hashes are verified before evidence is
-  presented as frozen.
+- [x] One unified morphology runner, configuration, method freeze, and evidence
+  manifest are hash-verified before results are presented as frozen.
+- [x] Public execution contains no scenario-name dispatch; all nine situations
+  enter the same candidate library and classifier.
 - [x] Exact package versions are recorded in `requirements-lock.txt`.
 - [x] English and Chinese entry documentation use the current nine-situation
   vocabulary rather than historical internal labels.
@@ -29,21 +31,22 @@
   property-support declarations in the public result contract.
 - [x] Emit continuity, monotonicity, sign relation, taxonomy cell, and
   `requires_abduction` alongside the convenient nine-situation label.
-- [x] Add the researcher interpretation record to the public workflow.
-- [x] Threshold-step is an operational candidate-boundary label with two-side
-  contrast; the package does not claim mathematical proof of discontinuity.
+- [x] Add the researcher-owned Step 4 decision/audit log to the public workflow.
+- [x] Threshold-step is an operational candidate-boundary label reported with
+  its location, two-side contrast, and supporting diagnostics.
 
 The authoritative status of these items is machine readable in
 `configs/github_release_method_contract_v1.json` and checked by
 `orgcate contract`.
 
-## Publication metadata still to be supplied
+## Human approval required before public release
 
 - [ ] Choose and add a software license.
 - [ ] Confirm author order, affiliations, contact details, and citation text.
 - [ ] Decide which non-disclosive aggregate reports and figures will be tracked.
-- [x] Record the research team's authorization for the single frozen
-  processed Compustat-derived backbone in `DATA_NOTICE.md`.
+- [x] Record the human research lead's authorization for the single frozen
+  processed Compustat-derived backbone in the upload candidate's
+  `DATA_NOTICE.md`.
 - [ ] Confirm that the staged tree contains only that hash-pinned backbone and
   no raw extract, access note, credential, or additional firm-level dataset.
 - [ ] Create a clean release commit/tag only after the staged-file audit passes.
@@ -53,9 +56,8 @@ even when the code and tests run successfully.
 
 ## Final assembly route
 
-The private research worktree must not be uploaded wholesale. This candidate
-preserves only the exact hash-verified frozen runtime dependencies and aggregate
-evidence selected in `docs/GITHUB_RELEASE_ASSEMBLY.md`. Run the automated
-allowlist/content audit, test from a clean installation, add team-approved
-release metadata, and inspect the final staged paths before creating the public
-repository.
+The current research worktree must not be uploaded wholesale. Follow
+`docs/GITHUB_RELEASE_ASSEMBLY.md`: consolidate the frozen runtime out of the
+historical dynamic-import chain, prove fixed-seed equivalence, build a clean
+candidate by allowlist, scan it for licensed rows and machine paths, and test it
+from a clean installation before creating the public repository.

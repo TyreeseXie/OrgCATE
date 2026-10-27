@@ -2,40 +2,63 @@
 
 [English](README.md)
 
-OrgCATE 是一个用于研究组织情境中处理效应异质性的 Python 项目。程序首先用
-cross-fitted DML/AIPW 估计平均处理效应，再用一棵包含全部候选企业特征的
-`CausalForestDML` 估计 CATE，并沿焦点企业特征重构效应函数。最终结果包括函数
-形态及其关键量，例如斜率、转折点、符号转换点和阈值位置。
-
-研究流程如下：
+OrgCATE 是一套由研究者主导的处理效应异质性理论发展方法。它从可信的因果设计
+出发，将交叉拟合的 ATE 估计、多变量因果森林、留出样本确认和可解释的 CATE
+形态重构连接为一条完整路径。
 
 ```text
-研究设计与 overlap 检查
-  -> cross-fitted DML/AIPW ATE
-  -> ATE-CATE 一致性检查
-  -> 一棵多变量 CausalForestDML
-  -> held-out 数据上的 CATE 属性检验
-  -> 函数形态分类与参数估计
-  -> 由研究者完成理论解释记录
+可信的因果设计
+  -> 处理变量与 overlap 合格性门禁
+  -> cross-fitted DML/AIPW ATE 锚点
+  -> 朴素/协变量调整 ATE 对照
+  -> DML-ATE 与最终 CATE 的 10% 一致性停止规则
+  -> 一棵包含全部候选变量的 CausalForestDML
+  -> held-out 验证与可支持的 CATE 属性
+  -> 预先指定的焦点企业特征 + 全部变量排名信息
+  -> 三层分类 + 易读的函数形态
+  -> 支持候选 / 证据不足 / 不作主张 / 设计不合格
+  -> 研究者主导的理论审计或克制结论
 ```
 
-模型估计、held-out 确认和模拟评价使用不同的数据对象。模拟真值只用于评价方法，
-不会进入模型估计或形态分类。
+因果设计负责效应识别，因果森林负责估计异质性，留出样本负责检验候选模式，
+研究者负责提出并评估理论解释。
 
-## 本仓库建立的两项方法结果
+## 一页读懂方法
 
-本仓库包含两项相互衔接的结果。第一，针对单个焦点企业特征，恢复其 CATE 函数
-形态及决定该形态的关键量。第二，把同一套可审计标准扩展到有限的加性共生情境：
-当两个或三个预先指定的企业特征共同构成同一个 CATE 面时，分别剥离并评价每一条
-异质性成分，而不是只判断总体 CATE 是否拟合良好。
+本项目的估计对象是条件平均处理效应
+`tau(x) = E[Y(1) - Y(0) | X=x]`。基准实验采用半合成架构：真实
+Compustat 派生的处理前企业历史提供协变量联合分布，处理变量、潜在结果、观测
+结果和 oracle CATE 由程序模拟。Oracle 字段不会进入实践工作流。
 
-共生模块没有降低单情境标准。每个活动成分都必须独立通过形态、曲线和关键量验收，
-重构后的总体 CATE 也必须通过，并使用匹配的全 null 情境控制“任一成分被假确认”
-的概率。
+| 环节 | 估计或检查内容 | 在工作流中的作用 |
+|---|---|---|
+| 设计合格性 | 二元处理、overlap、支持范围和必要变量 | 因果设计不合格时停止分析 |
+| ATE 锚点 | 五折 cross-fitted DML/AIPW | 独立估计总体平均处理效应 |
+| HTE 估计 | 一棵联合纳入 12 个企业特征的 `CausalForestDML` | 在多变量条件下估计 CATE，不为每个变量单独训练森林 |
+| 一致性检查 | `abs(mean(CATE_test) - ATE_train) / SD(Y_train) <= 0.10` | 最终 CATE 面与 ATE 锚点不一致时停止解释 |
+| 形态重构 | 仅在 TRAIN 上进行正交化形态拟合 | 把噪声较大的森林曲面转为斜率、转折点、零点、折点或边界等明确参数 |
+| 独立确认 | untouched TEST 上的正交损失与组件消融 | 把模型构造与证据确认分开 |
+| 理论审计 | 研究者填写机制、文献、排除理由和最终决定 | 理论发展由研究者负责，并允许克制结论 |
 
-## 安装与基本检查
+对观测 `i`，AIPW score 为：
 
-参考环境为 Python 3.13 和 EconML 0.17.0，完整版本记录在
+```text
+psi_i = m1(X_i) - m0(X_i)
+        + T_i * (Y_i - m1(X_i)) / e(X_i)
+        - (1 - T_i) * (Y_i - m0(X_i)) / (1 - e(X_i)).
+```
+
+所有 nuisance function 都在样本外拟合，score 中的倾向得分截断在
+`[0.05, 0.95]`。主因果森林使用外部 80/20 TRAIN/TEST 划分，`cv=2`、
+`honest=True`、1,000 棵树、`min_samples_leaf=5`、`max_samples=0.45`。
+每条合格曲线都进入同一个常数、线性、二次、tanh、hinge 与分段常数候选库；
+形态族和候选参数只在 TRAIN 上选择，不允许按情境名称分派专用算法。TEST 只用于
+确认，oracle 真值只用于模拟评价。完整实现契约、公式、输出字段及证据到主张的映射同时写在
+[`docs/TECHNICAL_APPENDIX.md`](docs/TECHNICAL_APPENDIX.md) 中。
+
+## 快速开始
+
+当前验证环境为 Python 3.10+ 和 EconML 0.17.0，精确版本记录在
 `requirements-lock.txt`。
 
 ```powershell
@@ -49,167 +72,118 @@ orgcate contract
 orgcate evidence
 ```
 
-`doctor` 检查运行环境和随仓库提供的 backbone；`verify` 核对代码、配置与结果
-哈希；`contract` 检查方法和发布条件；`evidence` 输出九种情境的汇总结果。
-
-## 合成数据示例
-
-下面的命令使用模拟协变量、处理变量和结果变量运行完整流程。示例采用
-`n=3000` 和与正式实验相同的 1,000 棵树配置。
+运行一个完全公开的合成演示。演示保留冻结的 `n=3000`、1,000 棵树和正式
+工作流约束，而不是为了快而换成另一个算法。
 
 ```powershell
 orgcate demo --scenario sign-reversal --output artifacts/public_demo
 ```
 
-输出分为 `analyst/`、`practical/`、`oracle/` 和 `evaluator/`。前两个目录保存
-估计输入与最终报告，后两个目录保存模拟真值和准确度指标。程序还会生成一份空白
-解释记录；研究者填写后可以检查其结构：
+输出按 `analyst/`、`oracle/`、`practical/` 和 `evaluator/` 物理分离，并附带
+文件哈希 manifest。`--scenario` 可以选择下列九种情境中的任意一种。
+
+`practical/` 还会生成空白的研究者 Step 4 审计表。研究者完成机制候选、文献依据、
+排除理由与采纳/克制决定后，可检查其结构：
 
 ```powershell
 orgcate theory-audit --input artifacts/public_demo/practical/researcher_theory_audit.json
 ```
 
-## 函数形态
+## 九情境形态层
 
-| 形态 | 主要输出 |
+| 情境 | 关键输出 |
 |---|---|
-| homogeneous | 恒定效应估计 |
+| homogeneous | 不形成异质性理论主张 |
 | linear-monotone | 方向与斜率 |
-| nonlinear-monotone | 方向、中心、幅度、转变宽度、有效梯度和局部斜率 |
-| steep-continuous | 方向、中心、较窄的转变宽度、有效梯度和局部斜率 |
-| inverted-u | 转折点、峰值和两侧差异 |
-| u-shaped | 转折点、谷值和两侧差异 |
+| nonlinear-monotone | 效应排序与非线性强度 |
+| steep-continuous | 排序与剧烈连续转变位置 |
+| inverted-u | 转折点、峰值与两侧差异 |
+| u-shaped | 转折点、谷值与两侧差异 |
 | kinked | 折点位置及左右斜率 |
-| threshold-step | 边界位置及边界两侧效应 |
-| sign-reversal | 符号转换点、端点效应和斜率 |
+| threshold-step | 候选边界及边界两侧效应差异 |
+| sign-reversal | 符号转换点、两端效应与符号、全局及转换点两侧斜率 |
 
-多个有序阈值作为 `threshold-step` 的子型报告，不另设一个高层类别。
+多个有序边界作为 `threshold-step` 的多阶梯子型报告，不另设第十种高层情境。
 
-## 验证标准与结果
+## 冻结结果
 
-九种单情境使用同一套联合标准。一个异质性 replication 只有同时满足以下条件才算
-成功：盲态 TRAIN/TEST 证据支持固定候选形态、操作性形态名称正确、曲线 Spearman
-相关不低于 `.95`、标准化曲线 RMSE 不高于 `.20`，并且该形态要求的所有关键量均
-准确。位置和宽度在冻结的 0--1 ECDF（经验分位秩）尺度上的误差不得超过 `.10`；
-效应水平、斜率、曲率、对比度和幅度在观测支持区间内换算后的误差，不得超过真实
-CATE 极差的 20%。10 次冻结重复中至少 9 次整体成功，该情境才通过。实践程序固定
-输出后，评价器才读取模拟真值。
+当前结果由同一个九类盲态分类器生成。每种情境使用相同运行路径和相同验收标准。
 
-下表报告 `n=3000` 下的统一恢复率。
-
-| 函数形态 | 统一恢复率 |
+| 情境 | Fresh 统一恢复 |
 |---|---:|
-| homogeneous | 10/10 |
+| homogeneous | 9/10 |
 | linear-monotone | 10/10 |
-| nonlinear-monotone | 9/10 |
+| nonlinear-monotone | 10/10 |
 | steep-continuous | 10/10 |
-| inverted-u | 10/10 |
+| inverted-u | 9/10 |
 | u-shaped | 10/10 |
-| kinked | 10/10 |
+| kinked | 9/10 |
 | threshold-step | 10/10 |
 | sign-reversal | 10/10 |
 
-`nonlinear-monotone` 一行来自操作性转变规则冻结后的独立专项确认；`kinked` 一行
-来自折点专项 v2 的独立确认。完整定义及各形态的必需关键量见
-`docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`。
+`orgcate evidence --format json` 输出机器可读结果，`orgcate verify` 复核冻结
+代码、配置和结果哈希；`orgcate contract` 检查 proposal 层面的停止规则。九行均由
+同一分类器生成，只在分类完成后的关键量读取方式上有所不同。
 
-![九种单情境统一恢复结果](reports/single_scenario_release_candidate_v1/FIGURE_SINGLE_SCENARIO_UNIFIED_RECOVERY.svg)
+## 多个异质性成分共存
 
-## 加性异质性共生
+单形态基准回答一个焦点变量的形态能否恢复；独立的能力边界 pilot 则进一步
+考察：当多个预先指定的企业特征共同以加性方式影响 CATE 时，同一棵联合森林和
+正交重构能否把各自贡献剥离出来。这组实验用于刻画加性共存条件下的初步能力边界。
 
-第二个研究模块考察：一棵联合因果森林估计完整 CATE 后，能否剥离多个预先指定的
-企业特征贡献。它把研究从“每次恢复一条形态”推进到有限的多成分共生，同时保持
-逐成分验收标准不变。两组件和三组件共用一套方法，但分别配置、分别运行、分别
-汇报。
+目前已有两个按照单情境同等成分标准通过的仓库示例。在 `n=3000`、`R=20` 下，
+两成分示例分别以 90% 和 100% 完整恢复固定资产强度的倒 U 与无形资产强度的
+U 型；三成分示例分别以 95%、90% 和 100% 完整恢复现金持有变化的符号反转、
+无形资产强度的倒 U 和杠杆变化的 U 型。两种示例的总 CATE fidelity 均为
+100%，匹配全 null 下任一假确认率分别为 0% 和 5%。复现命令、图表、报告和哈希见
+[`additive_coexistence/`](additive_coexistence/)。当前证据覆盖这两个预先指定的两成分
+和三成分加性设计；活跃变量集合发现、交互效应和更多成分是后续能力研究的方向。
 
-| 示例 | 各成分完整恢复率 | 总 CATE fidelity | 全 null 下任一假确认率 |
-|---|---:|---:|---:|
-| 两组件 | 90%、100% | 100% | 0% |
-| 三组件 | 95%、90%、100% | 100% | 5% |
+## 完整半合成复现
 
-这些 `n=3000` 结果建立了一个可审计的能力边界：在信号清晰、活动成分预先指定、
-加性且无交互时，程序可以剥离两个和三个共生异质性成分，同时保持总体 CATE
-恢复和全 null 错误控制。该结论不等于自动发现活动变量，也不代表任意组合都能
-恢复。两个实验各自的配置、报告、汇总表、图和 manifest 见
-[`additive_coexistence/`](additive_coexistence/)，综合解释见
-[模块报告](additive_coexistence/ADDITIVE_COEXISTENCE_REPORT.zh-CN.md)。
-
-![两组件恢复与全 null 控制](additive_coexistence/two_component/evidence/FIGURE_1_RECOVERY_AND_NULL_CONTROL.svg)
-
-![三组件恢复与全 null 控制](additive_coexistence/three_component/evidence/FIGURE_1_RECOVERY_AND_NULL_CONTROL.svg)
-
-## 半合成复现
-
-仓库包含实验所用、经研究团队授权的 Compustat 派生 L=3 处理前企业面板骨架：
-
-`execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz`
-
-该文件只提供企业协变量。处理变量、潜在结果、观测结果、真实 CATE 和形态标签均
-由版本化代码模拟。完整实验通过以下命令运行：
+GitHub 上传候选已经包含研究团队明确授权用于复现的 Compustat 派生 L=3
+处理前企业面板骨架：
+`execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz`。
+该文件只提供真实企业协变量；处理变量、潜在结果、观测结果、真实 CATE 和全部
+oracle 标签均由程序重新模拟。先运行 `orgcate doctor` 验证数据与环境，再通过
+统一入口运行：
 
 ```powershell
-orgcate reproduce --target morphology-product --phase confirmation
-orgcate reproduce --target morphology-product --phase report
-orgcate reproduce --target kink-resolution --phase confirmation
-orgcate reproduce --target kink-resolution --phase report
-python additive_coexistence/src/run.py --config additive_coexistence/two_component/config.json
-python additive_coexistence/src/run.py --config additive_coexistence/three_component/config.json
-python additive_coexistence/verify.py
+orgcate reproduce --target unified-morphology --phase confirmation
+orgcate reproduce --target unified-morphology --phase report
+orgcate reproduce --target unified-morphology --phase acceptance
 ```
 
-程序会保留已经完成的 replication，并记录运行失败。`--freeze-only` 仅用于文档
-规定的“先开发、后确认”流程。
+runner 会识别已经完成的 cell，不会静默删除失败，也不会重复拟合已有结果。
+除非严格遵循“先开发、再冻结、后确认”的协议，不要使用 `--freeze-only`。
 
-## 可下载的数据到结果验收
+## 输出与审计
 
-CI 还会使用仓库中的 L=3 backbone 对九种预设情境分别做一次固定种子的全新
-分析，而不是调用合成协变量生成器：
+- `schemas/orgcate-result-v1.schema.json`：实践输出 schema；
+- `docs/OUTPUT_SCHEMA.md`：字段含义和四种实践状态；
+- `docs/SHAPE_OUTPUT_REFERENCE.md`：九类形态的英文关键量字段，包括转折点、
+  曲率、折点、候选边界、斜率、分段效应、跳跃幅度与零点；
+- `docs/UNIFIED_MORPHOLOGY_V2_METHOD.md`：共同候选库、判定顺序和关键量读取规则；
+- `reports/unified_morphology_v2/`：统一 fresh 证据、混淆矩阵与图；
+- `docs/REPOSITORY_VERIFICATION_RECORD.md`：公开仓库验证记录。
+
+Oracle 真值不得进入实践侧变量排名、调参、形态选择、边界选择或理论状态。
+
+## 数据与发布安全
+
+研究团队仅明确授权发布公共候选中 `DATA_NOTICE.md` 记录并经哈希固定的 L=3
+处理后 backbone。不得再加入其他原始下载、转换后的企业面板、访问记录、凭证、
+机器专属路径或生成的 analyst/oracle 行级结果。
+
+第一次公开发布前，研究团队仍需批准软件许可证、引用信息、作者顺序以及允许纳入
+仓库的汇总结果。机器可解决的 proposal 方法门禁已经接入；权威状态记录于
+`docs/METHOD_CONTRACT_AND_STOP_RULES.md` 和
+`configs/github_release_method_contract_v1.json`。详见 `docs/RELEASE_CHECKLIST.md`。
+
+## 验证命令
 
 ```powershell
-orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
-python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
+.venv\Scripts\ruff.exe check src tests
+.venv\Scripts\python.exe -m compileall -q src tests
+.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider --basetemp reports/.pytest_release
 ```
-
-上传的真实数据提供 8,648 行处理前企业协变量。程序针对每种情境从中抽取 3,000
-家企业，重新模拟处理变量与因果结果，重新拟合 DML ATE 和一棵联合因果森林。
-下载包包含九情境汇总表、九宫格总图、每种情境各两张 SVG 图片、诊断信息、分析
-报告和 SHA256 manifest，但不包含企业级数据行。
-
-每次 GitHub Actions 成功运行后，打开该次运行的 summary 页面，在 **Artifacts**
-区域下载 `orgcate-data-to-results-<run_id>`。
-
-同一次运行还会提供 `orgcate-additive-coexistence-<run_id>`，其中包含两份独立确认
-报告、图片、汇总表、配置和证据 manifest，不包含企业级数据行。
-
-## 文档与结果
-
-- `docs/METHOD_CONTRACT_AND_STOP_RULES.md`：估计顺序与停止规则；
-- `docs/TECHNICAL_APPENDIX.md`：估计量、样本划分、形态重构、验证标准和复现细节；
-- `docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`：冻结的单情境成功标准；
-- `additive_coexistence/`：共生方法、两组件与三组件独立确认及综合模块报告；
-- `docs/REPOSITORY_VERIFICATION_RECORD.md`：代码、证据、数据和端到端分析的最终
-  验证记录；
-- `docs/OUTPUT_SCHEMA.md`：结果字段与状态定义；
-- `docs/SHAPE_OUTPUT_REFERENCE.md`：各形态报告的参数；
-- `reports/morphology_product_v1/`：主实验结果与图；
-- `reports/kink_resolution_v2/`：连续折点专项实验；
-- `DATA_NOTICE.md`：L=3 backbone 的内容与授权范围；
-- `PUBLIC_RELEASE_MANIFEST.json`：文件清单与 SHA256。
-
-仓库只包含 `DATA_NOTICE.md` 指定的 backbone。原始下载、其他处理后面板、访问记录、
-凭证及模拟生成的企业级结果不在发布范围内。
-
-## 开发检查
-
-```powershell
-.venv\Scripts\ruff.exe check src tests execution tools additive_coexistence
-.venv\Scripts\python.exe -m compileall -q src tests execution tools additive_coexistence
-.venv\Scripts\python.exe -m pytest -q -p no:cacheprovider
-python tools/verify_single_scenario_evidence.py
-python additive_coexistence/verify.py
-python tools/audit_public_release.py --allow-metadata-pending
-orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
-python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
-```
-
-加入 `LICENSE` 和 `CITATION.cff` 后，最终审计不再使用 metadata 例外。

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="620" viewBox="0 0 1220 620">
+<style>text{font-family:Arial,sans-serif;fill:#20252b}.title{font-size:25px;font-weight:700}.label{font-size:11px}.value{font-size:11px;font-weight:700}.axis{stroke:#9aa3ab}.exact{fill:#247b7b}.support{fill:#cf6d3d}</style>
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="35" y="38" class="title">Fresh morphology recovery and practical support</text>
+<line x1="70" y1="490" x2="1180" y2="490" class="axis"/>
+<line x1="70" y1="90" x2="70" y2="490" class="axis"/>
+<line x1="70" y1="130" x2="1180" y2="130" stroke="#333" stroke-dasharray="5 4"/>
+<text x="76" y="124" class="label">90%</text>
+<rect x="97" y="130.0" width="25" height="360.0" class="exact"/>
+<rect x="128" y="490.0" width="25" height="0.0" class="support"/>
+<text x="97" y="120.0" class="value">90%</text>
+<text x="128" y="480.0" class="value">0%</text>
+<text x="125" y="515" class="label" text-anchor="middle" transform="rotate(35 125 515)">homogeneous</text>
+<rect x="205" y="90.0" width="25" height="400.0" class="exact"/>
+<rect x="236" y="90.0" width="25" height="400.0" class="support"/>
+<text x="205" y="80.0" class="value">100%</text>
+<text x="236" y="80.0" class="value">100%</text>
+<text x="233" y="515" class="label" text-anchor="middle" transform="rotate(35 233 515)">linear-monotone</text>
+<rect x="313" y="90.0" width="25" height="400.0" class="exact"/>
+<rect x="344" y="90.0" width="25" height="400.0" class="support"/>
+<text x="313" y="80.0" class="value">100%</text>
+<text x="344" y="80.0" class="value">100%</text>
+<text x="341" y="515" class="label" text-anchor="middle" transform="rotate(35 341 515)">nonlinear-monotone</text>
+<rect x="421" y="90.0" width="25" height="400.0" class="exact"/>
+<rect x="452" y="90.0" width="25" height="400.0" class="support"/>
+<text x="421" y="80.0" class="value">100%</text>
+<text x="452" y="80.0" class="value">100%</text>
+<text x="449" y="515" class="label" text-anchor="middle" transform="rotate(35 449 515)">steep-continuous</text>
+<rect x="529" y="130.0" width="25" height="360.0" class="exact"/>
+<rect x="560" y="90.0" width="25" height="400.0" class="support"/>
+<text x="529" y="120.0" class="value">90%</text>
+<text x="560" y="80.0" class="value">100%</text>
+<text x="557" y="515" class="label" text-anchor="middle" transform="rotate(35 557 515)">inverted-u</text>
+<rect x="637" y="90.0" width="25" height="400.0" class="exact"/>
+<rect x="668" y="90.0" width="25" height="400.0" class="support"/>
+<text x="637" y="80.0" class="value">100%</text>
+<text x="668" y="80.0" class="value">100%</text>
+<text x="665" y="515" class="label" text-anchor="middle" transform="rotate(35 665 515)">u-shaped</text>
+<rect x="745" y="130.0" width="25" height="360.0" class="exact"/>
+<rect x="776" y="90.0" width="25" height="400.0" class="support"/>
+<text x="745" y="120.0" class="value">90%</text>
+<text x="776" y="80.0" class="value">100%</text>
+<text x="773" y="515" class="label" text-anchor="middle" transform="rotate(35 773 515)">kinked</text>
+<rect x="853" y="90.0" width="25" height="400.0" class="exact"/>
+<rect x="884" y="90.0" width="25" height="400.0" class="support"/>
+<text x="853" y="80.0" class="value">100%</text>
+<text x="884" y="80.0" class="value">100%</text>
+<text x="881" y="515" class="label" text-anchor="middle" transform="rotate(35 881 515)">threshold-step</text>
+<rect x="961" y="90.0" width="25" height="400.0" class="exact"/>
+<rect x="992" y="90.0" width="25" height="400.0" class="support"/>
+<text x="961" y="80.0" class="value">100%</text>
+<text x="992" y="80.0" class="value">100%</text>
+<text x="989" y="515" class="label" text-anchor="middle" transform="rotate(35 989 515)">sign-reversal</text>
+<rect x="1069" y="90.0" width="25" height="400.0" class="exact"/>
+<rect x="1100" y="90.0" width="25" height="400.0" class="support"/>
+<text x="1069" y="80.0" class="value">100%</text>
+<text x="1100" y="80.0" class="value">100%</text>
+<text x="1097" y="515" class="label" text-anchor="middle" transform="rotate(35 1097 515)">multi-threshold-step</text>
+<rect x="830" y="40" width="16" height="16" class="exact"/><text x="852" y="53" class="label">exact label</text>
+<rect x="960" y="40" width="16" height="16" class="support"/><text x="982" y="53" class="label">practical support</text>
+</svg>

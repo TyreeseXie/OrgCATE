@@ -1,0 +1,10 @@
+scenario,replications,blind_evidence_rate,exact_morphology_rate,curve_fidelity_rate,key_quantities_rate,unified_recovery_rate,median_curve_spearman,median_normalized_rmse,replications_complete,scenario_pass
+homogeneous,10,0.9,0.9,1.0,0.9,0.9,,0.03677515634378792,True,True
+linear-monotone,10,1.0,1.0,1.0,1.0,1.0,1.0,0.03361822966446014,True,True
+nonlinear-monotone,10,1.0,1.0,1.0,1.0,1.0,1.0,0.051956274736380745,True,True
+steep-continuous,10,1.0,1.0,1.0,1.0,1.0,1.0,0.03351498442003607,True,True
+inverted-u,10,1.0,0.9,0.9,0.9,0.9,0.9999971241972915,0.03390699202537115,True,True
+u-shaped,10,1.0,1.0,1.0,1.0,1.0,0.9999967647192394,0.052574405287238224,True,True
+kinked,10,1.0,0.9,1.0,0.9,0.9,1.0,0.02870764232184219,True,True
+threshold-step,10,1.0,1.0,1.0,1.0,1.0,0.9999999999999998,0.04064698658450147,True,True
+sign-reversal,10,1.0,1.0,1.0,1.0,1.0,1.0,0.027438050678186936,True,True

@@ -10,8 +10,8 @@ state are fixed.
 A cell reaches morphology analysis only when treatment is binary, propensity
 support is acceptable, the cross-fitted DML/AIPW ATE is available, and the
 standardized difference between DML ATE and mean final reconstructed CATE is
-at most `0.10 SD(Y_train)`. Failure is an upstream stop, not evidence of
-homogeneous effects.
+at most `0.10 SD(Y_train)`. Failure ends morphology interpretation and returns
+the corresponding practical stop state.
 
 ## One practical workflow
 

@@ -1,0 +1,17 @@
+{
+  "status": "ACCEPTANCE_FROZEN_WITH_COMPLETENESS_CHECK_CORRECTION",
+  "frozen_at": "2026-10-27",
+  "thresholds_changed_from_unified_acceptance_v1": false,
+  "hashes": {
+    "acceptance_config_sha256": "9cd4c9f76512b8a63d59133e14f6c7120400c499c02d5d19a9b35a23b88eea93",
+    "acceptance_runner_sha256": "ca66a1be0c4f5e99de488c88213e218a14d135732952f79b0a51fcf287ace278",
+    "acceptance_helper_sha256": "4aee71ca793256cf8dae846a3ba8cb5e17329a0318667864f718fffa71f1b09a",
+    "unified_method_freeze_sha256": "68add971bab62008f91e7c08b993ba29a8c006bd722671002395611bbe130b8a"
+  },
+  "recovery_success": "blind evidence AND exact label AND curve fidelity AND all prespecified key quantities",
+  "oracle_used_after_practical_output_only": true,
+  "engineering_correction": {
+    "correction": "Require exactly 10 completed replications for every scenario before it can pass.",
+    "scientific_thresholds_changed": false
+  }
+}

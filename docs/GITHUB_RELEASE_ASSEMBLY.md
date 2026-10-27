@@ -1,107 +1,73 @@
-# GitHub release assembly
+# GitHub repository assembly
 
-## Release boundary
+## Public scope
 
-This directory is the only intended GitHub upload base. It was created beside
-the private research repository by copying an explicit allowlist. The private
-repository remains the complete provenance archive and must not be initialized
-as, or pushed to, the public GitHub repository.
+This directory is the GitHub repository. It contains one active
+single-morphology workflow, one separate additive-coexistence module, the
+authorized covariate backbone, aggregate evidence, tests, and documentation.
+Private development packs and row-level simulation outputs are excluded.
 
-## Final directory structure
+## Repository structure
 
 ```text
-OrgCATE_GitHub_Upload_v1/
+OrgCATE/
 |-- .github/workflows/ci.yml
-|-- configs/                         # frozen public method rules
-|-- docs/                            # method, outputs, safety, release guide
-|-- execution/                       # five exact hash-verified frozen runners
-|-- simulation_runner_v2/            # exact low-level dependency, code/config only
+|-- configs/                         # active method and audit contracts
+|-- docs/                            # method, output, and verification notes
+|-- execution/                       # unified runner and shared internals
+|-- simulation_runner_v2/            # treatment/outcome simulation dependency
 |-- morphology_reconstruction_v2_stage_success/
-|                                      # reconstruction dependency, code/config only
-|-- additive_coexistence/              # second contribution: additive coexistence
-|-- reports/
-|   |-- morphology_product_v1/       # aggregate table, manifest, report, SVGs
-|   |-- kink_resolution_v2/          # aggregate table, manifest, report, figures
-|   `-- public_method_gate_integration_v1/
-|-- evidence/figures/                # three convenience copies for README/paper use
-|-- execution/phase2_real_backbone_v1/ # authorized frozen L=3 covariate backbone
-|-- schemas/                         # machine-readable practical output contract
-|-- src/orgcate_sim/                 # installable public package and CLI
-|-- tests/                           # selected public, leakage, and hash tests
-|-- tools/audit_public_release.py    # disclosure and manifest audit
-|-- tools/assemble_additive_coexistence_artifact.py
-|-- tools/verify_additive_coexistence_artifact.py
+|                                      # reconstruction dependency
+|-- additive_coexistence/             # separate two/three-component module
+|-- reports/unified_morphology_v2/    # aggregate evidence and figures
+|-- execution/phase2_real_backbone_v1/ # authorized L=3 covariate backbone
+|-- schemas/                          # practical output contract
+|-- src/orgcate_sim/                  # installable package and CLI
+|-- tests/
+|-- tools/
 |-- README.md
 |-- README.zh-CN.md
-|-- SECURITY.md
 |-- DATA_NOTICE.md
-|-- PUBLICATION_METADATA_TEMPLATE.md
-|-- PUBLIC_RELEASE_MANIFEST.json     # generated; inspect before staging
+|-- SECURITY.md
+|-- PUBLIC_RELEASE_MANIFEST.json
 |-- pyproject.toml
 `-- requirements-lock.txt
 ```
 
-`LICENSE` and `CITATION.cff` are intentionally absent until the research team
-approves them. Their absence blocks a public release but does not block testing
-the candidate.
+The active single-morphology path is:
 
-## Why the frozen dependency paths remain
+```text
+cross-fitted DML ATE
+-> one 12-characteristic honest CausalForestDML
+-> one common TRAIN-only candidate library and classifier
+-> untouched-TEST confirmation
+-> practical state, morphology, and key quantities
+```
 
-The verified public demo reaches the current frozen morphology method through
-five runner modules and two lower-level code dependencies. Their exact hashes
-are part of the frozen evidence audit. For v1, the safer choice is to preserve
-only those exact files and clearly mark them as internal runtime, rather than
-rename/refactor them and silently invalidate the verified hashes.
+There is no situation-name dispatch and no separate kink or nonlinear runtime
+runner. Multiple thresholds are a subtype of `threshold-step`.
 
-No historical results, ZIPs, local outputs, raw downloads, or unused experimental
-packs from those directories were copied. The only row-level data file is the
-research-team-authorized, hash-pinned L=3 headline backbone required by the
-frozen runners. A later major version may refactor
-the internals after fixed-seed equivalence tests, but that is not required for
-the v1 release.
+## Included data
 
-## Assembly policy
+The only row-level input is the research-team-authorized, hash-pinned L=3
+pre-treatment covariate backbone. Treatment, potential outcomes, observed
+outcomes, and CATE truth are generated during simulation. Generated row-level
+analyst and oracle data are not committed.
 
-- Include installable source code, operative configurations, schema, selected
-  tests, aggregate evidence, public documentation, and the single authorized
-  frozen L=3 real-covariate backbone.
-- Exclude every other row-level dataset, including generated treatment,
-  analyst, oracle, and evaluator tables.
-- Exclude private Git history, handoffs, unpublished source documents, access notes,
-  credentials, archives, caches, local outputs, and machine-specific paths.
-- Retain evaluator/oracle *code* because simulation truth evaluation is part of
-  the scientific method; never retain saved evaluator/oracle *row data*.
-- Keep only the three selected aggregate SVGs under `evidence/figures`; these
-  duplicate verified report figures for convenient public presentation.
-- Build and review `PUBLIC_RELEASE_MANIFEST.json` before staging files.
-
-The detailed decision table is in `PUBLIC_RELEASE_CONTENT_AUDIT.md`.
-
-## Required checks
-
-Candidate-stage check, while publication metadata is pending:
+## Verification
 
 ```powershell
-python tools/audit_public_release.py --allow-metadata-pending
 python -m pip install -e . --no-deps
 ruff check src tests execution tools additive_coexistence
 python -m compileall -q src tests execution tools additive_coexistence
-python -m compileall -q tools/assemble_additive_coexistence_artifact.py tools/verify_additive_coexistence_artifact.py
 pytest -q -p no:cacheprovider
 orgcate verify
 orgcate contract
+python tools/verify_unified_morphology_evidence.py
 python additive_coexistence/verify.py
-python tools/assemble_additive_coexistence_artifact.py artifacts/additive_coexistence
-python tools/verify_additive_coexistence_artifact.py artifacts/additive_coexistence
+python tools/audit_public_release.py --allow-metadata-pending
 ```
 
-`orgcate contract` must remain blocked only by license/citation metadata during
-candidate assembly. After adding approved metadata, run:
-
-```powershell
-python tools/audit_public_release.py
-```
-
-Only a clean audit, clean tests, verified hashes, and research-team review of the final
-staged paths authorize upload.
-
+`orgcate contract` remains blocked only while license and citation metadata are
+awaiting research-team approval. That publication decision is separate from
+code and evidence verification.
