@@ -1,6 +1,6 @@
 # Repository verification record
 
-Verification date: 2026-10-25
+Verification date: 2026-10-26
 
 Repository baseline before this verification update:
 `bf1aaf73b29288446db9d9ed21d5ee8027889a67`
@@ -10,11 +10,11 @@ The files added or revised in this update are hash-listed in
 
 ## Scope
 
-This record covers the single-scenario OrgCATE repository prepared for public
-review. It verifies the Python package, frozen simulation evidence, bundled
-firm-covariate backbone, and the executable data-to-results workflow. The
-multi-component development studies are outside this repository and are not
-part of the verified claim.
+This record covers the OrgCATE repository prepared for public review. It
+verifies the Python package, frozen single-scenario evidence, bundled
+firm-covariate backbone, executable data-to-results workflow, and the separate
+two- and three-component additive coexistence examples. Broader component-count
+and interaction studies remain outside the verified public claim.
 
 ## Input data
 
@@ -37,13 +37,16 @@ No pre-existing result table was used as an analysis input.
 
 | Check | Result |
 |---|---|
-| `ruff check src tests execution tools` | PASS |
-| `python -m compileall -q src tests execution tools` | PASS |
-| `pytest -q -p no:cacheprovider` | 43 passed |
+| `ruff check src tests execution tools additive_coexistence` | PASS |
+| `python -m compileall -q src tests execution tools additive_coexistence` | PASS |
+| `pytest -q -p no:cacheprovider` | 48 passed |
 | `orgcate doctor --json` | PASS; package lock and backbone hash matched |
 | `orgcate verify` | PASS; all frozen and unified evidence checks passed |
 | `python tools/verify_single_scenario_evidence.py` | PASS |
-| `python tools/audit_public_release.py --allow-metadata-pending` | PASS; zero findings |
+| `python additive_coexistence/verify.py` | PASS; separate two/three evidence and hashes verified |
+| `python tools/assemble_additive_coexistence_artifact.py artifacts/additive_coexistence` | PASS; module package assembled |
+| `python tools/verify_additive_coexistence_artifact.py artifacts/additive_coexistence` | PASS; all module files nonempty |
+| `python tools/audit_public_release.py --allow-metadata-pending` | PASS; 147 files, zero findings |
 | Staged LF checkout verification | PASS; tests and frozen hashes reproduced |
 
 The executable acceptance command was:
@@ -96,6 +99,11 @@ The verifier fails if any required table, figure, report, or manifest entry is
 missing, empty, or hash-inconsistent. Firm-level simulation rows are excluded
 from the downloadable package.
 
+The coexistence artifact is uploaded separately as
+`orgcate-additive-coexistence-<run_id>`. It contains the integrated report and
+the independent two- and three-component evidence packages; it does not contain
+firm-level simulation rows.
+
 ## Repository presentation audit
 
 Tracked filenames and text were checked for development-only coordination
@@ -104,6 +112,7 @@ material is included in the public commit.
 
 ## Decision
 
-The single-scenario repository is ready for a standard GitHub push. Publication
+The single-scenario workflow and the separate two/three-component coexistence
+module are ready for a standard GitHub push. Publication
 metadata (`LICENSE` and `CITATION.cff`) remains a separate research-team
 decision and is not required for the current code-verification upload.

@@ -1,0 +1,165 @@
+{
+  "schema_version": "multi-hte-property-first-coexistence-v2",
+  "source_config": "../../simulation_runner_v2/config/pilot_b.json",
+  "method_config": "../../configs/morphology_product_v1.json",
+  "base_runner": "../src/additive_base.py",
+  "output_dir": "../../reports/multi_morphology_coexistence_theory_v2",
+  "freeze_path": "../../reports/MULTI_HTE_COEXISTENCE_THEORY_V2_METHOD_FREEZE.json",
+  "n": 3000,
+  "test_size": 0.2,
+  "target_ate": 0.2,
+  "backfit_iterations": 6,
+  "same_data_nuisance_refits": 3,
+  "nuisance_crossfit_folds": 5,
+  "shape_cv_folds": 5,
+  "test_confirmation_alpha": 0.05,
+  "property_selector": {
+    "step_minimum_refit_win_rate": 0.6666666666666666,
+    "maximum_location_range": 0.15,
+    "turning_support": [0.25, 0.75],
+    "minimum_peak_tail_contrast": 0.10,
+    "curve_fidelity_spearman": 0.95,
+    "parameter_tolerance_ecdf": 0.10,
+    "strict_parameter_tolerance_ecdf": 0.05
+  },
+  "scenarios": {
+    "primary_count_2": {
+      "role": "primary",
+      "component_count": 2,
+      "components": [
+        {
+          "feature": "cash_at_slope_L",
+          "substantive_name": "change in cash holdings",
+          "truth_label": "sign-reversal",
+          "shape": "linear",
+          "half_range": 0.75,
+          "truth_parameter": 0.3666666666666667
+        },
+        {
+          "feature": "intangibles_at",
+          "substantive_name": "intangible-asset intensity",
+          "truth_label": "inverted-u",
+          "shape": "inverted_u",
+          "amplitude": 1.5,
+          "center": 0.5,
+          "truth_parameter": 0.5
+        }
+      ]
+    },
+    "primary_count_3": {
+      "role": "primary",
+      "component_count": 3,
+      "components": [
+        {
+          "feature": "cash_at_slope_L",
+          "substantive_name": "change in cash holdings",
+          "truth_label": "sign-reversal",
+          "shape": "linear",
+          "half_range": 0.75,
+          "truth_parameter": 0.3666666666666667
+        },
+        {
+          "feature": "intangibles_at",
+          "substantive_name": "intangible-asset intensity",
+          "truth_label": "inverted-u",
+          "shape": "inverted_u",
+          "amplitude": 1.5,
+          "center": 0.5,
+          "truth_parameter": 0.5
+        },
+        {
+          "feature": "log_at_slope_L",
+          "substantive_name": "firm-size growth",
+          "truth_label": "u-shaped",
+          "shape": "inverted_u",
+          "amplitude": -1.5,
+          "center": 0.5,
+          "truth_parameter": 0.5
+        }
+      ]
+    },
+    "stress_count_3_threshold": {
+      "role": "threshold-stress",
+      "component_count": 3,
+      "components": [
+        {
+          "feature": "cash_at_slope_L",
+          "truth_label": "sign-reversal",
+          "shape": "linear",
+          "half_range": 0.75,
+          "truth_parameter": 0.3666666666666667
+        },
+        {
+          "feature": "intangibles_at",
+          "truth_label": "inverted-u",
+          "shape": "inverted_u",
+          "amplitude": 1.5,
+          "center": 0.5,
+          "truth_parameter": 0.5
+        },
+        {
+          "feature": "ppe_at",
+          "truth_label": "threshold-step",
+          "shape": "threshold",
+          "boundary": 0.45,
+          "contrast": 1.0,
+          "truth_parameter": 0.45
+        }
+      ]
+    },
+    "control_count_3_steep": {
+      "role": "false-step-control",
+      "component_count": 3,
+      "components": [
+        {
+          "feature": "cash_at_slope_L",
+          "truth_label": "sign-reversal",
+          "shape": "linear",
+          "half_range": 0.75,
+          "truth_parameter": 0.3666666666666667
+        },
+        {
+          "feature": "intangibles_at",
+          "truth_label": "inverted-u",
+          "shape": "inverted_u",
+          "amplitude": 1.5,
+          "center": 0.5,
+          "truth_parameter": 0.5
+        },
+        {
+          "feature": "ppe_at",
+          "truth_label": "steep-continuous",
+          "shape": "tanh",
+          "half_range": 0.15,
+          "center": 0.45,
+          "steepness": 25.0,
+          "truth_parameter": 0.45
+        }
+      ]
+    }
+  },
+  "development": {
+    "master_seed": 2026102521,
+    "replications": 5
+  },
+  "confirmation": {
+    "master_seed": 2026102522,
+    "primary_replications": 20,
+    "diagnostic_replications": 10
+  },
+  "acceptance": {
+    "primary_all_component_functional_recovery_rate": 0.90,
+    "minimum_primary_component_functional_recovery_rate": 0.90,
+    "minimum_reconstructed_cate_spearman_median": 0.95,
+    "minimum_reconstructed_cate_spearman_p10": 0.90
+  },
+  "selection_policy": {
+    "one_joint_multivariable_forest": true,
+    "active_features_prespecified_for_reconstruction": true,
+    "test_used_for_shape_selection": false,
+    "oracle_used_for_shape_selection": false,
+    "oracle_used_only_for_evaluation": true,
+    "common_random_numbers_across_scenarios": true,
+    "interactions_included": false
+  }
+}

@@ -1,0 +1,3 @@
+scenario,component_count,feature,truth_label,replications,successes,component_recovery_rate,wilson_ci_low,wilson_ci_high,blind_evidence_rate,exact_morphology_rate,curve_fidelity_rate,key_quantities_rate
+active_count_2,2,intangibles_at,u-shaped,20,20,1.0,0.8388748419471806,1.0,1.0,1.0,1.0,1.0
+active_count_2,2,ppe_at,inverted-u,20,18,0.9,0.6989663547715128,0.972133518786232,1.0,1.0,1.0,0.9

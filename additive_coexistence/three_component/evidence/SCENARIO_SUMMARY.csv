@@ -1,0 +1,2 @@
+scenario,component_count,replications,total_cate_fidelity_rate,reconstructed_cate_spearman_median,reconstructed_cate_normalized_rmse_median
+active_count_3,3,20,1.0,0.992562146005961,0.0249806249437627

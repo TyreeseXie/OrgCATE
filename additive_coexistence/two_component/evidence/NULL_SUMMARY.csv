@@ -1,0 +1,2 @@
+scenario,component_count,replications,any_false_confirmation_count,familywise_false_confirmation_rate,wilson_ci_low,wilson_ci_high
+null_count_2,2,20,0,0.0,0.0,0.1611251580528193

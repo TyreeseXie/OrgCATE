@@ -126,13 +126,35 @@ CATE transitions.
 Feature importance and variable rank are reported as descriptive information.
 Neither is a substitute for held-out confirmation or shape recovery.
 
+## Additive heterogeneity coexistence extension
+
+The second research contribution keeps the same real L=3 backbone,
+`n=3000`, 80/20 split, and one 12-characteristic forest. The active component
+set is prespecified for decomposition. TRAIN uses five-fold nuisance
+cross-fitting, six additive backfitting cycles, and three nuisance refits;
+untouched TEST evaluates fixed components with joint orthogonal scores and Holm
+adjustment.
+
+The two- and three-component confirmations are reported separately inside one
+module. Component recovery is 90%/100% for two components and
+95%/90%/100% for three. Total-CATE fidelity is 100% in both, while matched
+all-null family-wise false-confirmation rates are 0% and 5%. Every component
+uses the single-scenario curve and key-quantity tolerances. The claim is limited
+to clear, prespecified, additive components and excludes interactions and
+automatic active-set discovery. The integrated interpretation is in
+`additive_coexistence/ADDITIVE_COEXISTENCE_REPORT.md` and the method contract is
+in `additive_coexistence/METHOD.md`.
+
 ## Reproducibility and public audit
 
 Configuration files and hierarchical seeds determine every run. The release
 verifier checks configuration, code, result, and source hashes. GitHub Actions
-runs linting, compilation, tests, frozen-evidence verification, a fresh demo,
-and nine fresh data-to-results analyses. The artifact verifier requires every
-expected table, figure, report, and manifest entry before CI can pass.
+runs linting, compilation, tests, frozen-evidence verification, the coexistence
+evidence verifier, a fresh demo, and nine fresh data-to-results analyses. A
+separate artifact verifier requires every coexistence table, figure, report,
+configuration, and manifest to be present and nonempty before CI can pass. The
+existing acceptance artifact verifier likewise requires every expected table,
+figure, report, and manifest entry before CI can pass.
 
 The downloadable CI artifact contains aggregate results only. It excludes raw
 firm-level simulation rows, oracle microdata, credentials, and environment

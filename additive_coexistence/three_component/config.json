@@ -1,0 +1,63 @@
+{
+  "schema_version": "orgcate-additive-coexistence-three-component-v1",
+  "property_config": "../shared/property_config.json",
+  "output_dir": "../../artifacts/additive_coexistence/three_component",
+  "report_phase": "confirmation",
+  "report_filename": "THREE_COMPONENT_CONFIRMATION_REPORT.md",
+  "manifest_filename": "THREE_COMPONENT_CONFIRMATION_MANIFEST.json",
+  "n": 3000,
+  "test_size": 0.2,
+  "nuisance_refits": 3,
+  "nuisance_crossfit_folds": 5,
+  "backfit_iterations": 6,
+  "test_alpha": 0.05,
+  "familywise_confirmation_alpha": 0.05,
+  "joint_train_shape_scaling": true,
+  "use_joint_train_effect_level": true,
+  "acceptance_mode": "componentwise-v1",
+  "master_seed": 2026102661,
+  "replications": 20,
+  "scenarios": {
+    "active_count_3": {
+      "base_scenario": "primary_count_3",
+      "role": "active",
+      "component_count": 3,
+      "components": [
+        {"feature": "cash_at_slope_L", "substantive_name": "change in cash holdings", "truth_label": "sign-reversal", "shape": "linear", "half_range": 0.9, "truth_parameter": 0.3888888889},
+        {"feature": "intangibles_at", "substantive_name": "intangible-asset intensity", "truth_label": "inverted-u", "shape": "inverted_u", "amplitude": 2.0, "center": 0.5, "truth_parameter": 0.5},
+        {"feature": "debt_at_slope_L", "substantive_name": "change in leverage", "truth_label": "u-shaped", "shape": "inverted_u", "amplitude": -2.0, "center": 0.5, "truth_parameter": 0.5}
+      ]
+    },
+    "null_count_3": {
+      "base_scenario": "primary_count_3",
+      "role": "all-component-null",
+      "component_count": 3,
+      "components": [
+        {"feature": "cash_at_slope_L", "substantive_name": "change in cash holdings", "truth_label": "sign-reversal", "shape": "linear", "half_range": 0.9, "truth_parameter": 0.3888888889},
+        {"feature": "intangibles_at", "substantive_name": "intangible-asset intensity", "truth_label": "inverted-u", "shape": "inverted_u", "amplitude": 2.0, "center": 0.5, "truth_parameter": 0.5},
+        {"feature": "debt_at_slope_L", "substantive_name": "change in leverage", "truth_label": "u-shaped", "shape": "inverted_u", "amplitude": -2.0, "center": 0.5, "truth_parameter": 0.5}
+      ]
+    }
+  },
+  "acceptance": {
+    "development_minimum_component_success_rate": 0.9,
+    "development_minimum_total_cate_fidelity_rate": 0.9,
+    "future_confirmation_component_success_rate": 0.9,
+    "future_confirmation_total_cate_fidelity_rate": 0.9,
+    "maximum_null_familywise_false_confirmation_rate": 0.1,
+    "curve_spearman": 0.95,
+    "normalized_curve_rmse": 0.2,
+    "location_tolerance_ecdf": 0.1,
+    "effect_tolerance_share_true_cate_range": 0.2,
+    "minimum_curve_stability_spearman": 0.8,
+    "maximum_location_range_ecdf": 0.2
+  },
+  "selection_policy": {
+    "one_joint_multivariable_forest": true,
+    "active_features_prespecified_for_reconstruction": true,
+    "test_used_for_shape_or_parameter_selection": false,
+    "oracle_used_for_shape_or_parameter_selection": false,
+    "test_role": "joint component confirmation with within-scenario Holm correction",
+    "interactions_included": false
+  }
+}

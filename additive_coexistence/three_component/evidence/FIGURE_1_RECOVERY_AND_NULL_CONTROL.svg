@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650">
+<rect width="100%" height="100%" fill="white"/>
+<text x="560.0" y="40.0" font-family="Arial, sans-serif" font-size="25" text-anchor="middle" font-weight="bold" fill="#222222">3-component additive coexistence</text>
+<text x="560.0" y="70.0" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" font-weight="normal" fill="#626c75">Separate component recovery, total-CATE fidelity, and all-null calibration</text>
+<line x1="90.0" y1="465.0" x2="1030.0" y2="465.0" stroke="#d9dee2"/>
+<text x="78.0" y="469.0" font-family="Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#5f6972">0%</text>
+<line x1="90.0" y1="395.0" x2="1030.0" y2="395.0" stroke="#d9dee2"/>
+<text x="78.0" y="399.0" font-family="Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#5f6972">20%</text>
+<line x1="90.0" y1="325.0" x2="1030.0" y2="325.0" stroke="#d9dee2"/>
+<text x="78.0" y="329.0" font-family="Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#5f6972">40%</text>
+<line x1="90.0" y1="255.0" x2="1030.0" y2="255.0" stroke="#d9dee2"/>
+<text x="78.0" y="259.0" font-family="Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#5f6972">60%</text>
+<line x1="90.0" y1="185.0" x2="1030.0" y2="185.0" stroke="#d9dee2"/>
+<text x="78.0" y="189.0" font-family="Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#5f6972">80%</text>
+<line x1="90.0" y1="115.0" x2="1030.0" y2="115.0" stroke="#d9dee2"/>
+<text x="78.0" y="119.0" font-family="Arial, sans-serif" font-size="12" text-anchor="end" font-weight="normal" fill="#5f6972">100%</text>
+<line x1="90.0" y1="150.0" x2="1030.0" y2="150.0" stroke="#252525" stroke-width="1.4" stroke-dasharray="7 5"/>
+<text x="1030.0" y="142.0" font-family="Arial, sans-serif" font-size="11" text-anchor="end" font-weight="normal" fill="#222222">Recovery/fidelity threshold 90%</text>
+<rect x="133.2" y="132.5" width="101.5" height="332.5" fill="#1F6F78"/>
+<text x="184.0" y="123.5" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">95%</text>
+<text x="184.0" y="505.0" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" fill="#222222">Change in cash holdings</text>
+<text x="184.0" y="526.0" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" font-weight="normal" fill="#626c75">sign-reversal</text>
+<rect x="321.2" y="115.0" width="101.5" height="350.0" fill="#1F6F78"/>
+<text x="372.0" y="106.0" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">100%</text>
+<text x="372.0" y="505.0" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" fill="#222222">Change in leverage</text>
+<text x="372.0" y="526.0" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" font-weight="normal" fill="#626c75">u-shaped</text>
+<rect x="509.2" y="150.0" width="101.5" height="315.0" fill="#1F6F78"/>
+<text x="560.0" y="141.0" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">90%</text>
+<text x="560.0" y="505.0" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" fill="#222222">Intangible-asset intensity</text>
+<text x="560.0" y="526.0" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" font-weight="normal" fill="#626c75">inverted-u</text>
+<rect x="697.2" y="115.0" width="101.5" height="350.0" fill="#3B6EA8"/>
+<text x="748.0" y="106.0" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">100%</text>
+<text x="748.0" y="505.0" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" fill="#222222">Total CATE</text>
+<text x="748.0" y="526.0" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" font-weight="normal" fill="#626c75">fidelity</text>
+<rect x="885.2" y="447.5" width="101.5" height="17.5" fill="#C76D3A"/>
+<text x="936.0" y="438.5" font-family="Arial, sans-serif" font-size="13" text-anchor="middle" font-weight="bold" fill="#222222">5%</text>
+<text x="936.0" y="505.0" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" fill="#222222">All-null</text>
+<text x="936.0" y="526.0" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" font-weight="normal" fill="#626c75">any false confirmation</text>
+<text x="560.0" y="603.0" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" font-weight="normal" fill="#626c75">The all-null bar must stay at or below 10%; all other bars must reach 90%.</text>
+</svg>

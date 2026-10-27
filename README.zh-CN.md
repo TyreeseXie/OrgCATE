@@ -22,6 +22,17 @@ cross-fitted DML/AIPW 估计平均处理效应，再用一棵包含全部候选�
 模型估计、held-out 确认和模拟评价使用不同的数据对象。模拟真值只用于评价方法，
 不会进入模型估计或形态分类。
 
+## 本仓库建立的两项方法结果
+
+本仓库包含两项相互衔接的结果。第一，针对单个焦点企业特征，恢复其 CATE 函数
+形态及决定该形态的关键量。第二，把同一套可审计标准扩展到有限的加性共生情境：
+当两个或三个预先指定的企业特征共同构成同一个 CATE 面时，分别剥离并评价每一条
+异质性成分，而不是只判断总体 CATE 是否拟合良好。
+
+共生模块没有降低单情境标准。每个活动成分都必须独立通过形态、曲线和关键量验收，
+重构后的总体 CATE 也必须通过，并使用匹配的全 null 情境控制“任一成分被假确认”
+的概率。
+
 ## 安装与基本检查
 
 参考环境为 Python 3.13 和 EconML 0.17.0，完整版本记录在
@@ -104,6 +115,29 @@ CATE 极差的 20%。10 次冻结重复中至少 9 次整体成功，该情境�
 
 ![九种单情境统一恢复结果](reports/single_scenario_release_candidate_v1/FIGURE_SINGLE_SCENARIO_UNIFIED_RECOVERY.svg)
 
+## 加性异质性共生
+
+第二个研究模块考察：一棵联合因果森林估计完整 CATE 后，能否剥离多个预先指定的
+企业特征贡献。它把研究从“每次恢复一条形态”推进到有限的多成分共生，同时保持
+逐成分验收标准不变。两组件和三组件共用一套方法，但分别配置、分别运行、分别
+汇报。
+
+| 示例 | 各成分完整恢复率 | 总 CATE fidelity | 全 null 下任一假确认率 |
+|---|---:|---:|---:|
+| 两组件 | 90%、100% | 100% | 0% |
+| 三组件 | 95%、90%、100% | 100% | 5% |
+
+这些 `n=3000` 结果建立了一个可审计的能力边界：在信号清晰、活动成分预先指定、
+加性且无交互时，程序可以剥离两个和三个共生异质性成分，同时保持总体 CATE
+恢复和全 null 错误控制。该结论不等于自动发现活动变量，也不代表任意组合都能
+恢复。两个实验各自的配置、报告、汇总表、图和 manifest 见
+[`additive_coexistence/`](additive_coexistence/)，综合解释见
+[模块报告](additive_coexistence/ADDITIVE_COEXISTENCE_REPORT.zh-CN.md)。
+
+![两组件恢复与全 null 控制](additive_coexistence/two_component/evidence/FIGURE_1_RECOVERY_AND_NULL_CONTROL.svg)
+
+![三组件恢复与全 null 控制](additive_coexistence/three_component/evidence/FIGURE_1_RECOVERY_AND_NULL_CONTROL.svg)
+
 ## 半合成复现
 
 仓库包含实验所用、经研究团队授权的 Compustat 派生 L=3 处理前企业面板骨架：
@@ -118,6 +152,9 @@ orgcate reproduce --target morphology-product --phase confirmation
 orgcate reproduce --target morphology-product --phase report
 orgcate reproduce --target kink-resolution --phase confirmation
 orgcate reproduce --target kink-resolution --phase report
+python additive_coexistence/src/run.py --config additive_coexistence/two_component/config.json
+python additive_coexistence/src/run.py --config additive_coexistence/three_component/config.json
+python additive_coexistence/verify.py
 ```
 
 程序会保留已经完成的 replication，并记录运行失败。`--freeze-only` 仅用于文档
@@ -141,11 +178,15 @@ python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
 每次 GitHub Actions 成功运行后，打开该次运行的 summary 页面，在 **Artifacts**
 区域下载 `orgcate-data-to-results-<run_id>`。
 
+同一次运行还会提供 `orgcate-additive-coexistence-<run_id>`，其中包含两份独立确认
+报告、图片、汇总表、配置和证据 manifest，不包含企业级数据行。
+
 ## 文档与结果
 
 - `docs/METHOD_CONTRACT_AND_STOP_RULES.md`：估计顺序与停止规则；
 - `docs/TECHNICAL_APPENDIX.md`：估计量、样本划分、形态重构、验证标准和复现细节；
 - `docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`：冻结的单情境成功标准；
+- `additive_coexistence/`：共生方法、两组件与三组件独立确认及综合模块报告；
 - `docs/REPOSITORY_VERIFICATION_RECORD.md`：代码、证据、数据和端到端分析的最终
   验证记录；
 - `docs/OUTPUT_SCHEMA.md`：结果字段与状态定义；
@@ -161,10 +202,11 @@ python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
 ## 开发检查
 
 ```powershell
-.venv\Scripts\ruff.exe check src tests execution tools
-.venv\Scripts\python.exe -m compileall -q src tests execution tools
+.venv\Scripts\ruff.exe check src tests execution tools additive_coexistence
+.venv\Scripts\python.exe -m compileall -q src tests execution tools additive_coexistence
 .venv\Scripts\python.exe -m pytest -q -p no:cacheprovider
 python tools/verify_single_scenario_evidence.py
+python additive_coexistence/verify.py
 python tools/audit_public_release.py --allow-metadata-pending
 orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
 python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance

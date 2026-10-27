@@ -1,0 +1,4 @@
+scenario,component_count,feature,truth_label,replications,successes,component_recovery_rate,wilson_ci_low,wilson_ci_high,blind_evidence_rate,exact_morphology_rate,curve_fidelity_rate,key_quantities_rate
+active_count_3,3,cash_at_slope_L,sign-reversal,20,19,0.95,0.763868806553258,0.9911185511992048,1.0,1.0,1.0,0.95
+active_count_3,3,debt_at_slope_L,u-shaped,20,20,1.0,0.8388748419471806,1.0,1.0,1.0,1.0,1.0
+active_count_3,3,intangibles_at,inverted-u,20,18,0.9,0.6989663547715128,0.972133518786232,1.0,1.0,1.0,0.9

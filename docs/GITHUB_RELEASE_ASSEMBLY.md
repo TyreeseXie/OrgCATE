@@ -18,6 +18,7 @@ OrgCATE_GitHub_Upload_v1/
 |-- simulation_runner_v2/            # exact low-level dependency, code/config only
 |-- morphology_reconstruction_v2_stage_success/
 |                                      # reconstruction dependency, code/config only
+|-- additive_coexistence/              # second contribution: additive coexistence
 |-- reports/
 |   |-- morphology_product_v1/       # aggregate table, manifest, report, SVGs
 |   |-- kink_resolution_v2/          # aggregate table, manifest, report, figures
@@ -28,6 +29,8 @@ OrgCATE_GitHub_Upload_v1/
 |-- src/orgcate_sim/                 # installable public package and CLI
 |-- tests/                           # selected public, leakage, and hash tests
 |-- tools/audit_public_release.py    # disclosure and manifest audit
+|-- tools/assemble_additive_coexistence_artifact.py
+|-- tools/verify_additive_coexistence_artifact.py
 |-- README.md
 |-- README.zh-CN.md
 |-- SECURITY.md
@@ -81,11 +84,15 @@ Candidate-stage check, while publication metadata is pending:
 ```powershell
 python tools/audit_public_release.py --allow-metadata-pending
 python -m pip install -e . --no-deps
-ruff check src tests execution tools
-python -m compileall -q src tests execution tools
+ruff check src tests execution tools additive_coexistence
+python -m compileall -q src tests execution tools additive_coexistence
+python -m compileall -q tools/assemble_additive_coexistence_artifact.py tools/verify_additive_coexistence_artifact.py
 pytest -q -p no:cacheprovider
 orgcate verify
 orgcate contract
+python additive_coexistence/verify.py
+python tools/assemble_additive_coexistence_artifact.py artifacts/additive_coexistence
+python tools/verify_additive_coexistence_artifact.py artifacts/additive_coexistence
 ```
 
 `orgcate contract` must remain blocked only by license/citation metadata during

@@ -25,6 +25,21 @@ Estimation, held-out confirmation, and simulation evaluation use separate data
 objects. Simulation truth is used to evaluate the method and is not available
 to the estimation or classification routines.
 
+## What the repository establishes
+
+The repository contains two related methodological results. First, it shows
+how one focal firm characteristic can be assigned to a functional morphology
+and evaluated against its shape-defining quantities. Second, it extends the
+same audited standard to a limited additive-coexistence setting, where two or
+three prespecified firm characteristics contribute to the same CATE surface
+and must be separated without relaxing the single-component criterion.
+
+The coexistence extension is deliberately stricter than showing that the total
+CATE is predicted well. Every active component must independently recover its
+morphology, curve, and key quantities; the reconstructed total CATE must also
+pass; and a matched all-null design controls the probability of falsely
+confirming any component.
+
 ## Installation and basic checks
 
 The reference environment uses Python 3.13 and EconML 0.17.0. Package versions
@@ -117,6 +132,34 @@ quantity map are in `docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`.
 
 ![Unified single-scenario recovery](reports/single_scenario_release_candidate_v1/FIGURE_SINGLE_SCENARIO_UNIFIED_RECOVERY.svg)
 
+## Additive heterogeneity coexistence
+
+The second research module asks whether several prespecified firm
+characteristics can be separated after one joint causal forest estimates their
+combined CATE. It advances the analysis from one functional form at a time to
+limited coexistence while retaining the same component-level recovery
+requirements. One shared method is used, but the two-component and
+three-component confirmations remain separate experiments and separate
+reports.
+
+| Example | Complete component recovery | Total-CATE fidelity | All-null family-wise false confirmation |
+|---|---:|---:|---:|
+| Two components | 90%, 100% | 100% | 0% |
+| Three components | 95%, 90%, 100% | 100% | 5% |
+
+These `n=3000` results establish an auditable capability frontier: under clear,
+prespecified, additive signals, the procedure can separate two and three
+coexisting components while maintaining total-CATE fidelity and all-null error
+control. They do not claim automatic active-set discovery, interactions, or
+universal recovery across arbitrary combinations. Each experiment has its own
+config, report, aggregate tables, figures, and evidence manifest under
+[`additive_coexistence/`](additive_coexistence/); the joint interpretation is
+in the [module report](additive_coexistence/ADDITIVE_COEXISTENCE_REPORT.md).
+
+![Two-component recovery and null control](additive_coexistence/two_component/evidence/FIGURE_1_RECOVERY_AND_NULL_CONTROL.svg)
+
+![Three-component recovery and null control](additive_coexistence/three_component/evidence/FIGURE_1_RECOVERY_AND_NULL_CONTROL.svg)
+
 ## Semi-synthetic reproduction
 
 The repository includes the authorized Compustat-derived L=3 pre-treatment
@@ -133,6 +176,9 @@ orgcate reproduce --target morphology-product --phase confirmation
 orgcate reproduce --target morphology-product --phase report
 orgcate reproduce --target kink-resolution --phase confirmation
 orgcate reproduce --target kink-resolution --phase report
+python additive_coexistence/src/run.py --config additive_coexistence/two_component/config.json
+python additive_coexistence/src/run.py --config additive_coexistence/three_component/config.json
+python additive_coexistence/verify.py
 ```
 
 The runners preserve completed replications and record failures. `--freeze-only`
@@ -159,6 +205,11 @@ and a SHA256 manifest. Firm-level rows are excluded.
 For every successful GitHub Actions run, open the run summary and download
 `orgcate-data-to-results-<run_id>` from the **Artifacts** section.
 
+The same run also provides
+`orgcate-additive-coexistence-<run_id>`, containing the two separate
+confirmation reports, figures, aggregate tables, configurations, and evidence
+manifests. It contains no firm-level rows.
+
 ## Documentation
 
 - `docs/METHOD_CONTRACT_AND_STOP_RULES.md`: estimation order and stopping rules.
@@ -166,6 +217,8 @@ For every successful GitHub Actions run, open the run summary and download
   validation criteria, and reproducibility details.
 - `docs/SINGLE_SCENARIO_ACCEPTANCE_STANDARD_V1.md`: the frozen single-scenario
   success definition.
+- `additive_coexistence/`: shared coexistence method, separate two- and
+  three-component confirmations, and the integrated module report.
 - `docs/REPOSITORY_VERIFICATION_RECORD.md`: final code, evidence, data, and
   data-to-results verification record.
 - `docs/OUTPUT_SCHEMA.md`: result fields and state definitions.
@@ -182,10 +235,11 @@ simulation outputs are outside the release.
 ## Development checks
 
 ```powershell
-.venv\Scripts\ruff.exe check src tests execution tools
-.venv\Scripts\python.exe -m compileall -q src tests execution tools
+.venv\Scripts\ruff.exe check src tests execution tools additive_coexistence
+.venv\Scripts\python.exe -m compileall -q src tests execution tools additive_coexistence
 .venv\Scripts\python.exe -m pytest -q -p no:cacheprovider
 python tools/verify_single_scenario_evidence.py
+python additive_coexistence/verify.py
 python tools/audit_public_release.py --allow-metadata-pending
 orgcate acceptance --config configs/data_to_results_acceptance_v1.json --output artifacts/ci_acceptance
 python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance

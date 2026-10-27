@@ -57,6 +57,12 @@ FORBIDDEN_SUFFIXES = {
     ".zip",
 }
 ALLOWED_TABULAR = {
+    "additive_coexistence/two_component/evidence/COMPONENT_SUMMARY.csv",
+    "additive_coexistence/two_component/evidence/NULL_SUMMARY.csv",
+    "additive_coexistence/two_component/evidence/SCENARIO_SUMMARY.csv",
+    "additive_coexistence/three_component/evidence/COMPONENT_SUMMARY.csv",
+    "additive_coexistence/three_component/evidence/NULL_SUMMARY.csv",
+    "additive_coexistence/three_component/evidence/SCENARIO_SUMMARY.csv",
     "execution/phase2_real_backbone_v1/anchor_selection_distribution_L3.csv",
     "execution/phase2_real_backbone_v1/backbone_feature_dictionary_v1.csv",
     "execution/phase2_real_backbone_v1/candidate_feature_pearson_correlation_L3.csv",

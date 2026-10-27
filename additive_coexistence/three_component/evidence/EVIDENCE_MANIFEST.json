@@ -1,0 +1,41 @@
+{
+  "schema_version": "orgcate-additive-coexistence-example-v1",
+  "component_count": 3,
+  "decision": "PASS",
+  "replications": 20,
+  "n": 3000,
+  "source_confirmation": {
+    "combined_results_sha256": "af8669f6e8fa9e49859fdf1bac84055b9aa738f48dc30b66948253a6f58880e2",
+    "combined_curves_sha256": "3daefadd902c916fc2292fd61982a1d320fd077504be9be11734001aa7110b05"
+  },
+  "outputs": {
+    "COMPONENT_SUMMARY.csv": {
+      "bytes": 512,
+      "sha256": "18721b8316d74e96a1040b8e1ea2e1d0ee4525c20282f4fcff84238245c13414"
+    },
+    "FIGURE_1_RECOVERY_AND_NULL_CONTROL.svg": {
+      "bytes": 4819,
+      "sha256": "7d347815b27c44262d16dab4f3ecebd36568d8681fe78eeec68e754aca04eb62"
+    },
+    "FIGURE_2_COMPONENT_CURVES.svg": {
+      "bytes": 27424,
+      "sha256": "5b99d779f87b8eb42dc350aefd40957df302e43550da3c2eeb52c5b40876131b"
+    },
+    "NULL_SUMMARY.csv": {
+      "bytes": 193,
+      "sha256": "d2bfba19768f6c2adc82fd4bf98c7d6a6ab5e2ba2afe75ee5e0fbf467843f130"
+    },
+    "REPORT.md": {
+      "bytes": 2022,
+      "sha256": "c80eaa8fbb20665ff423280af9b67799611f51bed448fc0531954df70e3b8275"
+    },
+    "REPORT.zh-CN.md": {
+      "bytes": 1767,
+      "sha256": "3ae3b6e7a44e9797d482d55548f2e2be3f4b3d2640350e6d115646e88191d9aa"
+    },
+    "SCENARIO_SUMMARY.csv": {
+      "bytes": 201,
+      "sha256": "760804a15cdf91b299834e79a1d3b1a2f91381ccd37a991492fc89b4c978ed48"
+    }
+  }
+}
