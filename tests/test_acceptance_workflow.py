@@ -5,7 +5,7 @@ import json
 
 import pandas as pd
 
-from orgcate_sim import public_demo
+from orgcate_sim import acceptance, public_demo
 from orgcate_sim.public_demo import _prepare_output
 from orgcate_sim.release import NINE_SITUATIONS, repository_root, sha256_file
 
@@ -46,3 +46,10 @@ def test_public_demo_has_one_unified_morphology_path() -> None:
     assert "run_kink_resolution_v2.py" not in source
     assert "_focused_kink_readout" not in source
     assert 'scenario == "kinked"' not in source
+
+
+def test_acceptance_git_state_excludes_untracked_generated_outputs() -> None:
+    source = inspect.getsource(acceptance._git_state)
+
+    assert '"--untracked-files=no"' in source
+    assert "working_tree_dirty_scope" in source

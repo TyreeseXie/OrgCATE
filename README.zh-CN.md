@@ -126,7 +126,9 @@ python tools/verify_complete_analysis_artifact.py artifacts/reviewer_complete
 GitHub Actions 执行相同流程。进入仓库的 **Actions** 页面，打开成功的
 `public-artifact-ci`，在 **Artifacts** 下载
 `orgcate-complete-analysis-<run_id>`。ZIP 中含完整目录说明和逐文件哈希
-manifest；同一页面还提供单独的九情境分析包与共生模块包。
+manifest。这是该次运行唯一需要下载的成果包；九情境分析与共生模块分别位于
+包内独立目录。`RUN_CONTEXT.json` 与 `configuration/` 记录 workflow run、
+Git commit、执行命令、输入哈希、随机种子和实际使用的分析配置。
 
 ## 九情境形态层
 

@@ -137,8 +137,10 @@ headline DML-ATE/CATE test and morphology-recovery results on its first page.
 GitHub Actions executes the same sequence. Open the repository's **Actions**
 page, select a successful `public-artifact-ci` run, and download
 `orgcate-complete-analysis-<run_id>` from **Artifacts**. The ZIP has a manifest
-covering every included file. Separate nine-situation and additive packages are
-also available in the same run.
+covering every included file. It is the single downloadable artifact for the
+run and contains the nine-situation and additive modules as separate internal
+directories. `RUN_CONTEXT.json` and `configuration/` preserve the workflow
+run, commit, commands, input hash, seeds, and exact analysis configurations.
 
 ## Nine-situation morphology layer
 

@@ -75,20 +75,6 @@ jobs:
           --output artifacts/complete_analysis
       - name: Verify complete analysis package
         run: python tools/verify_complete_analysis_artifact.py artifacts/complete_analysis
-      - name: Upload data-to-results acceptance package
-        uses: actions/upload-artifact@v4
-        with:
-          name: orgcate-data-to-results-${{ github.run_id }}
-          path: artifacts/ci_acceptance/
-          if-no-files-found: error
-          retention-days: 14
-      - name: Upload additive coexistence evidence package
-        uses: actions/upload-artifact@v4
-        with:
-          name: orgcate-additive-coexistence-${{ github.run_id }}
-          path: artifacts/additive_coexistence/
-          if-no-files-found: error
-          retention-days: 14
       - name: Upload complete analysis package
         uses: actions/upload-artifact@v4
         with:

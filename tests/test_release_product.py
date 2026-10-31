@@ -168,3 +168,35 @@ def test_cli_exposes_current_product_commands_and_nine_names() -> None:
         assert command in help_text
     parsed = parser.parse_args(["demo", "--scenario", "kinked", "--output", "unused"])
     assert parsed.scenario == "kinked"
+
+
+def test_ci_uploads_one_complete_analysis_artifact() -> None:
+    root = repository_root()
+    workflow = (root / ".github" / "workflows" / "ci.yml").read_text(
+        encoding="utf-8"
+    )
+
+    assert workflow.count("uses: actions/upload-artifact@v4") == 1
+    assert "name: orgcate-complete-analysis-${{ github.run_id }}" in workflow
+    assert "orgcate-data-to-results-${{ github.run_id }}" not in workflow
+    assert "orgcate-additive-coexistence-${{ github.run_id }}" not in workflow
+
+
+def test_complete_artifact_contract_includes_provenance_files() -> None:
+    root = repository_root()
+    assembler = (root / "tools" / "assemble_complete_analysis_artifact.py").read_text(
+        encoding="utf-8"
+    )
+    verifier = (root / "tools" / "verify_complete_analysis_artifact.py").read_text(
+        encoding="utf-8"
+    )
+
+    for required in (
+        "RUN_CONTEXT.json",
+        "configuration/data_to_results_acceptance_v1.json",
+        "configuration/ate_estimator_comparison_v1.json",
+        "configuration/fixed_effects_comparison_v1.json",
+    ):
+        assert required in verifier
+    assert '"schema_version": "orgcate-analysis-run-context-v1"' in assembler
+    assert '"schema_version": "orgcate-complete-analysis-artifact-v2"' in assembler

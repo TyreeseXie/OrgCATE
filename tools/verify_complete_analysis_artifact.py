@@ -5,11 +5,17 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
+from datetime import datetime
 from pathlib import Path
 
 REQUIRED = {
     "README.md",
+    "RUN_CONTEXT.json",
     "COMPLETE_ANALYSIS_MANIFEST.json",
+    "configuration/data_to_results_acceptance_v1.json",
+    "configuration/ate_estimator_comparison_v1.json",
+    "configuration/fixed_effects_comparison_v1.json",
     "nine_situation_analysis/ANALYSIS_REPORT.md",
     "nine_situation_analysis/figures/nine_scenario_cate_overview.svg",
     "average_effect_comparison/ATE_ESTIMATOR_COMPARISON_REPORT.md",
@@ -37,6 +43,7 @@ CONTENT_REQUIREMENTS = {
         "## Start here",
         "## Headline results",
         "optional_theory_development/PROMPT.md",
+        "RUN_CONTEXT.json",
     ),
     "nine_situation_analysis/ANALYSIS_REPORT.md": (
         "## Nine-situation results",
@@ -121,7 +128,110 @@ def verify(output: Path) -> int:
         "fixed_effects_comparison/PANEL_FIXED_EFFECTS_COMPARISON.svg",
     ):
         _require("<svg" in files[name].read_text(encoding="utf-8"), f"invalid SVG: {name}")
-    manifest = json.loads(files["COMPLETE_ANALYSIS_MANIFEST.json"].read_text(encoding="utf-8"))
+    manifest = json.loads(
+        files["COMPLETE_ANALYSIS_MANIFEST.json"].read_text(encoding="utf-8")
+    )
+    _require(
+        manifest.get("schema_version") == "orgcate-complete-analysis-artifact-v2",
+        "wrong complete manifest schema",
+    )
+    _require(bool(manifest.get("created_at_utc")), "missing package creation time")
+    datetime.fromisoformat(manifest["created_at_utc"])
+    _require(len(manifest.get("git_commit", "")) == 40, "invalid Git commit")
+
+    context = json.loads(files["RUN_CONTEXT.json"].read_text(encoding="utf-8"))
+    _require(
+        context.get("schema_version") == "orgcate-analysis-run-context-v1",
+        "wrong run-context schema",
+    )
+    _require(
+        context.get("created_at_utc") == manifest["created_at_utc"],
+        "creation time mismatch",
+    )
+    _require(
+        context.get("git", {}).get("commit") == manifest["git_commit"],
+        "Git commit mismatch",
+    )
+    _require(
+        isinstance(context.get("git", {}).get("tracked_source_dirty"), bool),
+        "missing tracked-source state",
+    )
+    _require(
+        "untracked generated outputs excluded"
+        in context.get("git", {}).get("dirty_scope", ""),
+        "ambiguous dirty-source definition",
+    )
+    workflow = context.get("workflow", {})
+    _require(
+        workflow.get("provider") in {"local", "github-actions"},
+        "invalid workflow provider",
+    )
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        _require(
+            workflow.get("provider") == "github-actions",
+            "missing GitHub Actions context",
+        )
+        _require(
+            workflow.get("run_id") == os.environ.get("GITHUB_RUN_ID"),
+            "workflow run ID mismatch",
+        )
+    input_backbone = context.get("input_backbone", {})
+    _require(
+        len(input_backbone.get("sha256", "")) == 64,
+        "missing input-backbone hash",
+    )
+    _require(int(input_backbone.get("rows_read", 0)) > 0, "missing input row count")
+    _require(len(context.get("commands", [])) >= 7, "incomplete command record")
+    for command in (
+        "orgcate acceptance",
+        "orgcate ate-comparison",
+        "orgcate fixed-effects-comparison",
+    ):
+        _require(
+            any(item.startswith(command) for item in context["commands"]),
+            f"missing command: {command}",
+        )
+    configuration_records = context.get("configuration_files", [])
+    _require(len(configuration_records) == 3, "incomplete configuration inventory")
+    declared_config_hashes = {
+        "configuration/data_to_results_acceptance_v1.json": json.loads(
+            files["nine_situation_analysis/ACCEPTANCE_MANIFEST.json"].read_text(
+                encoding="utf-8"
+            )
+        )["config"]["sha256"],
+        "configuration/ate_estimator_comparison_v1.json": json.loads(
+            files["average_effect_comparison/RUN_MANIFEST.json"].read_text(
+                encoding="utf-8"
+            )
+        )["config_sha256"],
+        "configuration/fixed_effects_comparison_v1.json": json.loads(
+            files["fixed_effects_comparison/RUN_MANIFEST.json"].read_text(
+                encoding="utf-8"
+            )
+        )["config_sha256"],
+    }
+    for record in configuration_records:
+        name = record["packaged_path"]
+        _require(name in files, f"missing packaged configuration: {name}")
+        _require(
+            _sha256(files[name]) == record["sha256"],
+            f"configuration hash mismatch: {name}",
+        )
+        _require(
+            record["sha256"] == declared_config_hashes.get(name),
+            f"configuration differs from component manifest: {name}",
+        )
+        json.loads(files[name].read_text(encoding="utf-8"))
+    component_records = context.get("component_manifests", [])
+    _require(len(component_records) == 5, "incomplete component-manifest inventory")
+    for record in component_records:
+        name = record["path"]
+        _require(name in files, f"missing component manifest: {name}")
+        _require(
+            _sha256(files[name]) == record["sha256"],
+            f"component manifest hash mismatch: {name}",
+        )
+
     records = {item["path"]: item for item in manifest["files"]}
     expected = set(files) - {"COMPLETE_ANALYSIS_MANIFEST.json"}
     _require(set(records) == expected, "complete manifest inventory mismatch")

@@ -8,7 +8,7 @@
   ],
   "manifest_excludes_itself": true,
   "file_count": 150,
-  "total_bytes": 9874791,
+  "total_bytes": 9886699,
   "findings": [],
   "files": [
     {
@@ -18,8 +18,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 4040,
-      "sha256": "0917a78a8faefa10ea099dd251d75df7558009c8555b4942bd4e44697488cdaa"
+      "bytes": 3471,
+      "sha256": "0a48d139f6ab9579d0accce606f019939ffe5ee4911db51b184b3c02537a8ec3"
     },
     {
       "path": ".gitignore",
@@ -38,13 +38,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 15259,
-      "sha256": "97738b28149674c4cc054c085253711c5e8990eb7c709035c5ef1826e3b912a9"
+      "bytes": 15454,
+      "sha256": "b40fc664aeefc03e1f23ecebaf7948cc748c87724de439fc018cb4ab396f2b9f"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 13876,
-      "sha256": "caa2041c29c170924cacc9573920dfa0b7c787deef12d1232094b42ae04f57ba"
+      "bytes": 14073,
+      "sha256": "2405af836bbbb741798006d575f807610bb33662b043f2820f8c4dbd12578be9"
     },
     {
       "path": "SECURITY.md",
@@ -258,8 +258,8 @@
     },
     {
       "path": "docs/REPOSITORY_VERIFICATION_RECORD.md",
-      "bytes": 5670,
-      "sha256": "c94fd8c858a0f150334b02f2268b400ddc95f9c1eaf4fa4655dd553798e816ee"
+      "bytes": 5890,
+      "sha256": "0b85a48eae05efa0fb2c5952e1608319b20d08bf99d6df77dd43a04930e59531"
     },
     {
       "path": "docs/SCIENTIFIC_CODE_PROVENANCE.md",
@@ -543,8 +543,8 @@
     },
     {
       "path": "src/orgcate_sim/acceptance.py",
-      "bytes": 26827,
-      "sha256": "c551a5b0e960888be25db237a10847cd2a54d31e207630748be21f3f654cb76f"
+      "bytes": 27012,
+      "sha256": "c900fac56a432ca085b745bf62a15e8da38bfcc4f0a57a27f93bedfcac9bc4b1"
     },
     {
       "path": "src/orgcate_sim/ate.py",
@@ -673,8 +673,8 @@
     },
     {
       "path": "tests/test_acceptance_workflow.py",
-      "bytes": 1545,
-      "sha256": "c4ec3e110e48b496053a1d6da70d737c107128d2a97b032da0916bc2e79f6715"
+      "bytes": 1786,
+      "sha256": "74df45078cbf84274c0ee9b1da0cec449bc44430c6a0e395c27595cd4ace7db0"
     },
     {
       "path": "tests/test_additive_coexistence.py",
@@ -713,8 +713,8 @@
     },
     {
       "path": "tests/test_release_product.py",
-      "bytes": 5452,
-      "sha256": "bb1ed636e820e6c43af545be5ee8d6ba9e160bcdeca60149d604be118a0d5dc7"
+      "bytes": 6714,
+      "sha256": "04cfad70fc6d30a3b045f343c4f5406dde8caad5da2e002c24a4d9053462df27"
     },
     {
       "path": "tests/test_unified_morphology_v2.py",
@@ -728,8 +728,8 @@
     },
     {
       "path": "tools/assemble_complete_analysis_artifact.py",
-      "bytes": 6807,
-      "sha256": "fae553a530cd0c2c94c0533483f25cbdae3c5b1d97c3e73c268866bc528271e8"
+      "bytes": 12684,
+      "sha256": "77b90715f9681f85d934a61485611c9e2fed11542b507efe3f6a652e61ebe3f2"
     },
     {
       "path": "tools/audit_public_release.py",
@@ -753,8 +753,8 @@
     },
     {
       "path": "tools/verify_complete_analysis_artifact.py",
-      "bytes": 5124,
-      "sha256": "aad6de89c7c37a4e070792b927440a26256d8ea7361023778e3ef34495f82f2f"
+      "bytes": 9424,
+      "sha256": "508c26f0e206d3c46087301137625106c6814ec906b1d8e9b2a50494d130d9d7"
     },
     {
       "path": "tools/verify_unified_morphology_evidence.py",

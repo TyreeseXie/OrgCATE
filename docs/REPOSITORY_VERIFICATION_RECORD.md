@@ -25,7 +25,7 @@ outcomes, CATE, and morphology truth were generated during the run.
 |---|---|
 | `ruff check src tests execution tools additive_coexistence` | PASS |
 | `python -m compileall -q src tests execution tools additive_coexistence` | PASS |
-| `pytest -q -p no:cacheprovider` | 50 passed |
+| `pytest -q -p no:cacheprovider` | 53 passed |
 | `orgcate verify` | PASS; unified code, configuration, freeze, and evidence hashes matched |
 | `orgcate doctor --json` | PASS; dependency lock and backbone hash matched |
 | `python tools/verify_unified_morphology_evidence.py` | PASS; 100/100 cells and nine common-standard results verified |
@@ -98,12 +98,16 @@ The CI workflow now recalculates the nine-situation analysis, the 180-cell
 OLS/DML comparison, and the 90-cell panel fixed-effects comparison. It verifies
 the additive coexistence evidence and then assembles these outputs together
 with the optional English theory-development prompt and worked output. The
-complete package contains 165 nonempty files and excludes row-level generated
-data, compressed data, caches, and environments. Its entry page links directly
+complete package excludes row-level generated data, compressed data, caches,
+and environments. Its entry page links directly
 to the nine-situation overview, both average-effect comparisons, the additive
 results, the complete Prompt, the worked model output, and the technical
-appendix. The package verifier checks these required sections and SVG contents,
-then checks the byte count and SHA256 hash of every file against the manifest.
+appendix. It also includes the exact analysis configurations and a run-context
+record covering the workflow run, Git commit, commands, input hash, and
+component manifests. The package verifier checks these required sections and
+SVG contents, then checks the byte count and SHA256 hash of every file against
+the manifest. GitHub Actions publishes only this complete package, avoiding
+duplicate subset downloads.
 
 ## Decision
 

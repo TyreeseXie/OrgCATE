@@ -48,13 +48,19 @@ def _git_state(root: Path) -> dict[str, Any]:
         )
         commit = completed.stdout.strip()
     status = subprocess.run(
-        ["git", "status", "--porcelain"],
+        ["git", "status", "--porcelain", "--untracked-files=no"],
         cwd=root,
         check=True,
         capture_output=True,
         text=True,
     ).stdout
-    return {"commit": commit, "working_tree_dirty": bool(status.strip())}
+    return {
+        "commit": commit,
+        "working_tree_dirty": bool(status.strip()),
+        "working_tree_dirty_scope": (
+            "tracked and staged source files only; untracked generated outputs excluded"
+        ),
+    }
 
 
 def _scale(values: np.ndarray, lower: float, upper: float) -> np.ndarray:
