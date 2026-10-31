@@ -15,6 +15,15 @@ from orgcate_sim.fixed_effects_comparison import (
 )
 
 
+def _frozen_hash(path: Path, mode: str) -> str:
+    content = path.read_bytes()
+    if mode == "normalized_text_lf":
+        content = content.replace(b"\r\n", b"\n")
+    elif mode != "raw_bytes":
+        raise AssertionError(f"unsupported hash mode: {mode}")
+    return hashlib.sha256(content).hexdigest()
+
+
 def test_two_way_fixed_effects_recovers_constant_effect_without_noise() -> None:
     treated = np.array([0, 0, 1, 1], dtype=int)
     post = np.array([False, False, True, True])
@@ -79,7 +88,7 @@ def test_fixed_effects_freeze_protects_existing_results() -> None:
         )
     )
     for record in freeze["frozen_inputs"].values():
-        observed = hashlib.sha256((root / record["path"]).read_bytes()).hexdigest()
+        observed = _frozen_hash(root / record["path"], record["hash_mode"])
         assert observed == record["sha256"]
 
     manifest = json.loads((report_dir / "RUN_MANIFEST.json").read_text(encoding="utf-8"))

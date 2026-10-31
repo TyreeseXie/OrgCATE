@@ -8,7 +8,7 @@
   ],
   "manifest_excludes_itself": true,
   "file_count": 150,
-  "total_bytes": 9873949,
+  "total_bytes": 9874791,
   "findings": [],
   "files": [
     {
@@ -203,8 +203,8 @@
     },
     {
       "path": "configs/fixed_effects_comparison_v1.json",
-      "bytes": 898,
-      "sha256": "975c8f3c7786e1459e5aebd7c3193b130411950f8c3b61c60cad7bc9da7d1558"
+      "bytes": 957,
+      "sha256": "f8beb15704565dc5312df50d1a88419f19cafb62fd1c98aa476907155e1afedc"
     },
     {
       "path": "configs/github_release_method_contract_v1.json",
@@ -433,8 +433,8 @@
     },
     {
       "path": "reports/fixed_effects_comparison_v1/FIXED_EFFECTS_COMPARISON_V1_METHOD_FREEZE.json",
-      "bytes": 2255,
-      "sha256": "a8a5b3e759c4f135b43dfda3f53dff9344e45a2f5bf22eb0e55ed51da80a50c5"
+      "bytes": 2455,
+      "sha256": "7a5806027bd7bc95ccf958d79d84903951542692521b69fe579e2c6a0f314739"
     },
     {
       "path": "reports/fixed_effects_comparison_v1/FROZEN_ATE_CATE_INPUT.csv",
@@ -463,8 +463,8 @@
     },
     {
       "path": "reports/fixed_effects_comparison_v1/RUN_MANIFEST.json",
-      "bytes": 1690,
-      "sha256": "7e3d2f9918ea8bb7a91acb4ca59b6fba802bbca9e0c6682648ca0ed6d4d90154"
+      "bytes": 1750,
+      "sha256": "2c916c03a8ba69e79f4825a520347ecf50d58668a5c6fde71effe4210ce87dff"
     },
     {
       "path": "reports/unified_morphology_v2/FIGURE_1_CATE_ATE_AND_MORPHOLOGY.svg",
@@ -593,8 +593,8 @@
     },
     {
       "path": "src/orgcate_sim/fixed_effects_comparison.py",
-      "bytes": 18058,
-      "sha256": "45c3e5e5d153141298b5f77b2c946a3b987b84b7492da6f034c32f982f140327"
+      "bytes": 18280,
+      "sha256": "2fd99453e601a6b7d572e831db58411c2a7a650678cc3a0e3ba10e6a01ad2b5c"
     },
     {
       "path": "src/orgcate_sim/guarded_pipeline.py",
@@ -698,8 +698,8 @@
     },
     {
       "path": "tests/test_fixed_effects_comparison.py",
-      "bytes": 3191,
-      "sha256": "94e3e77bae3f7f3c59a1475823a85f53ceecf10d2902422af3b27f07147a7f99"
+      "bytes": 3492,
+      "sha256": "59028b84616ddef2854abb6e7b38d6693c5d39efe69dd53be88cd26ec854ad9d"
     },
     {
       "path": "tests/test_no_leakage.py",

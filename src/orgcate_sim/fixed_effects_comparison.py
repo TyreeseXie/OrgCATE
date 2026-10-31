@@ -282,7 +282,9 @@ def run_fixed_effects_comparison(
     output.mkdir(parents=True, exist_ok=False)
     config = _read_json(config_path)
     evidence_path = root / str(config["frozen_estimate_input"])
-    observed_hash = sha256_file(evidence_path)
+    if config.get("frozen_estimate_input_hash_mode") != "normalized_text_lf":
+        raise ValueError("unsupported frozen ATE/CATE evidence hash mode")
+    observed_hash = _versioned_hash(evidence_path)
     if observed_hash != str(config["frozen_estimate_input_sha256"]):
         raise ValueError("frozen ATE/CATE evidence hash mismatch")
     evidence = pd.read_csv(evidence_path)
@@ -394,6 +396,7 @@ def run_fixed_effects_comparison(
         "frozen_estimate_input": str(evidence_path.relative_to(root)).replace(
             "\\", "/"
         ),
+        "frozen_estimate_input_hash_mode": "normalized_text_lf",
         "frozen_estimate_input_sha256": observed_hash,
         "input_backbone": str(backbone_path.relative_to(root)).replace("\\", "/"),
         "input_backbone_sha256": sha256_file(backbone_path),

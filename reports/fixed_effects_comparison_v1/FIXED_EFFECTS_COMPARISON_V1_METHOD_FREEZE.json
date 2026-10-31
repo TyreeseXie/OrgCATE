@@ -1,7 +1,7 @@
 {
   "schema_version": "orgcate-fixed-effects-comparison-method-freeze-v1",
   "freeze_date": "2026-10-31",
-  "presentation_revision": "CATE label shortened; estimator, inputs, and numerical results unchanged",
+  "presentation_revision": "CATE label shortened; cross-platform text hashes normalized to LF; estimator, inputs, and numerical results unchanged",
   "scope": "auxiliary panel fixed-effects comparison only",
   "scientific_contract": {
     "changes_to_existing_dgp": false,
@@ -37,19 +37,23 @@
   "frozen_inputs": {
     "config": {
       "path": "configs/fixed_effects_comparison_v1.json",
-      "sha256": "975c8f3c7786e1459e5aebd7c3193b130411950f8c3b61c60cad7bc9da7d1558"
+      "hash_mode": "normalized_text_lf",
+      "sha256": "f8beb15704565dc5312df50d1a88419f19cafb62fd1c98aa476907155e1afedc"
     },
     "implementation": {
       "path": "src/orgcate_sim/fixed_effects_comparison.py",
-      "sha256": "45c3e5e5d153141298b5f77b2c946a3b987b84b7492da6f034c32f982f140327"
+      "hash_mode": "normalized_text_lf",
+      "sha256": "2fd99453e601a6b7d572e831db58411c2a7a650678cc3a0e3ba10e6a01ad2b5c"
     },
     "ate_cate_evidence": {
       "path": "reports/fixed_effects_comparison_v1/FROZEN_ATE_CATE_INPUT.csv",
-      "sha256": "f7e68d8205e52d6e201f77b576e9c7c17ad94a39f452d2c311253354229e2888",
+      "hash_mode": "normalized_text_lf",
+      "sha256": "b4c8e7b4ee9e2a0ca43f4bbbf4dd051521c60b5a46cf20a6a5cd1f90d5d142c0",
       "rows": 90
     },
     "real_covariate_backbone": {
       "path": "execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz",
+      "hash_mode": "raw_bytes",
       "sha256": "91c963e02cbdc17a19de85868ba44f5f4fd65791bec83906980f307a6cfd3174"
     }
   }

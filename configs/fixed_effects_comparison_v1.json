@@ -1,7 +1,8 @@
 {
   "schema_version": "orgcate-fixed-effects-comparison-v1",
   "frozen_estimate_input": "reports/fixed_effects_comparison_v1/FROZEN_ATE_CATE_INPUT.csv",
-  "frozen_estimate_input_sha256": "f7e68d8205e52d6e201f77b576e9c7c17ad94a39f452d2c311253354229e2888",
+  "frozen_estimate_input_hash_mode": "normalized_text_lf",
+  "frozen_estimate_input_sha256": "b4c8e7b4ee9e2a0ca43f4bbbf4dd051521c60b5a46cf20a6a5cd1f90d5d142c0",
   "sample_size": 3000,
   "replications_per_situation": 10,
   "analysis_partition": "TRAIN firms from the frozen 80/20 split",
