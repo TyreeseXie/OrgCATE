@@ -321,7 +321,7 @@ def doctor(root: Path | None = None) -> dict[str, Any]:
     observed_backbone_sha256 = sha256_file(backbone) if backbone.is_file() else None
     return {
         "schema_version": "orgcate-doctor-v1",
-        "python_supported": sys.version_info >= (3, 10),
+        "python_supported": sys.version_info >= (3, 12),
         "versions": versions,
         "release_lock_matches": version_checks,
         "aggregate_evidence_available": (
@@ -420,7 +420,8 @@ def validate_practical_result(record: dict[str, Any]) -> None:
             {
                 "passed",
                 "dml_ate_train",
-                "final_cate_test_mean",
+                "final_cate_train_target_mean",
+                "descriptive_cate_test_mean",
                 "signed_gap",
                 "outcome_sd_train",
                 "standardized_absolute_gap",

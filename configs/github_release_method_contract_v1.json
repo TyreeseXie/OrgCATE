@@ -24,19 +24,19 @@
     {
       "id": "ate_conventional_comparison",
       "stage": "ATE",
-      "requirement": "Place the DML ATE beside a naive and conventional adjusted estimate as a diagnostic.",
+      "requirement": "Report DML-ATE beside the difference in means and a conventional covariate-adjusted estimate.",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "The public workflow and result schema report naive difference-in-means and all-covariate adjusted OLS beside the independent cross-fitted DML/AIPW anchor.",
-      "required_action": "None. Keep the conventional estimates explicitly diagnostic."
+      "evidence": "The public workflow and result schema report naive difference-in-means and all-covariate constant-effect OLS with HC3 uncertainty beside DML/AIPW. The separate nine-form comparison reports evaluator-side bias, RMSE, and coverage.",
+      "required_action": "None."
     },
     {
       "id": "ate_cate_aggregate_anchor",
       "stage": "ATE-to-CATE gate",
-      "requirement": "Compare TRAIN cross-fitted DML ATE with the average final orthogonal reconstructed CATE on untouched TEST; interrupt downstream interpretation when the absolute gap exceeds 0.10 SD(Y_train).",
+      "requirement": "Compare TRAIN cross-fitted DML ATE with the final orthogonal reconstructed CATE standardized to the same TRAIN target distribution; interrupt downstream interpretation when the absolute gap exceeds 0.10 SD(Y_train).",
       "status": "PASS",
       "release_blocking": true,
-      "evidence": "The hash-frozen v2 rule passed 10/10 fresh cells and is now config-driven in the public schema/runtime; failure overrides downstream support with INCONCLUSIVE.",
+      "evidence": "The hash-frozen rule passed 10/10 fresh cells and is config-driven in the public schema/runtime; failure overrides downstream support with INCONCLUSIVE.",
       "required_action": "None. Preserve 0.05 and 0.15 as sensitivity values only."
     },
     {

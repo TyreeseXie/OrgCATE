@@ -72,11 +72,27 @@ ALLOWED_TABULAR = {
     "reports/unified_morphology_v2/UNIFIED_MORPHOLOGY_V2_ACCEPTANCE_SUMMARY.csv",
     "reports/unified_morphology_v2/UNIFIED_MORPHOLOGY_V2_CONFUSION_MATRIX.csv",
     "reports/unified_morphology_v2/UNIFIED_MORPHOLOGY_V2_SUMMARY.csv",
+    "reports/ate_estimator_comparison_v1/ATE_ESTIMATOR_COMPARISON_LONG.csv",
+    "reports/ate_estimator_comparison_v1/ATE_ESTIMATOR_COMPARISON_SUMMARY.csv",
+    "reports/fixed_effects_comparison_v1/FROZEN_ATE_CATE_INPUT.csv",
+    "reports/fixed_effects_comparison_v1/PANEL_FIXED_EFFECTS_COMPARISON_LONG.csv",
+    "reports/fixed_effects_comparison_v1/PANEL_FIXED_EFFECTS_COMPARISON_SUMMARY.csv",
+}
+TABULAR_ROW_LIMITS = {
+    "reports/ate_estimator_comparison_v1/ATE_ESTIMATOR_COMPARISON_LONG.csv": 200,
+    "reports/fixed_effects_comparison_v1/FROZEN_ATE_CATE_INPUT.csv": 90,
+    "reports/fixed_effects_comparison_v1/PANEL_FIXED_EFFECTS_COMPARISON_LONG.csv": 90,
 }
 ALLOWED_BINARY_DATA = {
     "execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz": {
         "bytes": 2643021,
         "sha256": "91c963e02cbdc17a19de85868ba44f5f4fd65791bec83906980f307a6cfd3174",
+    }
+}
+ALLOWED_BINARY_DOCUMENTS = {
+    "docs/TECHNICAL_APPENDIX.docx": {
+        "bytes": 6005261,
+        "sha256": "3fcf5ab29b5b6eaaac4e4f8380311ce8b312692e8724e5c672d330cf3475931f",
     }
 }
 TEXT_SUFFIXES = {
@@ -107,6 +123,21 @@ PLACEHOLDER_VALUES = {
     "not_set",
     "pending",
     "replace_me",
+}
+PUBLIC_PROSE_BLOCKLIST = {
+    "descriptive comparison, not a cate gate",
+    "descriptive output only",
+    "does not determine whether cate analysis proceeds",
+    "no downstream gate",
+    "not a firm fixed-effects model",
+    "not proof of a mathematical causal discontinuity",
+    "not moderator confirmation",
+    "public workflow now reports",
+    "current workflow now",
+    "former threshold",
+    "描述性输出",
+    "不决定是否继续 cate",
+    "下游门禁",
 }
 
 
@@ -211,6 +242,16 @@ def inspect_text(path: Path) -> list[dict[str, Any]]:
                         "issue": f"broken local Markdown link: {target}",
                     }
                 )
+    lowered_text = text.lower()
+    for phrase in sorted(PUBLIC_PROSE_BLOCKLIST):
+        if phrase in lowered_text:
+            findings.append(
+                {
+                    "severity": "ERROR",
+                    "path": relative(path),
+                    "issue": f"publication prose uses internal qualification: {phrase}",
+                }
+            )
     return findings
 
 
@@ -230,7 +271,8 @@ def audit(*, allow_metadata_pending: bool) -> dict[str, Any]:
             findings.append(
                 {"severity": "ERROR", "path": rel, "issue": "private-data path"}
             )
-        if suffix in FORBIDDEN_SUFFIXES and rel not in ALLOWED_BINARY_DATA:
+        allowed_binary = rel in ALLOWED_BINARY_DATA or rel in ALLOWED_BINARY_DOCUMENTS
+        if suffix in FORBIDDEN_SUFFIXES and not allowed_binary:
             findings.append(
                 {"severity": "ERROR", "path": rel, "issue": "forbidden file type"}
             )
@@ -245,6 +287,17 @@ def audit(*, allow_metadata_pending: bool) -> dict[str, Any]:
                         "issue": "authorized backbone size/hash mismatch",
                     }
                 )
+        if rel in ALLOWED_BINARY_DOCUMENTS:
+            expected = ALLOWED_BINARY_DOCUMENTS[rel]
+            observed_hash = sha256(path)
+            if path.stat().st_size != expected["bytes"] or observed_hash != expected["sha256"]:
+                findings.append(
+                    {
+                        "severity": "ERROR",
+                        "path": rel,
+                        "issue": "locked public document size/hash mismatch",
+                    }
+                )
         if suffix == ".csv":
             rows, header = inspect_csv(path)
             if rel not in ALLOWED_TABULAR:
@@ -255,12 +308,16 @@ def audit(*, allow_metadata_pending: bool) -> dict[str, Any]:
                         "issue": "tabular file is not on aggregate-evidence allowlist",
                     }
                 )
-            if rows > 100:
+            row_limit = TABULAR_ROW_LIMITS.get(rel, 100)
+            if rows > row_limit:
                 findings.append(
                     {
                         "severity": "ERROR",
                         "path": rel,
-                        "issue": f"aggregate table unexpectedly has {rows} rows",
+                        "issue": (
+                            f"aggregate table unexpectedly has {rows} rows "
+                            f"(limit {row_limit})"
+                        ),
                     }
                 )
             lowered = {name.strip().lower() for name in header}

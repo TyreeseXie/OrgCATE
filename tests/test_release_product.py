@@ -102,7 +102,8 @@ def test_practical_schema_rejects_oracle_leakage() -> None:
         "ate_cate_coherence": {
             "passed": True,
             "dml_ate_train": 0.2,
-            "final_cate_test_mean": 0.2,
+            "final_cate_train_target_mean": 0.2,
+            "descriptive_cate_test_mean": 0.2,
             "signed_gap": 0.0,
             "outcome_sd_train": 1.0,
             "standardized_absolute_gap": 0.0,
@@ -162,6 +163,7 @@ def test_cli_exposes_current_product_commands_and_nine_names() -> None:
         "contract",
         "theory-audit",
         "reproduce",
+        "fixed-effects-comparison",
     ):
         assert command in help_text
     parsed = parser.parse_args(["demo", "--scenario", "kinked", "--output", "unused"])

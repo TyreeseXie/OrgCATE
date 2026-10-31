@@ -16,7 +16,12 @@ def main() -> int:
     args = parser.parse_args()
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(SOURCE, output, dirs_exist_ok=True)
+    shutil.copytree(
+        SOURCE,
+        output,
+        dirs_exist_ok=True,
+        ignore=shutil.ignore_patterns("__pycache__", "*.pyc", ".pytest_cache"),
+    )
     print(f"Assembled additive coexistence artifact: {output}")
     return 0
 

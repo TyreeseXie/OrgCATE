@@ -10,6 +10,8 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from .acceptance import run_data_to_results_acceptance
+from .ate_comparison import run_ate_estimator_comparison
+from .fixed_effects_comparison import run_fixed_effects_comparison
 from .public_contract import validate_theory_audit
 from .public_demo import run_public_demo
 from .release import (
@@ -80,6 +82,32 @@ def build_parser() -> argparse.ArgumentParser:
     )
     acceptance.add_argument(
         "--output", type=Path, default=Path("artifacts/data_to_results_acceptance")
+    )
+
+    ate_comparison = subparsers.add_parser(
+        "ate-comparison",
+        help="compare conventional constant-effect OLS with DML across nine HTE forms",
+    )
+    ate_comparison.add_argument(
+        "--config",
+        type=Path,
+        default=Path("configs/ate_estimator_comparison_v1.json"),
+    )
+    ate_comparison.add_argument(
+        "--output", type=Path, default=Path("artifacts/ate_estimator_comparison")
+    )
+
+    fixed_effects = subparsers.add_parser(
+        "fixed-effects-comparison",
+        help="add a panel fixed-effects benchmark to frozen ATE and CATE results",
+    )
+    fixed_effects.add_argument(
+        "--config",
+        type=Path,
+        default=Path("configs/fixed_effects_comparison_v1.json"),
+    )
+    fixed_effects.add_argument(
+        "--output", type=Path, default=Path("artifacts/fixed_effects_comparison")
     )
 
     reproduce = subparsers.add_parser(
@@ -232,6 +260,39 @@ def main(argv: Sequence[str] | None = None) -> int:
             "Exact morphology labels: "
             f"{sum(bool(row['exact_label_correct']) for row in rows)}/{len(rows)}"
         )
+        print(
+            "DML-ATE/CATE gap tests: "
+            f"{sum(bool(row['ate_cate_coherence_passed']) for row in rows)}/"
+            f"{len(rows)} passed"
+        )
+        states = sorted({str(row["practical_state"]) for row in rows})
+        print(
+            "Practical states: "
+            + ", ".join(
+                f"{state}={sum(row['practical_state'] == state for row in rows)}"
+                for state in states
+            )
+        )
+        return 0
+    if args.command == "ate-comparison":
+        result = run_ate_estimator_comparison(
+            config_path=args.config,
+            output=args.output,
+        )
+        print(f"ATE estimator comparison completed: {args.output.resolve()}")
+        print(f"Situations analyzed: {len(result['summary'])}")
+        print(f"Replications completed: {result['manifest']['total_replications']}")
+        print("Causal forests fitted: 0")
+        return 0
+    if args.command == "fixed-effects-comparison":
+        result = run_fixed_effects_comparison(
+            config_path=args.config,
+            output=args.output,
+        )
+        print(f"Fixed-effects comparison completed: {args.output.resolve()}")
+        print(f"Situations analyzed: {len(result['summary'])}")
+        print(f"Replications completed: {result['manifest']['total_replications']}")
+        print("New causal forests fitted: 0")
         return 0
     if args.command == "reproduce":
         return _run_reproduction(args)

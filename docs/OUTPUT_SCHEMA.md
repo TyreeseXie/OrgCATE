@@ -5,8 +5,10 @@ by the public command. Its principal sections are:
 
 1. `eligibility`: treatment prevalence, propensity tails, and clipping;
 2. `ate`: cross-fitted DML/AIPW estimate, standard error, confidence interval,
-   difference in means, and covariate-adjusted OLS;
-3. `ate_cate_coherence`: the standardized 10% ATE-CATE check;
+   difference in means, and conventional constant-effect OLS with HC3 uncertainty;
+3. `ate_cate_coherence`: the gap between TRAIN DML-ATE and the reconstructed
+   CATE standardized to the same TRAIN target firms, divided by TRAIN outcome
+   variation, together with its threshold and result;
 4. `forest`: specification of the joint multivariable `CausalForestDML`;
 5. `moderator`: focal characteristic and ranks of all candidate variables;
 6. `property_support`: support for ordering, magnitude, curvature, and
@@ -17,8 +19,9 @@ by the public command. Its principal sections are:
 9. `theory_audit`: path to the researcher-completed interpretation record.
 
 An eligibility failure yields `DESIGN_NOT_ELIGIBLE`. Failure of
-`abs(mean(CATE_TEST)-DML_ATE_TRAIN)/SD(Y_TRAIN) <= 0.10` yields
-`INCONCLUSIVE`. Neither state reports a supported morphology.
+`abs(CATE_TRAIN_TARGET-DML_ATE_TRAIN)/SD(Y_train) <= 0.10` yields
+`INCONCLUSIVE` and withholds
+downstream morphology claims.
 
 The property fields are `continuity`, `monotonicity`, `sign_relation`,
 `taxonomy_cell`, and `requires_abduction`. These fields describe the estimated
@@ -36,7 +39,8 @@ are written to `oracle/` and `evaluator/` rather than the analyst-facing output.
 - `NO_THEORY_CLAIM`: the data did not support a nonconstant effect;
 - `DESIGN_NOT_ELIGIBLE`: treatment or overlap requirements failed.
 
-Variable rank is descriptive and does not replace TEST confirmation.
+Variable rank summarizes the forest's ordering of candidate characteristics;
+TEST confirmation supplies the evidence state for the selected morphology.
 
 The interpretation template is saved as
 `practical/researcher_theory_audit.json`. It records proposed explanations,

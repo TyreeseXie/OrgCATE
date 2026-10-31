@@ -8,6 +8,7 @@ from orgcate_sim.public_contract import (
     evaluate_ate_cate_coherence,
     evaluate_design_eligibility,
     property_support,
+    standardize_curve_to_target,
     summarize_shape_quantities_en,
     theory_audit_template,
     three_layer_taxonomy,
@@ -50,14 +51,41 @@ def test_ate_cate_gate_uses_train_outcome_scale_and_fixed_threshold() -> None:
     assert failed["failure_state"] == "INCONCLUSIVE"
 
 
-def test_conventional_ate_diagnostics_are_not_the_anchor() -> None:
+def test_ate_cate_gate_standardizes_curve_to_dml_target_sample() -> None:
+    curve_u = np.array([0.10, 0.50, 0.90])
+    curve_cate = np.array([0.0, 1.0, 3.0])
+    train_target = np.array([0.10, 0.10, 0.50, 0.90])
+    test_target = np.array([0.90, 0.90])
+
+    train_mean = standardize_curve_to_target(curve_u, curve_cate, train_target)
+    test_mean = standardize_curve_to_target(curve_u, curve_cate, test_target)
+
+    assert train_mean == pytest.approx(1.0)
+    assert test_mean == pytest.approx(3.0)
+    result = evaluate_ate_cate_coherence(
+        1.0,
+        train_mean,
+        np.array([-1.0, 0.0, 1.0]),
+        CONFIG,
+        descriptive_cate_test_mean=test_mean,
+    )
+    assert result["passed"]
+    assert result["final_cate_train_target_mean"] == pytest.approx(1.0)
+    assert result["descriptive_cate_test_mean"] == pytest.approx(3.0)
+
+
+def test_conventional_ate_diagnostics_report_ols_benchmark() -> None:
     x = np.arange(20, dtype=float).reshape(10, 2)
     t = np.array([0, 1] * 5)
     y = 0.5 * t + x[:, 0] * 0.01
     result = conventional_ate_diagnostics(x, y, t, dml_ate=0.49)
     assert result["dml_ate"] == 0.49
     assert result["adjustment_count"] == 2
-    assert "diagnostic" in result["method_note"]
+    assert "DML/AIPW" in result["method_note"]
+    assert result["conventional_estimator"].endswith("OLS")
+    assert result["adjusted_ols_dml_relative_deviation"] >= 0
+    assert result["adjusted_ols_standard_error_hc3"] >= 0
+    assert result["adjusted_ols_ci_low"] <= result["adjusted_ols_ci_high"]
 
 
 def test_taxonomy_and_support_preserve_shape_property_gate() -> None:
@@ -100,7 +128,8 @@ def test_result_validator_enforces_state_precedence() -> None:
         "ate_cate_coherence": {
             "passed": False,
             "dml_ate_train": 0.2,
-            "final_cate_test_mean": 0.5,
+            "final_cate_train_target_mean": 0.5,
+            "descriptive_cate_test_mean": 0.5,
             "signed_gap": 0.3,
             "outcome_sd_train": 1.0,
             "standardized_absolute_gap": 0.3,

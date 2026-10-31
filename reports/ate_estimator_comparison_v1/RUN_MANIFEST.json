@@ -1,0 +1,36 @@
+{
+  "causal_forests_fitted": 0,
+  "config": "configs/ate_estimator_comparison_v1.json",
+  "config_sha256": "241e597eec1db2ad6d37d88afad148575a1c27bd29290ef96920c77233c61ad8",
+  "input_backbone": "execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz",
+  "input_backbone_sha256": "91c963e02cbdc17a19de85868ba44f5f4fd65791bec83906980f307a6cfd3174",
+  "outputs": {
+    "ATE_ESTIMATOR_COMPARISON.svg": "278d5f44ed35ff5e7f06801a697923644b9331a51e54ca690ec344f9ed21d60e",
+    "ATE_ESTIMATOR_COMPARISON_LONG.csv": "b27ca10860f6457efb26a5b0c540136f0e769863104551b6714d30ff926de9e8",
+    "ATE_ESTIMATOR_COMPARISON_REPORT.md": "a0c14f390129bb206bf467dcdef9783b622972ad1b923aec5577461e52a71b7c",
+    "ATE_ESTIMATOR_COMPARISON_SUMMARY.csv": "35218e7e444f9fd65013e6107557c544e7e2f2f831cf6f362369e25c9a5ae757"
+  },
+  "package_versions": {
+    "econml": "0.17.0",
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "pyarrow": "25.0.1",
+    "python": "3.13.3",
+    "scikit-learn": "1.6.1",
+    "scipy": "1.18.1"
+  },
+  "replications_per_situation": 20,
+  "schema_version": "orgcate-ate-estimator-comparison-manifest-v1",
+  "situations": [
+    "homogeneous",
+    "linear-monotone",
+    "nonlinear-monotone",
+    "steep-continuous",
+    "inverted-u",
+    "u-shaped",
+    "kinked",
+    "threshold-step",
+    "sign-reversal"
+  ],
+  "total_replications": 180
+}

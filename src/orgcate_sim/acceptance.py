@@ -222,7 +222,7 @@ def _importance_figure(ranking: pd.DataFrame, path: Path) -> None:
 <text x="{left}" y="32" font-family="Arial" font-size="22" font-weight="700" fill="#202124">Causal-forest feature importance</text>
 <line x1="{left}" y1="{top}" x2="{left}" y2="{height - bottom}" stroke="#374151" stroke-width="1.5"/>
 {"".join(rows)}
-<text x="{left + plot_width / 2}" y="{height - 17}" text-anchor="middle" font-family="Arial" font-size="14" fill="#374151">Importance (ranking information, not moderator confirmation)</text>
+<text x="{left + plot_width / 2}" y="{height - 17}" text-anchor="middle" font-family="Arial" font-size="14" fill="#374151">Forest importance for candidate-characteristic ranking</text>
 </svg>
 """
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -230,6 +230,8 @@ def _importance_figure(ranking: pd.DataFrame, path: Path) -> None:
 
 
 def _finite_or_none(value: Any) -> float | None:
+    if value is None:
+        return None
     number = float(value)
     return number if math.isfinite(number) else None
 
@@ -250,10 +252,14 @@ def _report_text(
     detail_sections = []
     for row in rows:
         table_rows.append(
-            "| {scenario} | {dml:.4f} | {truth:.4f} | {error:.4f} | "
-            "{label} | {state} | {rank} | {rmse:.4f} | {focal}/12 |".format(
+            "| {scenario} | {dml:.4f} | {ols:.4f} | {ols_dml} | {cate_dml} | {gap_pass} | "
+            "{truth:.4f} | {error:.4f} | {label} | {state} | {rank} | {rmse:.4f} | {focal}/12 |".format(
                 scenario=row["scenario"],
                 dml=row["dml_ate"],
+                ols=row["conventional_ols_ate"],
+                ols_dml=_format_metric(row["ols_dml_relative_deviation"]),
+                cate_dml=_format_metric(row["ate_cate_standardized_gap"]),
+                gap_pass="PASS" if row["ate_cate_coherence_passed"] else "FAIL",
                 truth=row["true_ate"],
                 error=row["ate_error"],
                 label=row["estimated_morphology"],
@@ -270,6 +276,10 @@ def _report_text(
             f"`scenarios/{row['scenario']}/figures/feature_importance.svg`."
         )
     exact_count = sum(bool(row["exact_label_correct"]) for row in rows)
+    gap_pass_count = sum(bool(row["ate_cate_coherence_passed"]) for row in rows)
+    inconclusive_count = sum(
+        row["practical_state"] == "INCONCLUSIVE" for row in rows
+    )
     table_text = "\n".join(table_rows)
     detail_text = "\n\n".join(detail_sections)
     return f"""# OrgCATE data-to-results acceptance report
@@ -290,14 +300,17 @@ reconstructed the CATE shape on TRAIN, and assessed it on untouched TEST.
 
 ## Nine-situation results
 
-| Situation | DML ATE | True ATE | ATE error | Estimated form | State | TEST Spearman | CATE RMSE | Focal rank |
-|---|---:|---:|---:|---|---|---:|---:|---:|
+| Situation | DML ATE | Constant-effect OLS | OLS-DML deviation | TRAIN-target CATE-DML gap / SD(Y) | Gap test | True ATE | ATE error | Estimated form | State | TEST Spearman | CATE RMSE | Focal rank |
+|---|---:|---:|---:|---:|---|---:|---:|---|---|---:|---:|---:|
 {table_text}
 
 The exact morphology label matched the simulation label in {exact_count} of
 {len(rows)} fresh runs. This is a fixed-seed executable acceptance result, not a
 Monte Carlo success-rate estimate. Spearman rank correlation is undefined when
 the true CATE is constant.
+
+The DML-ATE/CATE gap test passed in {gap_pass_count} of {len(rows)} runs;
+{inconclusive_count} result(s) were reported as `INCONCLUSIVE`.
 
 ## Figures
 
@@ -402,6 +415,14 @@ def run_data_to_results_acceptance(
             "dml_ate_standard_error": float(practical["ate"]["standard_error"]),
             "dml_ate_ci_low": float(practical["ate"]["ci_low"]),
             "dml_ate_ci_high": float(practical["ate"]["ci_high"]),
+            "conventional_ols_ate": float(
+                practical["ate"]["conventional_diagnostics"]["adjusted_ols"]
+            ),
+            "ols_dml_relative_deviation": _finite_or_none(
+                practical["ate"]["conventional_diagnostics"][
+                    "adjusted_ols_dml_relative_deviation"
+                ]
+            ),
             "true_ate": float(evaluation["true_ate"]),
             "ate_error": float(evaluation["ate_error"]),
             "estimated_morphology": str(practical["morphology"]["label"]),

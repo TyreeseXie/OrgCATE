@@ -5,7 +5,7 @@ nuisance-model refits. `key_quantities` reports their final summary, normally
 the median, and `interpretation_en` gives a one-sentence description.
 
 CATE magnitudes use the outcome scale. Locations use the scale of the focal
-characteristic; the current benchmark uses a reference rank from 0 to 1.
+characteristic; the benchmark uses a reference rank from 0 to 1.
 
 | Functional form | Reported quantities |
 |---|---|
@@ -20,7 +20,8 @@ characteristic; the current benchmark uses a reference rank from 0 to 1.
 | `sign-reversal` | zero crossing, endpoint effects and signs, global slope, and slopes on both sides |
 
 For `threshold-step`, boundary refers to the operational threshold-like form
-used by the procedure; it is not a formal test of mathematical discontinuity.
+used by the procedure and represents an operational candidate boundary with a
+localized two-side effect contrast.
 Multiple boundaries use the same array-valued fields and the
 `multi-threshold-step` subtype.
 

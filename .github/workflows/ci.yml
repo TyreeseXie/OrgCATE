@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -47,6 +50,31 @@ jobs:
           --output artifacts/ci_acceptance
       - name: Verify downloadable analysis results
         run: python tools/verify_acceptance_artifacts.py artifacts/ci_acceptance
+      - name: Run average-effect estimator comparison
+        run: >-
+          orgcate ate-comparison
+          --config configs/ate_estimator_comparison_v1.json
+          --output artifacts/ci_ate_comparison
+      - name: Run panel fixed-effects comparison
+        run: >-
+          orgcate fixed-effects-comparison
+          --config configs/fixed_effects_comparison_v1.json
+          --output artifacts/ci_fixed_effects
+      - name: Verify average-effect comparison results
+        run: >-
+          python tools/verify_average_effect_artifacts.py
+          --ate artifacts/ci_ate_comparison
+          --fixed-effects artifacts/ci_fixed_effects
+      - name: Assemble complete analysis package
+        run: >-
+          python tools/assemble_complete_analysis_artifact.py
+          --acceptance artifacts/ci_acceptance
+          --ate artifacts/ci_ate_comparison
+          --fixed-effects artifacts/ci_fixed_effects
+          --additive artifacts/additive_coexistence
+          --output artifacts/complete_analysis
+      - name: Verify complete analysis package
+        run: python tools/verify_complete_analysis_artifact.py artifacts/complete_analysis
       - name: Upload data-to-results acceptance package
         uses: actions/upload-artifact@v4
         with:
@@ -59,6 +87,13 @@ jobs:
         with:
           name: orgcate-additive-coexistence-${{ github.run_id }}
           path: artifacts/additive_coexistence/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload complete analysis package
+        uses: actions/upload-artifact@v4
+        with:
+          name: orgcate-complete-analysis-${{ github.run_id }}
+          path: artifacts/complete_analysis/
           if-no-files-found: error
           retention-days: 14
 

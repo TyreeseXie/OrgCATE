@@ -1,0 +1,18 @@
+{
+  "schema_version": "orgcate-fixed-effects-comparison-v1",
+  "frozen_estimate_input": "reports/fixed_effects_comparison_v1/FROZEN_ATE_CATE_INPUT.csv",
+  "frozen_estimate_input_sha256": "f7e68d8205e52d6e201f77b576e9c7c17ad94a39f452d2c311253354229e2888",
+  "sample_size": 3000,
+  "replications_per_situation": 10,
+  "analysis_partition": "TRAIN firms from the frozen 80/20 split",
+  "relative_periods": [-3, -2, -1, 0, 1, 2],
+  "post_period_starts_at": 0,
+  "period_effects": [-0.15, -0.08, -0.02, 0.04, 0.10, 0.17],
+  "panel_noise_standard_deviation": 0.60,
+  "panel_noise_ar1": 0.40,
+  "panel_seed_namespace": 20261031,
+  "fixed_effects": ["firm", "relative_period"],
+  "fixed_effects_standard_error": "firm-clustered CR1",
+  "treatment_activation": "T_i multiplied by the post-period indicator",
+  "existing_result_policy": "reuse frozen True ATE, DML-ATE, and CATE; fit no new causal forest"
+}

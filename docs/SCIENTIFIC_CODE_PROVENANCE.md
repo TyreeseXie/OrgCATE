@@ -11,7 +11,7 @@ The public-path changes are limited to:
 - retaining only aggregate evidence and the authorized firm-covariate backbone;
 - adding public verification, artifact packaging, and CI checks.
 
-The public consolidation does not change the DGP formulas, primary
+The public consolidation preserves the DGP formulas, primary
 `CausalForestDML` settings, 80/20 split, DML ATE estimator, candidate variables,
 classification thresholds, or acceptance tolerances. Configuration, runner,
 acceptance helper, and method-freeze hashes are checked by `orgcate verify`.

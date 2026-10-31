@@ -41,13 +41,27 @@
         "ci_high": {"type": "number"},
         "conventional_diagnostics": {
           "type": "object",
-          "required": ["dml_ate", "naive_difference", "adjusted_ols", "naive_minus_dml", "adjusted_ols_minus_dml", "adjustment_count", "method_note"]
+          "required": ["dml_ate", "naive_difference", "adjusted_ols", "adjusted_ols_standard_error_hc3", "adjusted_ols_ci_low", "adjusted_ols_ci_high", "conventional_estimator", "naive_minus_dml", "adjusted_ols_minus_dml", "absolute_adjusted_ols_dml_gap", "adjusted_ols_dml_relative_deviation", "adjusted_ols_dml_relative_deviation_percent", "adjustment_count", "method_note"]
         }
       }
     },
     "ate_cate_coherence": {
       "type": "object",
-      "required": ["passed", "dml_ate_train", "final_cate_test_mean", "signed_gap", "outcome_sd_train", "standardized_absolute_gap", "threshold", "sensitivity_thresholds", "rule", "failure_state"]
+      "additionalProperties": false,
+      "required": ["passed", "dml_ate_train", "final_cate_train_target_mean", "descriptive_cate_test_mean", "signed_gap", "outcome_sd_train", "standardized_absolute_gap", "threshold", "sensitivity_thresholds", "rule", "failure_state"],
+      "properties": {
+        "passed": {"type": "boolean"},
+        "dml_ate_train": {"type": "number"},
+        "final_cate_train_target_mean": {"type": "number"},
+        "descriptive_cate_test_mean": {"type": "number"},
+        "signed_gap": {"type": "number"},
+        "outcome_sd_train": {"type": "number", "exclusiveMinimum": 0},
+        "standardized_absolute_gap": {"type": "number", "minimum": 0},
+        "threshold": {"type": "number", "minimum": 0},
+        "sensitivity_thresholds": {"type": "array", "items": {"type": "number", "minimum": 0}},
+        "rule": {"type": "string"},
+        "failure_state": {"const": "INCONCLUSIVE"}
+      }
     },
     "forest": {"type": "object"},
     "moderator": {"type": "object"},

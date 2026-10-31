@@ -17,6 +17,7 @@ from .public_contract import (
     evaluate_ate_cate_coherence,
     evaluate_design_eligibility,
     property_support,
+    standardize_curve_to_target,
     summarize_shape_quantities_en,
     theory_audit_template,
     three_layer_taxonomy,
@@ -354,13 +355,24 @@ def run_public_demo(
     rank_frame.to_csv(paths["ranking"], index=False)
     details = json.loads(result.get("parameter_details_json", "[]"))
     practical_state = str(result["practical_state"])
-    coherence = evaluate_ate_cate_coherence(
+    focal_u = product.BASE.reference_u(
+        backbone,
+        data["unit_id"],
+        config["focal_characteristic"],
+    )
+    cate_train_target_mean = standardize_curve_to_target(
+        curve_practical["u"].to_numpy(float),
+        curve_practical["estimate_curve"].to_numpy(float),
+        focal_u[train],
+    )
+    ate_cate_coherence = evaluate_ate_cate_coherence(
         float(result["train_ate_dml"]),
-        float(result["cate_test_mean"]),
+        cate_train_target_mean,
         data["Y"][train],
         public_contract,
+        descriptive_cate_test_mean=float(result["cate_test_mean"]),
     )
-    if eligibility["eligible"] and not coherence["passed"]:
+    if eligibility["eligible"] and not ate_cate_coherence["passed"]:
         practical_state = "INCONCLUSIVE"
     taxonomy = three_layer_taxonomy(
         predicted_label,
@@ -368,7 +380,7 @@ def run_public_demo(
         float(result["train_ate_dml"]),
         selected_family=selected_family,
     )
-    support = property_support(predicted_label, practical_state, coherence)
+    support = property_support(predicted_label, practical_state, ate_cate_coherence)
     english_summary = summarize_shape_quantities_en(
         predicted_label,
         str(result.get("predicted_subtype", "")),
@@ -394,7 +406,7 @@ def run_public_demo(
             "ci_high": float(result["train_ate_ci_high"]),
             "conventional_diagnostics": conventional,
         },
-        "ate_cate_coherence": coherence,
+        "ate_cate_coherence": ate_cate_coherence,
         "forest": {
             "learner": (
                 "econml.dml.CausalForestDML"

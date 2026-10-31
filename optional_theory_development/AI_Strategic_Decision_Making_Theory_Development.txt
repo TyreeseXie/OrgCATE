@@ -1,0 +1,264 @@
+AI-ASSISTED STRATEGIC DECISION-MAKING
+AND INNOVATION PRODUCTIVITY
+
+AN ABDUCTIVE THEORY DEVELOPMENT BRIEF  |  ENGLISH EDITION
+──────────────────────────────────────────────────────
+Population: U.S. publicly listed manufacturing and
+            knowledge-intensive business service firms
+Study window: 2018–2024    |    Treatment year: 2021
+
+
+──────────────────────────────────────────────────────
+01  EMPIRICAL PHENOMENON
+──────────────────────────────────────────────────────
+
+Among U.S. publicly listed manufacturing and knowledge-intensive business
+service firms observed during 2018–2024, the DML-estimated average treatment
+effect of formally deploying AI-assisted strategic decision systems in 2021 on
+innovation productivity in 2022–2024 is 0.9246 standardized units (95% CI:
+[0.8210, 1.0283]).
+
+A causal forest ranks pretreatment relative firm size (u) first among 12
+candidate heterogeneity predictors (variable importance = 0.6573). A
+training-only reconstruction, confirmed in held-out data, identifies an
+inverted-U pattern: the estimated treatment effect peaks at u = 0.50 (1.9296)
+and declines to approximately −0.1703 at u = 0.10 and u = 0.90.
+
+These estimates establish a phenomenon to explain, not its organizational
+cause. Variable importance does not identify a mechanism, and replication of a
+fitted functional form does not establish why the pattern exists. The
+theoretical puzzle is why medium-sized firms appear best positioned to turn
+AI-assisted strategic decisions into innovation productivity.
+
+
+──────────────────────────────────────────────────────
+02  COMPETING ORGANIZATIONAL MECHANISMS
+──────────────────────────────────────────────────────
+
+Two complementary—but empirically distinguishable—mechanisms are proposed:
+
+    A   KNOWLEDGE RECOMBINATION CONVERTIBILITY
+    B   ATTENTION–DECISION AUTHORITY ALIGNMENT
+
+COMPARATIVE MECHANISM MATRIX
+································
+01  THEORETICAL LENS
+    A   Knowledge-based view; organizational search; hybrid problem-solving
+    B   Attention-based view; organization design; innovation selection
+
+02  CORE CONSTRUCTS
+    A   Knowledge coverage; interoperability; technical validation
+    B   Managerial attention; authority clarity; resource-allocation friction
+
+03  CAUSAL PATHWAY
+    A   AI deployment → wider strategic search → knowledge recombination →
+        viable innovations → higher productivity
+    B   AI deployment → strategic recommendations → managerial attention →
+        approval and execution → higher productivity
+
+04  WHY RETURNS RISE AMONG SMALLER FIRMS
+    A   Small firms initially lack expertise and validation capacity;
+        increasing size makes AI insights more convertible
+    B   Small firms initially lack specialized evaluation capabilities;
+        increasing size strengthens informed adoption
+
+05  WHY RETURNS FALL AMONG LARGER FIRMS
+    A   Knowledge fragmentation, incompatible systems, and cross-unit
+        integration costs undermine gains
+    B   Agenda competition, approval delays, and resource-allocation conflicts
+        hinder implementation
+
+06  OBSERVABLE MEDIATORS
+    A   Validated recombination rate; technical feasibility;
+        knowledge-transfer costs
+    B   Recommendation adoption rate; funding approval; decision latency; veto
+        counts
+
+07  BOUNDARY CONDITIONS
+    A   Data interoperability; modular R&D architecture
+    B   Decision authority clarity; cross-unit innovation governance
+
+08  DISTINGUISHING PREDICTION
+    A   Knowledge integration explains AI gains even after accounting for
+        decision friction
+    B   Decision friction explains AI gains even after accounting for
+        knowledge quality
+
+09  DATA REQUIREMENTS
+    A   IT architecture; R&D knowledge structures; AI recommendation and
+        project logs
+    B   Organizational charts; decision records; budget approvals; employee
+        surveys
+
+10  KEY REFERENCES
+    A   [1]–[3]
+    B   [4]–[9]
+
+The mechanisms can operate jointly, but they generate competing empirical
+predictions. Mechanism A explains whether AI recommendations become
+technically valuable innovation opportunities; Mechanism B explains whether
+those opportunities receive attention, resources, and execution. Their
+relative explanatory power may differ across firm-size ranges.
+
+A relevant counterpoint is Babina et al. (2024) [10], who find that broader AI
+investment can disproportionately stimulate product innovation in larger
+firms. The present theory therefore concerns the incremental effect of
+AI-assisted strategic decision systems on quality-adjusted innovation
+productivity, not the universal impact of AI on innovation.
+
+
+──────────────────────────────────────────────────────
+03  TESTABLE THEORETICAL PROPOSITIONS
+──────────────────────────────────────────────────────
+
+P1  KNOWLEDGE CONVERTIBILITY AND THE ASCENDING SEGMENT
+  Among firms with pretreatment size ranks u in [0.10, 0.50], the positive
+  effect of 2021 AI deployment, relative to nondeployment, on 2022–2024
+  innovation productivity increases with firm size. The mechanism is a larger
+  stock of usable expertise and stronger cross-domain knowledge-recombination
+  and validation capabilities.
+
+P2  DECISION FRICTION AND THE DESCENDING SEGMENT
+  Among firms with u in [0.50, 0.90], the effect of 2021 AI deployment,
+  relative to nondeployment, on 2022–2024 innovation productivity weakens with
+  increasing firm size and may become nonpositive at the upper end. The
+  mechanism is growing managerial attention competition, hierarchical approval
+  delays, and resource-allocation conflict.
+
+P3  KNOWLEDGE INTEROPERABILITY AS A MODERATOR
+  Among large firms with u in [0.75, 0.90], higher pretreatment knowledge
+  interoperability makes the treatment effect of 2021 AI deployment on
+  2022–2024 innovation productivity more favorable and attenuates the
+  right-side decline. The mechanism is lower cross-unit knowledge-integration
+  cost.
+
+P4  DECISION AUTHORITY AS A MODERATOR
+  Among large firms with u in [0.75, 0.90], clearer pretreatment professional
+  decision authority and cross-unit budget coordination make the treatment
+  effect of 2021 AI deployment on 2022–2024 innovation productivity more
+  favorable and attenuate the right-side decline. The mechanism is more
+  effective AI-recommendation adoption and execution.
+
+All propositions concern conditional treatment effects (deployment versus
+nondeployment), not the direct association between firm size and innovation.
+
+
+──────────────────────────────────────────────────────
+04  NEXT EVIDENCE
+──────────────────────────────────────────────────────
+
+4.1  TEST COMPETING MEDIATORS
+  Measure M_A as the share of cross-domain AI recommendations technically
+  validated and converted into R&D projects; measure M_B as the share of
+  formally reviewed AI recommendations receiving committed implementation
+  resources. Assess whether these pathways differentially explain
+  treatment-effect heterogeneity. Where feasible, link 2021–2022 process
+  measures to 2023–2024 outcomes and use longitudinal causal mediation methods
+  with sensitivity analysis for posttreatment confounding.
+
+4.2  INTRODUCE A NEW BOUNDARY CONDITION
+  Measure pretreatment cross-unit task interdependence. Mechanism A predicts a
+  stronger knowledge-integration bottleneck when interdependence is high.
+  Mechanism B predicts that the productivity consequences hinge primarily on
+  coordination structures and the alignment of expertise with decision
+  authority.
+
+4.3  COLLECT MULTILEVEL ORGANIZATIONAL EVIDENCE
+  At the firm level, collect data standards, R&D knowledge dispersion,
+  hierarchy, and approval rights. At the project level, collect AI
+  recommendation quality, knowledge combinations, funding approvals, and cycle
+  times. At the employee level, measure practices for questioning AI,
+  perceived autonomy, cross-unit collaboration, and responsibility clarity. A
+  2 × 2 business-unit field experiment crossing knowledge-integration support
+  with decision-authority reform could distinguish independent and
+  complementary effects.
+
+4.4  IDENTIFICATION AND INTERPRETATION
+  The fitted quadratic's symmetry around u = 0.50 is partly imposed by its
+  functional form; it is not independent evidence of symmetric organizational
+  mechanisms. The negative point estimates at the size extremes require local
+  uncertainty estimates before being treated as statistically established.
+  Follow-up work should allow asymmetric nonlinearities and test pretreatment
+  trends, treatment overlap, patent-outcome timing, and mediator-outcome
+  confounding.
+
+
+──────────────────────────────────────────────────────
+05  VERIFIED PEER-REVIEWED REFERENCES
+──────────────────────────────────────────────────────
+
+Bibliographic years refer to journal issue years; some articles appeared
+online earlier.
+
+[1] Raisch, Sebastian, and Kateryna Fomina (2025).
+    “Combining Human and Artificial Intelligence: Hybrid Problem-Solving in
+    Organizations.” Academy of Management Review, 50(2), 441-464.
+    DOI: 10.5465/amr.2021.0421
+    Publisher: https://journals.aom.org/doi/full/10.5465/amr.2021.0421
+
+[2] Boussioux, Leonard, Jacqueline N. Lane, Miaomiao Zhang, Vladimir
+    Jacimovic, and Karim R. Lakhani (2024).
+    “The Crowdless Future? Generative AI and Creative Problem-Solving.”
+    Organization Science, 35(5), 1589-1607.
+    DOI: 10.1287/orsc.2023.18430
+    Publisher: https://pubsonline.informs.org/doi/full/10.1287/orsc.2023.18430
+
+[3] Waardenburg, Lauren, Marleen Huysman, and Anastasia V. Sergeeva (2022).
+    “In the Land of the Blind, the One-Eyed Man Is King: Knowledge Brokerage
+    in the Age of Learning Algorithms.” Organization Science, 33(1), 59-82.
+    DOI: 10.1287/orsc.2021.1544
+    Publisher: https://pubsonline.informs.org/doi/10.1287/orsc.2021.1544
+
+[4] Raisch, Sebastian, and Sebastian Krakowski (2021).
+    “Artificial Intelligence and Management: The Automation-Augmentation
+    Paradox.” Academy of Management Review, 46(1), 192-210.
+    DOI: 10.5465/amr.2018.0072
+    Publisher: https://journals.aom.org/doi/abs/10.5465/amr.2018.0072
+
+[5] Ocasio, William, Tomi Laamanen, and Eero Vaara (2018).
+    “Communication and Attention Dynamics: An Attention-Based View of
+    Strategic Change.” Strategic Management Journal, 39(1), 155-167.
+    DOI: 10.1002/smj.2702
+    Publisher: https://sms.onlinelibrary.wiley.com/doi/full/10.1002/smj.2702
+
+[6] Keum, Dongil D., and Kelly E. See (2017).
+    “The Influence of Hierarchy on Idea Generation and Selection in the
+    Innovation Process.” Organization Science, 28(4), 653-669.
+    DOI: 10.1287/orsc.2017.1142
+    Publisher: https://pubsonline.informs.org/doi/abs/10.1287/orsc.2017.1142
+
+[7] Lebovitz, Sarah, Hila Lifshitz-Assaf, and Natalia Levina (2022).
+    “To Engage or Not to Engage with AI for Critical Judgments: How
+    Professionals Deal with Opacity When Using AI for Medical Diagnosis.”
+    Organization Science, 33(1), 126-148.
+    DOI: 10.1287/orsc.2021.1549
+    Publisher: https://pubsonline.informs.org/doi/abs/10.1287/orsc.2021.1549
+
+[8] Kocak, Ozgecan, Daniel A. Levinthal, and Phanish Puranam (2023).
+    “The Dual Challenge of Search and Coordination for Organizational
+    Adaptation: How Structures of Influence Matter.” Organization Science,
+    34(2), 851-869.
+    DOI: 10.1287/orsc.2022.1601
+    Publisher: https://pubsonline.informs.org/doi/10.1287/orsc.2022.1601
+
+[9] Bottcher, Lucas, and Ronald Klingebiel (2025).
+    “Organizational Selection of Innovation.” Organization Science, 36(1),
+    387-410.
+    DOI: 10.1287/orsc.2023.17357
+    Publisher: https://pubsonline.informs.org/doi/10.1287/orsc.2023.17357
+
+[10] Babina, Tania, Anastassia Fedyk, Alex He, and James Hodson (2024).
+    “Artificial Intelligence, Firm Growth, and Product Innovation.” Journal of
+    Financial Economics, 151, 103745.
+    DOI: 10.1016/j.jfineco.2023.103745
+    Publisher: https://www.sciencedirect.com/science/article/pii/S0304405X2300185X
+
+──────────────────────────────────────────────────────
+CENTRAL THEORETICAL CONTRIBUTION
+AI-assisted strategic decision-making may yield the greatest innovation
+productivity gains when firms possess sufficient knowledge-conversion
+capabilities without incurring excessive coordination and decision-execution
+costs. Medium-sized firms may occupy this configuration more frequently, but
+the proposed causal explanation rests on organizational mechanisms rather than
+firm size itself.
+──────────────────────────────────────────────────────

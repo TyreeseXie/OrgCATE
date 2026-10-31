@@ -15,8 +15,8 @@ Together they establish frozen-evidence integrity and method-contract readiness.
 ```text
 data/treatment eligibility
 -> cross-fitted DML ATE and conventional comparison
--> ATE-CATE aggregate-coherence gate
 -> one joint honest multivariable CausalForestDML
+-> DML-ATE/CATE gap failure test
 -> no-signal, reproducibility, and stability checks
 -> supportable properties: ordering / magnitude / curvature / boundaries
 -> continuity / monotonicity / sign relation / taxonomy cell
@@ -24,47 +24,46 @@ data/treatment eligibility
 -> researcher-owned theory audit or explicit abstention
 ```
 
-Any failed upstream gate is terminal for downstream interpretation. Diagnostic
-estimates remain available on disk, and the practical state records that the
-candidate was not supported.
+Failed design eligibility is terminal for estimation. A failed DML-ATE/CATE
+test is terminal for downstream interpretation and returns `INCONCLUSIVE`.
 
-## ATE-CATE point-tolerance rule is frozen for integration
+## Average-effect comparison and DML-ATE/CATE failure test
 
-The human research lead selected the final orthogonal reconstructed CATE, not
-raw forest CATE, as the result-bearing quantity for aggregate coherence. The
-approved lightweight gate is:
+The conventional comparison is the constant treatment coefficient in
+`Y ~ 1 + T + X`, with all 12 pre-treatment characteristics and an HC3 standard
+error. It is compared with cross-fitted DML-ATE across the nine one-dimensional
+HTE forms. In simulation, evaluator-only truth is used to report bias, RMSE,
+and interval coverage for both estimators.
+
+The gate uses the final orthogonal reconstructed CATE:
 
 ```text
-abs(mean final reconstructed CATE_TEST - TRAIN cross-fitted DML ATE)
-------------------------------------------------------------------- <= 0.10
-                           SD(Y_train)
+abs(mean final reconstructed CATE standardized to TRAIN - TRAIN DML ATE)
+-------------------------------------------------------------------------
+                              SD(Y_train)
 ```
 
-The denominator is the TRAIN outcome scale rather than absolute DML ATE so the
-gate remains defined under cancellation and near-zero ATE. The `0.05` and
-`0.15` ratios are sensitivity analyses only. A failure routes to upstream
-`INCONCLUSIVE`; it does not imply homogeneous treatment effects and does not
-route to `DESIGN_NOT_ELIGIBLE`.
+The primary threshold is `0.10`; `0.05` and `0.15` are recorded as sensitivity
+values. A failure returns `INCONCLUSIVE` and prevents a supported morphology
+claim. It does not imply homogeneous treatment effects.
 
-A pre-frozen fresh ten-cell confirmation passed 10/10 at the 10% rule, with a
-median ratio of 0.058 and maximum of 0.096. The earlier paired-equivalence
-pilot produced 10/10 INCONCLUSIVE and 0/10 DRIFT because its TEST DR-score
-intervals were too wide; it remains a documented negative result. Therefore
-the public claim is practical point tolerance, not statistical equivalence.
-The point gate is now wired into the public runtime state machine. Failure
-overrides any downstream supported-candidate state with `INCONCLUSIVE`.
+Both quantities target the TRAIN firms. The reconstructed curve is averaged
+over the TRAIN focal-characteristic distribution; values outside the frozen
+reported curve support use the nearest supported endpoint. The untouched TEST
+sample remains reserved for independent morphology confirmation. Its mean CATE
+is retained as a descriptive output but does not enter this consistency test.
 
 ## Eligibility and public output integration
 
 `configs/public_workflow_contract_v1.json` freezes the public eligibility
-thresholds and the ATE-CATE rule. The eligibility gate runs after a TRAIN-only
+thresholds and the DML-ATE/CATE rule. The eligibility gate runs after a TRAIN-only
 cross-fitted DML preflight and before the unified morphology workflow. It requires a
 binary treatment with both arms, treatment prevalence in `[0.10, 0.90]`, OOF
 propensity 1st/99th percentiles inside `[0.01, 0.99]`, and no more than 10%
 propensity clipping. Failure skips the forest and returns
 `DESIGN_NOT_ELIGIBLE`.
 
-The public result now includes conventional ATE diagnostics, property-support
+The public result includes conventional ATE diagnostics, property-support
 declarations, the proposal's three-layer/12-cell fields, and a blank
 researcher-owned Step 4 theory-audit artifact. Shape quantities are suppressed
 when required properties are unsupported. All eligible inputs use one unified

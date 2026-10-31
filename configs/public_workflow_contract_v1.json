@@ -10,13 +10,15 @@
   "ate_cate": {
     "max_standardized_gap": 0.10,
     "sensitivity_thresholds": [0.05, 0.15],
-    "cate_quantity": "mean final orthogonal reconstructed CATE on untouched TEST",
+    "cate_quantity": "mean final orthogonal reconstructed CATE standardized to the TRAIN target distribution",
+    "target_sample": "TRAIN, matching the DML-ATE target sample",
+    "reported_curve_support_policy": "values outside the frozen 0.10-0.90 curve support use the nearest supported endpoint",
     "scale": "sample SD(Y_train, ddof=1)",
     "failure_state": "INCONCLUSIVE"
   },
   "claim_scope": {
-    "threshold_step": "operational candidate boundary and two-side contrast; not proof of a mathematical causal discontinuity",
-    "feature_rank": "information output; not moderator confirmation",
+    "threshold_step": "operational candidate boundary and localized two-side effect contrast",
+    "feature_rank": "candidate-characteristic ordering evaluated alongside TEST confirmation",
     "theory": "interpretation is recorded separately by the researcher"
   }
 }

@@ -176,6 +176,7 @@ def verify_acceptance_artifacts(output: str | Path) -> dict[str, Any]:
     numeric_fields = (
         "dml_ate",
         "dml_ate_standard_error",
+        "conventional_ols_ate",
         "true_ate",
         "ate_error",
         "cate_rmse",
@@ -195,6 +196,36 @@ def verify_acceptance_artifacts(output: str | Path) -> dict[str, Any]:
             statistics.get("analysis_sample_n") == 3000,
             f"statistics sample size failed: {statistics['scenario']}",
         )
+        gap_passed = statistics.get("ate_cate_coherence_passed")
+        _require(
+            isinstance(gap_passed, bool),
+            f"gap test result is missing: {statistics['scenario']}",
+        )
+        if not gap_passed:
+            _require(
+                statistics.get("practical_state") == "INCONCLUSIVE",
+                f"failed gap test did not route to INCONCLUSIVE: {statistics['scenario']}",
+            )
+        if statistics.get("practical_state") == "SUPPORTED_CANDIDATE":
+            _require(
+                gap_passed,
+                f"supported candidate failed the gap test: {statistics['scenario']}",
+            )
+
+    exact_labels_correct = sum(
+        bool(row["exact_label_correct"]) for row in statistics_rows
+    )
+    gap_tests_passed = sum(
+        bool(row["ate_cate_coherence_passed"]) for row in statistics_rows
+    )
+    _require(
+        exact_labels_correct == len(SCENARIOS),
+        f"nine-situation exact-label acceptance failed: {exact_labels_correct}/9",
+    )
+    _require(
+        gap_tests_passed == len(SCENARIOS),
+        f"nine-situation DML-ATE/CATE acceptance failed: {gap_tests_passed}/9",
+    )
 
     for scenario in SCENARIOS:
         prefix = f"scenarios/{scenario}"
@@ -202,6 +233,21 @@ def verify_acceptance_artifacts(output: str | Path) -> dict[str, Any]:
             actual_files[f"{prefix}/statistics/summary_statistics.json"]
         )
         _require(statistics.get("scenario") == scenario, "scenario statistics mismatch")
+        practical = _read_json(actual_files[f"{prefix}/practical/result.json"])
+        coherence = practical.get("ate_cate_coherence", {})
+        _require(
+            "final_cate_train_target_mean" in coherence,
+            f"TRAIN-target CATE mean is missing: {scenario}",
+        )
+        _require(
+            "descriptive_cate_test_mean" in coherence,
+            f"descriptive TEST CATE mean is missing: {scenario}",
+        )
+        _require(
+            coherence.get("rule")
+            == "abs(CATE_TRAIN_TARGET - DML_ATE_TRAIN) / SD(Y_TRAIN)",
+            f"DML-ATE/CATE target populations are not aligned: {scenario}",
+        )
         curve = pd.read_csv(actual_files[f"{prefix}/tables/cate_curve_with_ate.csv"])
         _require(len(curve) >= 100, f"aggregate CATE curve is short: {scenario}")
         _require(
@@ -241,9 +287,8 @@ def verify_acceptance_artifacts(output: str | Path) -> dict[str, Any]:
         "analysis_sample_n_per_situation": input_record[
             "analysis_sample_n_per_scenario"
         ],
-        "exact_labels_correct": sum(
-            bool(row["exact_label_correct"]) for row in statistics_rows
-        ),
+        "exact_labels_correct": exact_labels_correct,
+        "gap_tests_passed": gap_tests_passed,
     }
 
 

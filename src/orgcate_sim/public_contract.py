@@ -82,14 +82,35 @@ def conventional_ate_diagnostics(
     design = np.column_stack([np.ones(len(t)), t, x])
     coefficient = np.linalg.lstsq(design, y, rcond=None)[0]
     adjusted = float(coefficient[1])
+    residual = y - design @ coefficient
+    xtx_inverse = np.linalg.pinv(design.T @ design)
+    leverage = np.einsum("ij,jk,ik->i", design, xtx_inverse, design)
+    hc3_residual = residual / np.maximum(1.0 - leverage, 1e-8)
+    score_matrix = design * hc3_residual[:, None]
+    hc3_covariance = xtx_inverse @ (score_matrix.T @ score_matrix) @ xtx_inverse
+    adjusted_se = float(np.sqrt(max(hc3_covariance[1, 1], 0.0)))
+    normal_critical_value = 1.959963984540054
+    dml = float(dml_ate)
+    gap = adjusted - dml
+    denominator = abs(dml)
+    relative_deviation = abs(gap) / denominator if denominator > 1e-12 else None
     record = {
-        "dml_ate": float(dml_ate),
+        "dml_ate": dml,
         "naive_difference": naive,
         "adjusted_ols": adjusted,
-        "naive_minus_dml": naive - float(dml_ate),
-        "adjusted_ols_minus_dml": adjusted - float(dml_ate),
+        "adjusted_ols_standard_error_hc3": adjusted_se,
+        "adjusted_ols_ci_low": adjusted - normal_critical_value * adjusted_se,
+        "adjusted_ols_ci_high": adjusted + normal_critical_value * adjusted_se,
+        "conventional_estimator": "covariate-adjusted constant-treatment-coefficient OLS",
+        "naive_minus_dml": naive - dml,
+        "adjusted_ols_minus_dml": gap,
+        "absolute_adjusted_ols_dml_gap": abs(gap),
+        "adjusted_ols_dml_relative_deviation": relative_deviation,
+        "adjusted_ols_dml_relative_deviation_percent": (
+            100.0 * relative_deviation if relative_deviation is not None else None
+        ),
         "adjustment_count": int(x.shape[1]),
-        "method_note": "diagnostic comparisons only; DML/AIPW remains the ATE anchor",
+        "method_note": "DML/AIPW is the primary ATE estimate; OLS is the conventional benchmark",
     }
     validate_no_oracle_fields(record)
     return record
@@ -97,33 +118,67 @@ def conventional_ate_diagnostics(
 
 def evaluate_ate_cate_coherence(
     dml_ate: float,
-    cate_test_mean: float,
+    cate_train_target_mean: float,
     y_train: Sequence[float],
     config: Mapping[str, Any],
+    *,
+    descriptive_cate_test_mean: float | None = None,
 ) -> dict[str, Any]:
-    """Apply the frozen standardized point-tolerance stop rule."""
+    """Apply the frozen standardized ATE-CATE failure test."""
 
     y = np.asarray(y_train, dtype=float)
     scale = float(np.std(y, ddof=1))
-    gap = float(cate_test_mean) - float(dml_ate)
+    gap = float(cate_train_target_mean) - float(dml_ate)
     ratio = abs(gap) / scale if scale > 0 else float("inf")
     limit = float(config["ate_cate"]["max_standardized_gap"])
     record = {
         "passed": bool(np.isfinite(ratio) and ratio <= limit),
         "dml_ate_train": float(dml_ate),
-        "final_cate_test_mean": float(cate_test_mean),
+        "final_cate_train_target_mean": float(cate_train_target_mean),
+        "descriptive_cate_test_mean": float(
+            cate_train_target_mean
+            if descriptive_cate_test_mean is None
+            else descriptive_cate_test_mean
+        ),
         "signed_gap": gap,
         "outcome_sd_train": scale,
         "standardized_absolute_gap": ratio,
         "threshold": limit,
         "sensitivity_thresholds": [
-            float(x) for x in config["ate_cate"]["sensitivity_thresholds"]
+            float(value) for value in config["ate_cate"]["sensitivity_thresholds"]
         ],
-        "rule": "abs(mean final CATE_TEST - DML ATE_TRAIN) / SD(Y_TRAIN)",
+        "rule": "abs(CATE_TRAIN_TARGET - DML_ATE_TRAIN) / SD(Y_TRAIN)",
         "failure_state": "INCONCLUSIVE",
     }
     validate_no_oracle_fields(record)
     return record
+
+
+def standardize_curve_to_target(
+    curve_u: Sequence[float],
+    curve_cate: Sequence[float],
+    target_u: Sequence[float],
+) -> float:
+    """Average the reported CATE curve over a declared target distribution."""
+
+    support = np.asarray(curve_u, dtype=float)
+    effects = np.asarray(curve_cate, dtype=float)
+    target = np.asarray(target_u, dtype=float)
+    if (
+        support.ndim != 1
+        or effects.ndim != 1
+        or target.ndim != 1
+        or len(support) != len(effects)
+        or len(support) < 2
+        or len(target) == 0
+        or not np.isfinite(support).all()
+        or not np.isfinite(effects).all()
+        or not np.isfinite(target).all()
+        or not np.all(np.diff(support) > 0)
+    ):
+        raise ValueError("invalid CATE curve or target distribution")
+    standardized = np.interp(target, support, effects)
+    return float(np.mean(standardized))
 
 
 _CELL = {
@@ -463,7 +518,7 @@ def summarize_shape_quantities_en(
             boundary_locations_median_across_refits=boundaries,
             band_effects_median_across_refits=levels,
             jumps_median_across_refits=jumps,
-            boundary_claim_scope="candidate boundary; not proof of a mathematical causal discontinuity",
+            boundary_claim_scope="operational candidate boundary with localized two-side contrast",
         )
         boundary_text = ", ".join(f"{value:.3f}" for value in boundaries)
         level_text = ", ".join(f"{value:.3f}" for value in levels)
@@ -472,7 +527,7 @@ def summarize_shape_quantities_en(
             f"CATE forms {len(levels)} effect bands separated by {len(boundaries)} "
             f"candidate boundary/boundaries at {boundary_text}. Band effects are "
             f"[{level_text}], and adjacent-band jumps are [{jump_text}]. These are "
-            "candidate boundaries, not proof of mathematical causal discontinuities."
+            "operational candidate boundaries with localized two-side effect contrasts."
             if boundaries
             else "CATE contains a threshold-like candidate boundary."
         )

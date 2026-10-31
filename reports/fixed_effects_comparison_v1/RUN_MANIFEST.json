@@ -1,0 +1,40 @@
+{
+  "config": "configs/fixed_effects_comparison_v1.json",
+  "config_sha256": "975c8f3c7786e1459e5aebd7c3193b130411950f8c3b61c60cad7bc9da7d1558",
+  "frozen_dml_and_cate_rows_reused": 90,
+  "frozen_estimate_input": "reports/fixed_effects_comparison_v1/FROZEN_ATE_CATE_INPUT.csv",
+  "frozen_estimate_input_sha256": "f7e68d8205e52d6e201f77b576e9c7c17ad94a39f452d2c311253354229e2888",
+  "input_backbone": "execution/phase2_real_backbone_v1/headline_one_anchor_per_firm_L3.pkl.gz",
+  "input_backbone_sha256": "91c963e02cbdc17a19de85868ba44f5f4fd65791bec83906980f307a6cfd3174",
+  "new_causal_forests_fitted": 0,
+  "new_quantity": "firm and relative-period fixed-effects coefficient",
+  "outputs": {
+    "PANEL_FIXED_EFFECTS_COMPARISON.svg": "769ba8e5c856bf98fdb33818c0474ba3c714d4ceeb89328953d739a149d573c6",
+    "PANEL_FIXED_EFFECTS_COMPARISON_LONG.csv": "1e1dfe3b963e930acca5b79f18b19a6ca2bb145dd57f85735db8e1fc6bf511ae",
+    "PANEL_FIXED_EFFECTS_COMPARISON_REPORT.md": "de0d6a53eb58c565e2ea5c0fa88b799eeeb2bb9cdf81d3a8e4fd18ebc26be732",
+    "PANEL_FIXED_EFFECTS_COMPARISON_SUMMARY.csv": "48af84930ee7669e292e9a4e3f20f6311b0b16413a6d7170ebc073f055dc717f"
+  },
+  "package_versions": {
+    "econml": "0.17.0",
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "pyarrow": "25.0.1",
+    "python": "3.13.3",
+    "scikit-learn": "1.6.1",
+    "scipy": "1.18.1"
+  },
+  "replications_per_situation": 10,
+  "schema_version": "orgcate-fixed-effects-comparison-manifest-v1",
+  "situations": [
+    "homogeneous",
+    "linear-monotone",
+    "nonlinear-monotone",
+    "steep-continuous",
+    "inverted-u",
+    "u-shaped",
+    "kinked",
+    "threshold-step",
+    "sign-reversal"
+  ],
+  "total_replications": 90
+}

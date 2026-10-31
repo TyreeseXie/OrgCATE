@@ -44,8 +44,8 @@ cross-fitted DML ATE
 -> practical state, morphology, and key quantities
 ```
 
-There is no situation-name dispatch and no separate kink or nonlinear runtime
-runner. Multiple thresholds are a subtype of `threshold-step`.
+All nine situations use one classifier and one runtime path. Multiple
+thresholds are a subtype of `threshold-step`.
 
 ## Included data
 

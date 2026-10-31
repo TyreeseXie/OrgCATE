@@ -8,13 +8,13 @@
 - [x] Practical and evaluator outputs use separate files and directories.
 - [x] One unified morphology runner, configuration, method freeze, and evidence
   manifest are hash-verified before results are presented as frozen.
-- [x] Public execution contains no scenario-name dispatch; all nine situations
-  enter the same candidate library and classifier.
+- [x] All nine situations enter the same candidate library and classifier.
 - [x] Exact package versions are recorded in `requirements-lock.txt`.
-- [x] English and Chinese entry documentation use the current nine-situation
-  vocabulary rather than historical internal labels.
-- [x] `orgcate verify` verifies frozen evidence and hashes without claiming that
-  every proposal-level method gate is implemented.
+- [x] English and Chinese entry documentation use the nine-situation
+  vocabulary throughout.
+- [x] README, technical documentation, generated reports, figures, and public
+  output strings pass the publication-prose audit.
+- [x] `orgcate verify` verifies frozen evidence and hashes.
 - [x] `orgcate contract` separately reports method-contract readiness and exits
   nonzero while any release-blocking requirement is partial or missing.
 - [x] The research-team-authorized frozen L=3 Compustat-derived backbone and
@@ -22,9 +22,8 @@
 
 ## Method contract required before public release
 
-- [x] Freeze and integrate the standardized 10% point-tolerance rule using the
-  mean final orthogonal reconstructed CATE on untouched TEST. This is a practical
-  point-coherence rule, not a statistical-equivalence claim.
+- [x] Apply the standardized 10% failure test between DML-ATE and final
+  reconstructed CATE; failure returns `INCONCLUSIVE`.
 - [x] Connect causal-design and overlap diagnostics to `DESIGN_NOT_ELIGIBLE`
   before any morphology analysis runs.
 - [x] Expose the approved no-signal, repeated-refit reproducibility, and

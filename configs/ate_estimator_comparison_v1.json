@@ -1,0 +1,21 @@
+{
+  "schema_version": "orgcate-ate-estimator-comparison-v1",
+  "sample_size": 3000,
+  "replications_per_situation": 20,
+  "master_seed": 20261030,
+  "situations": [
+    "homogeneous",
+    "linear-monotone",
+    "nonlinear-monotone",
+    "steep-continuous",
+    "inverted-u",
+    "u-shaped",
+    "kinked",
+    "threshold-step",
+    "sign-reversal"
+  ],
+  "analysis_sample": "80% TRAIN partition used by the main workflow",
+  "conventional_estimator": "constant treatment coefficient from Y ~ 1 + T + all 12 pre-treatment characteristics",
+  "conventional_standard_error": "HC3",
+  "dml_estimator": "five-fold cross-fitted AIPW/DML"
+}

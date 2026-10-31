@@ -24,7 +24,7 @@ repository.
 | Generated analyst, oracle, or evaluator tables | Unit-level simulation output is regenerated as needed |
 | Credentials, access notes, and `.env` files | Confidential information |
 | ZIP files and historical execution packages | Redundant and difficult to review |
-| Earlier exploratory branches and W-number reports | Not part of the current interface |
+| Earlier exploratory branches and W-number reports | Preserved in private research provenance |
 | Briefing documents and manuscripts | Separate research documents |
 | Environments, caches, logs, and temporary files | Machine-generated material |
 | Private Git history and handoff notes | Internal project records |

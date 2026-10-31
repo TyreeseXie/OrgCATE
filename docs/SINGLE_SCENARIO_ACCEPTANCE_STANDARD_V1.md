@@ -7,11 +7,11 @@ state are fixed.
 
 ## Upstream eligibility
 
-A cell reaches morphology analysis only when treatment is binary, propensity
-support is acceptable, the cross-fitted DML/AIPW ATE is available, and the
-standardized difference between DML ATE and mean final reconstructed CATE is
-at most `0.10 SD(Y_train)`. Failure ends morphology interpretation and returns
-the corresponding practical stop state.
+A cell reaches morphology interpretation only when treatment is binary,
+propensity support is acceptable, the cross-fitted DML/AIPW ATE is available,
+and `abs(CATE_TRAIN_TARGET-DML_ATE_TRAIN)/SD(Y_train) <= 0.10`. Failure returns
+`INCONCLUSIVE`. Both estimates target the TRAIN firms; untouched TEST remains
+reserved for independent morphology confirmation.
 
 ## One practical workflow
 
@@ -19,9 +19,10 @@ Each cell uses one 80/20 firm-level TRAIN/untouched-TEST split and one honest
 1,000-tree `CausalForestDML` containing all 12 candidate firm characteristics.
 TRAIN chooses the family and every shape quantity. Three five-fold nuisance
 refits must give pairwise curve Spearman at least `.80`; the primary location
-range must not exceed `.20` ECDF. Untouched TEST does not move a parameter or
-choose a family. At least two of three fixed-candidate comparisons must improve
-one-sided orthogonal loss relative to the relevant no-heterogeneity model.
+range must not exceed `.20` ECDF. Parameter and family selection finish on
+TRAIN before untouched TEST confirmation. At least two of three fixed-candidate
+comparisons must improve one-sided orthogonal loss relative to the relevant
+no-heterogeneity model.
 
 Homogeneous truth passes only when the workflow makes no supported HTE claim.
 For a heterogeneous situation, blind practical evidence must support the
@@ -59,12 +60,13 @@ range. A situation passes when at least 9 of 10 frozen replications succeed.
 | threshold-step | every boundary, band levels, and jumps |
 | sign-reversal | zero crossing, endpoint effects/signs, global slope, and slopes on both sides |
 
-For tanh shapes, raw `k` remains a reported diagnostic. It is not the sole
-acceptance quantity because amplitude and `k` can compensate while leaving the
+For tanh shapes, raw `k` is reported alongside transition width and effective
+center gradient because amplitude and `k` can compensate while leaving the
 substantive CATE transition nearly unchanged. Effective center gradient
 `|amplitude x k|` determines whether the transition is ordinary nonlinear or
 steep; transition width reports the interpretable support interval over which
 the central half of the effect change occurs.
 
-Variable rank and forest importance are information outputs only. They do not
-replace blind confirmation, curve accuracy, or key-quantity accuracy.
+Variable rank and forest importance summarize candidate-characteristic
+ordering. Blind confirmation, curve accuracy, and key-quantity accuracy
+determine recovery success.

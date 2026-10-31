@@ -6,7 +6,7 @@ import hashlib
 import json
 import platform
 from dataclasses import asdict, is_dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
@@ -52,7 +52,7 @@ def build_run_manifest(
 ) -> dict[str, Any]:
     """Build an evaluator-side manifest; it never belongs in analyst input."""
     return {
-        "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "created_at_utc": datetime.now(UTC).isoformat(),
         "python": platform.python_version(),
         "packages": package_versions(),
         "config": _jsonable(config),

@@ -41,6 +41,7 @@ data/
 *.gz
 *.doc
 *.docx
+!/docs/TECHNICAL_APPENDIX.docx
 *.xls
 *.xlsx
 *.ppt

@@ -5,11 +5,11 @@
 The active single-component workflow uses one classifier for every eligible
 dataset. A simulation scenario name is used to generate treatment-effect truth
 and to score the final output, but it is never passed to morphology selection.
-There is no situation-specific runtime dispatch.
+Every input follows the same candidate library and selection path.
 
 ## Common input and candidate library
 
-After the design and ATE gates, one 12-characteristic honest
+After design eligibility and ATE estimation, one 12-characteristic honest
 `CausalForestDML` is fitted. For the prespecified focal characteristic, TRAIN
 data then provide five-fold cross-fitted nuisance residuals. Three nuisance
 refits are used to fit the same candidate library:
@@ -44,7 +44,7 @@ The TRAIN-only classifier applies the same ordered rules to every curve:
    over a straight line. Passing curves yield `kinked`.
 6. Remaining smooth monotone curves are split into `nonlinear-monotone` and
    `steep-continuous` using the frozen effective center gradient
-   `abs(amplitude * k)`, not raw `k` alone.
+   `abs(amplitude * k)` together with raw `k`.
 
 Untouched TEST never selects a family, boundary, center, or threshold. It only
 checks whether the fixed nonconstant candidate improves orthogonal loss over a
@@ -71,9 +71,9 @@ The classifier is common; only the quantities read after classification differ:
 Oracle truth is opened only after the practical output is fixed. A replication
 passes only when blind practical evidence passes, the high-level label is
 exact, curve rank and magnitude fidelity pass, and all prespecified key
-quantities meet their tolerances. Real empirical applications do not have the
-oracle stage and therefore report the practical state rather than recovery
-accuracy.
+quantities meet their tolerances. Real empirical applications report the
+practical evidence state; simulation experiments additionally score recovery
+against oracle truth.
 
 ## Active files
 
@@ -83,6 +83,5 @@ accuracy.
 - fresh evidence: `reports/unified_morphology_v2/`;
 - public execution path: `src/orgcate_sim/public_demo.py`.
 
-The public repository contains this unified path rather than separate
-shape-specific runners. Development history remains in Git history, not in the
-active package.
+The public repository uses this unified path for every shape. Git history
+preserves the development record.
