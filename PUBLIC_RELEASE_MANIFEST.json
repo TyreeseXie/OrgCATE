@@ -8,7 +8,7 @@
   ],
   "manifest_excludes_itself": true,
   "file_count": 150,
-  "total_bytes": 9886699,
+  "total_bytes": 12084107,
   "findings": [],
   "files": [
     {
@@ -278,8 +278,8 @@
     },
     {
       "path": "docs/TECHNICAL_APPENDIX.docx",
-      "bytes": 6005261,
-      "sha256": "3fcf5ab29b5b6eaaac4e4f8380311ce8b312692e8724e5c672d330cf3475931f"
+      "bytes": 8202669,
+      "sha256": "a5e8ad1a0a222df25f1efa570560775f7ce3d1a25a3d2547bb925d098b0ba3e6"
     },
     {
       "path": "docs/UNIFIED_MORPHOLOGY_V2_METHOD.md",
@@ -734,7 +734,7 @@
     {
       "path": "tools/audit_public_release.py",
       "bytes": 13337,
-      "sha256": "40167ca9b62dfbce0b3f7fbdbab88c2ee316dffd914f217965aafb93fb06728b"
+      "sha256": "8348441744a43680c1dee9aa0fea3cc9e0d43f8817c7e64038e1ba6b75fae796"
     },
     {
       "path": "tools/verify_acceptance_artifacts.py",

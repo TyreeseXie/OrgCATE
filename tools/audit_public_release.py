@@ -91,8 +91,8 @@ ALLOWED_BINARY_DATA = {
 }
 ALLOWED_BINARY_DOCUMENTS = {
     "docs/TECHNICAL_APPENDIX.docx": {
-        "bytes": 6005261,
-        "sha256": "3fcf5ab29b5b6eaaac4e4f8380311ce8b312692e8724e5c672d330cf3475931f",
+        "bytes": 8202669,
+        "sha256": "a5e8ad1a0a222df25f1efa570560775f7ce3d1a25a3d2547bb925d098b0ba3e6",
     }
 }
 TEXT_SUFFIXES = {
